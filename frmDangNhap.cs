@@ -12,11 +12,11 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace CanKT
 {
-    public partial class frmDangNhap : Form
+    public partial class FrmDangNhap : Form
     {
         CanDBContext db = new CanDBContext();
 
-        public frmDangNhap()
+        public FrmDangNhap()
         {
             InitializeComponent();
 
@@ -92,21 +92,13 @@ namespace CanKT
                     {
                         if (user.matKhau == password)
                         {
-                            MessageBox.Show("Thanh cong!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
                             //check quyen user
-
-                            //if ()
-                            //{
-
-                            //}
-                            //else
-                            //{
-                            //    MessageBox.Show("Đăng nhập thành công", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            //    this.Hide();
-                            //    FrmChinh frmChinh = new FrmChinh();
-                            //    frmChinh.ShowDialog();
-                            //}
+                            
+                            MessageBox.Show("Đăng nhập thành công", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            
+                            FrmMain frmMain = new FrmMain();
+                            this.Hide();
+                            frmMain.ShowDialog();
                         }
                         else
                         {

@@ -6,37 +6,29 @@ namespace CanKT.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("XeXuc")]
-    public partial class XeXuc
+    [Table("NhapXuat")]
+    public partial class NhapXuat
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public XeXuc()
+        public NhapXuat()
         {
             PhieuThus = new HashSet<PhieuThu>();
         }
 
-        [StringLength(50)]
-        public string maDonVi { get; set; }
-
         [Key]
         [StringLength(50)]
-        public string maXeXuc { get; set; }
+        public string maNhapXuat { get; set; }
 
         [StringLength(50)]
-        public string tenXeXuc { get; set; }
+        public string tenNhapXuat { get; set; }
 
         [StringLength(50)]
         public string tenKhac { get; set; }
 
         [StringLength(50)]
-        public string tenTaiXe { get; set; }
-
-        [StringLength(50)]
         public string ghiChu { get; set; }
 
         public int? trangThai { get; set; }
-
-        public virtual DonVi DonVi { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PhieuThu> PhieuThus { get; set; }

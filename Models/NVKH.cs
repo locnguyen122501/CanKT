@@ -9,6 +9,13 @@ namespace CanKT.Models
     [Table("NVKH")]
     public partial class NVKH
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public NVKH()
+        {
+            Gias = new HashSet<Gia>();
+            PhieuThus = new HashSet<PhieuThu>();
+        }
+
         [Key]
         [StringLength(50)]
         public string maNVKH { get; set; }
@@ -40,6 +47,12 @@ namespace CanKT.Models
 
         public int? trangThai { get; set; }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Gia> Gias { get; set; }
+
         public virtual TaiKhoan TaiKhoan { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PhieuThu> PhieuThus { get; set; }
     }
 }
