@@ -19,6 +19,8 @@ namespace CanKT
         public frmDangNhap()
         {
             InitializeComponent();
+
+            this.KeyPreview = true;
         }
 
         private void frmDangNhap_Load(object sender, EventArgs e)
@@ -110,6 +112,19 @@ namespace CanKT
             if (result == DialogResult.Yes)
             {
                 Application.Exit();
+            }
+        }
+
+
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            base.OnKeyDown(e);
+
+            //kiem tra da nhan phim T chua va co dang focus vao 2 textbox Ten, MK khong
+            if (e.KeyCode == Keys.T && !txbTen.Focused && !txbMatkhau.Focused)
+            {
+                btnThoat.PerformClick();
             }
         }
     }
