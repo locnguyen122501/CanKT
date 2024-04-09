@@ -77,30 +77,47 @@ namespace CanKT
                     string username = txbTen.Text;
                     string password = txbMatkhau.Text;
 
-                    var user = db.TaiKhoans.FirstOrDefault(u => u.tenTaiKhoan == username && u.matKhau == password);
-                                      
-                    if (user == null) //khong ton tai tai khoan
+                    var user = db.TaiKhoans.FirstOrDefault(u => u.tenTaiKhoan == username);
+
+                    //if(db.TaiKhoans.Any(u => u.tenTaiKhoan == username && u.matKhau == password) != false)
+                    //{
+                    //    MessageBox.Show("Thanh cong!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    //}
+                    //else
+                    //{
+                    //    MessageBox.Show("Sai!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    //}
+
+                    if (user != null) //ton tai tai khoan
                     {
-                        MessageBox.Show("Tên đăng nhập hoặc mật khẩu không đúng!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        if (user.matKhau == password)
+                        {
+                            MessageBox.Show("Thanh cong!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                            //check quyen user
+
+                            //if ()
+                            //{
+
+                            //}
+                            //else
+                            //{
+                            //    MessageBox.Show("Đăng nhập thành công", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            //    this.Hide();
+                            //    FrmChinh frmChinh = new FrmChinh();
+                            //    frmChinh.ShowDialog();
+                            //}
+                        }
+                        else
+                        {
+                            MessageBox.Show("Mật khẩu không đúng!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
+
+
                     }
-                    else //dang nhap thanh cong
+                    else //tai khoan khong ton tai
                     {
-
-                        MessageBox.Show("Thanh cong!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-                        //check quyen user
-
-                        //if ()
-                        //{
-
-                        //}
-                        //else
-                        //{
-                        //    MessageBox.Show("Đăng nhập thành công", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        //    this.Hide();
-                        //    FrmChinh frmChinh = new FrmChinh();
-                        //    frmChinh.ShowDialog();
-                        //}
+                        MessageBox.Show("Tai khoan không đúng!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
                 }
             }
