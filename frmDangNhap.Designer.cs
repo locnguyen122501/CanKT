@@ -80,6 +80,7 @@
             this.txbMatkhau.PasswordChar = '*';
             this.txbMatkhau.Size = new System.Drawing.Size(156, 20);
             this.txbMatkhau.TabIndex = 17;
+            this.txbMatkhau.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txbMatkhau_KeyDown);
             // 
             // lbMatkhau
             // 
@@ -108,6 +109,7 @@
             this.txbTen.Size = new System.Drawing.Size(156, 20);
             this.txbTen.TabIndex = 14;
             this.txbTen.Enter += new System.EventHandler(this.txbTen_Enter);
+            this.txbTen.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txbTen_KeyDown);
             this.txbTen.Leave += new System.EventHandler(this.txbTen_Leave);
             // 
             // pictureBox1

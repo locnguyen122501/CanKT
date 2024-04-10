@@ -16,18 +16,31 @@ namespace CanKT.Models
         [StringLength(50)]
         public string bienSoXe { get; set; }
 
+        [StringLength(50)]
+        public string maKH { get; set; }
+
         public int? trongLuongXeVao { get; set; }
 
         public int? trongLuongXeRa { get; set; }
 
         [StringLength(50)]
-        public string maKH { get; set; }
-
-        [StringLength(50)]
-        public string maXuat { get; set; }
+        public string lenhXuat { get; set; }
 
         [StringLength(50)]
         public string maSP { get; set; }
+
+        public int? soLuongTan { get; set; }
+
+        public int? soLuongM3 { get; set; }
+
+        [Column(TypeName = "money")]
+        public decimal? donGia { get; set; }
+
+        [Column(TypeName = "money")]
+        public decimal? thanhTien { get; set; }
+
+        [Column(TypeName = "money")]
+        public decimal? tienThanhToan { get; set; }
 
         [StringLength(50)]
         public string maKho { get; set; }
@@ -37,9 +50,6 @@ namespace CanKT.Models
 
         [StringLength(50)]
         public string maMayXuc { get; set; }
-
-        [Column(TypeName = "money")]
-        public decimal? tienThanhToan { get; set; }
 
         public virtual Kho Kho { get; set; }
 

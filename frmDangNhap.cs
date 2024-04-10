@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using CanKT.Models;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace CanKT
@@ -124,17 +125,33 @@ namespace CanKT
             }
         }
 
-
-
         protected override void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);
 
-            //kiem tra da nhan phim T chua va co dang focus vao 2 textbox Ten, MK khong
-            if (e.KeyCode == Keys.T && !txbTen.Focused && !txbMatkhau.Focused)
+            //kiem tra da nhan phim escape chua va co dang focus vao 2 textbox Ten, MK khong
+            if (e.Control && e.KeyCode == Keys.T)
             {
                 btnThoat.PerformClick();
             }
+        }
+
+        private void txbTen_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
+                txbMatkhau.Focus();
+            }         
+        }
+
+        private void txbMatkhau_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                btnDangnhap.PerformClick();
+            }          
         }
     }
 }

@@ -99,7 +99,7 @@ namespace CanKT.Models
             modelBuilder.Entity<NhapXuat>()
                 .HasMany(e => e.PhieuThus)
                 .WithOptional(e => e.NhapXuat)
-                .HasForeignKey(e => e.maXuat);
+                .HasForeignKey(e => e.lenhXuat);
 
             modelBuilder.Entity<NhomThanhPham>()
                 .Property(e => e.maNhom)
@@ -148,12 +148,24 @@ namespace CanKT.Models
                 .IsUnicode(false);
 
             modelBuilder.Entity<PhieuThu>()
-                .Property(e => e.maXuat)
+                .Property(e => e.lenhXuat)
                 .IsUnicode(false);
 
             modelBuilder.Entity<PhieuThu>()
                 .Property(e => e.maSP)
                 .IsUnicode(false);
+
+            modelBuilder.Entity<PhieuThu>()
+                .Property(e => e.donGia)
+                .HasPrecision(19, 4);
+
+            modelBuilder.Entity<PhieuThu>()
+                .Property(e => e.thanhTien)
+                .HasPrecision(19, 4);
+
+            modelBuilder.Entity<PhieuThu>()
+                .Property(e => e.tienThanhToan)
+                .HasPrecision(19, 4);
 
             modelBuilder.Entity<PhieuThu>()
                 .Property(e => e.maKho)
@@ -166,10 +178,6 @@ namespace CanKT.Models
             modelBuilder.Entity<PhieuThu>()
                 .Property(e => e.maMayXuc)
                 .IsUnicode(false);
-
-            modelBuilder.Entity<PhieuThu>()
-                .Property(e => e.tienThanhToan)
-                .HasPrecision(19, 4);
 
             modelBuilder.Entity<SanPham>()
                 .Property(e => e.maThanhPham)

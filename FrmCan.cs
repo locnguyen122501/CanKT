@@ -4,7 +4,9 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.Entity;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Windows.Forms;
 using CanKT.Models;
@@ -17,51 +19,68 @@ namespace CanKT
         public FrmCan()
         {
             InitializeComponent();
+            LoadDataIntoDataGridView();
         }
 
 
         private void FrmCan_Load(object sender, EventArgs e)
         {
+            this.ActiveControl = txbSoXe;
+        }
+
+        private void LoadDataIntoDataGridView()
+        {
+            
+
+            // Truy vấn dữ liệu từ DbSet trong DbContext
             var data = db.PhieuThus.ToList();
-            var dataTable = ConvertToDataTable(data);
 
-            // Gán dữ liệu vào DataGridView
-            dgvCan.DataSource = dataTable;
-            foreach (DataGridViewColumn column in dgvCan.Columns)
+            foreach (var item in data)
             {
-                column.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            }
+                int rowIndex = dgvCan.Rows.Add(); //thêm một hàng mới vào dgv
+                DataGridViewRow row = dgvCan.Rows[rowIndex]; //lấy hàng vừa thêm từ database
 
-            int numberOfColumnsToRemove = 7; // Số lượng cột tên bảng bạn muốn loại bỏ từ cuối
+                //gán dữ liệu vào từng cell tương ứng trong hàng
+                row.Cells["Column1"].Value = item.maDon; 
+                row.Cells["Column2"].Value = item.bienSoXe;
+                row.Cells["Column3"].Value = item.maKH;
+                row.Cells["Column4"].Value = item.trongLuongXeVao;
+                row.Cells["Column5"].Value = item.trongLuongXeRa;
+                row.Cells["Column6"].Value = item.maSP;
 
-            // Loại bỏ các cột tên bảng từ cuối của DataGridView
-            for (int i = 0; i < numberOfColumnsToRemove; i++)
-            {
-                int columnIndex = dgvCan.Columns.Count - 1; // Lấy index của cột cuối cùng
-                dgvCan.Columns.RemoveAt(columnIndex); // Loại bỏ cột cuối cùng
+                //dinh dang tien
+                decimal donGia = Convert.ToDecimal(item.donGia); //chuyen kieu du lieu money sang decimal
+                row.Cells["Column7"].Value = donGia.ToString("#,0.###", CultureInfo.InvariantCulture);
+
+                row.Cells["Column8"].Value = item.soLuongTan;
+                row.Cells["Column9"].Value = item.soLuongM3;
+
+                decimal thanhTien = Convert.ToDecimal(item.thanhTien); //chuyen kieu du lieu money sang decimal
+                row.Cells["Column10"].Value = thanhTien.ToString("#,0.###", CultureInfo.InvariantCulture);
             }
         }
 
-        // Phương thức để chuyển đổi danh sách thành DataTable
-        private DataTable ConvertToDataTable<T>(IEnumerable<T> data)
+        private void txbSoXe_KeyDown(object sender, KeyEventArgs e)
         {
-            PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(T));
-            DataTable table = new DataTable();
-
-            foreach (PropertyDescriptor prop in properties)
-                table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
-
-            foreach (T item in data)
+            if (e.KeyCode == Keys.Enter)
             {
-                DataRow row = table.NewRow();
-                    
-                foreach (PropertyDescriptor prop in properties)
-                    row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
-
-                table.Rows.Add(row);
+                e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
+                txbTLXeVao.Focus();
             }
+        }
 
-            return table;
+        private void txbTLXeVao_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
+                txbTLXeRa.Focus();
+            }
+        }
+
+        private void txbTLXeRa_KeyDown(object sender, KeyEventArgs e)
+        {
+
         }
     }
 }

@@ -11,110 +11,57 @@ namespace CanKT
 {
     public partial class FrmMain : Form
     {
-        //private int childFormNumber = 0;
-
         public FrmMain()
         {
             InitializeComponent();
         }
 
+        private Form currentFormChild;
+
         private void FrmMain_Load(object sender, EventArgs e)
         {
-            FrmCan frmCan = new FrmCan();
-            frmCan.MdiParent = this;
-
-            //frmCan.Text = "Window " + childFormNumber++;
-            frmCan.Show();
+            
         }
 
-        private void ShowNewForm(object sender, EventArgs e)
+        private void OpenChildForm(Form childForm)
         {
-            FrmCan frmCan = new FrmCan();
-            frmCan.MdiParent = this;
-            //frmCan.Text = "Window " + childFormNumber++;
-            frmCan.Show();
-        }
-
-        
-
-
-        private void OpenFile(object sender, EventArgs e)
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-            openFileDialog.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
-            if (openFileDialog.ShowDialog(this) == DialogResult.OK)
+            if (currentFormChild != null)
             {
-                string FileName = openFileDialog.FileName;
+                currentFormChild.Close();
+            }
+            currentFormChild = childForm;
+            childForm.TopLevel = false;
+            childForm.FormBorderStyle = FormBorderStyle.None;
+            childForm.Dock = DockStyle.Fill;
+            panel2.Controls.Add(childForm);
+            panel2.Tag = childForm;
+            childForm.BringToFront();
+            childForm.Show();
+        }
+
+        private void đăngXuấtToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var result = MessageBox.Show("Bạn có thực sự muốn đăng xuất không?", "Thông báo", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
+            {
+                FrmDangNhap frmDangNhap = new FrmDangNhap();
+                this.Hide();
+                frmDangNhap.ShowDialog();
             }
         }
 
-        private void SaveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void thoátToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-            saveFileDialog.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
-            if (saveFileDialog.ShowDialog(this) == DialogResult.OK)
+            var result = MessageBox.Show("Bạn có thực sự muốn thoát không?", "Thông báo", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
             {
-                string FileName = saveFileDialog.FileName;
+                Application.Exit();
             }
         }
 
-        private void ExitToolsStripMenuItem_Click(object sender, EventArgs e)
+        private void cânXeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Application.Exit();
+            OpenChildForm(new FrmCan());
         }
-
-        private void CutToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void CopyToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void PasteToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void ToolBarToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            toolStrip.Visible = toolBarToolStripMenuItem.Checked;
-        }
-
-        private void StatusBarToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            statusStrip.Visible = statusBarToolStripMenuItem.Checked;
-        }
-
-        private void CascadeToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            LayoutMdi(MdiLayout.Cascade);
-        }
-
-        private void TileVerticalToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            LayoutMdi(MdiLayout.TileVertical);
-        }
-
-        private void TileHorizontalToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            LayoutMdi(MdiLayout.TileHorizontal);
-        }
-
-        private void ArrangeIconsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            LayoutMdi(MdiLayout.ArrangeIcons);
-        }
-
-        private void CloseAllToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            foreach (Form childForm in MdiChildren)
-            {
-                childForm.Close();
-            }
-        }
-
-        
     }
 }
