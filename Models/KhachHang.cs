@@ -6,11 +6,11 @@ namespace CanKT.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("NVKH")]
-    public partial class NVKH
+    [Table("KhachHang")]
+    public partial class KhachHang
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public NVKH()
+        public KhachHang()
         {
             Gias = new HashSet<Gia>();
             PhieuThus = new HashSet<PhieuThu>();
@@ -18,18 +18,15 @@ namespace CanKT.Models
 
         [Key]
         [StringLength(50)]
-        public string maNVKH { get; set; }
+        public string maKH { get; set; }
 
         [StringLength(50)]
-        public string tenNVKH { get; set; }
-
-        public int? loai { get; set; }
-
-        [StringLength(50)]
-        public string tenDangNhap { get; set; }
+        public string tenKH { get; set; }
 
         [StringLength(50)]
         public string tenKhac { get; set; }
+
+        public int? loai { get; set; }
 
         [StringLength(50)]
         public string maSoThue { get; set; }
@@ -49,8 +46,6 @@ namespace CanKT.Models
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Gia> Gias { get; set; }
-
-        public virtual TaiKhoan TaiKhoan { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PhieuThu> PhieuThus { get; set; }

@@ -45,7 +45,7 @@ namespace CanKT.Models
 
         public virtual MaTienTe MaTienTe { get; set; }
 
-        public virtual NVKH NVKH { get; set; }
+        public virtual KhachHang KhachHang { get; set; }
 
         public virtual SanPham SanPham { get; set; }
     }

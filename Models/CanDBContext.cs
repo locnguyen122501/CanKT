@@ -15,16 +15,16 @@ namespace CanKT.Models
         public virtual DbSet<DonVi> DonVis { get; set; }
         public virtual DbSet<DonViTinh> DonViTinhs { get; set; }
         public virtual DbSet<Gia> Gias { get; set; }
+        public virtual DbSet<KhachHang> KhachHangs { get; set; }
         public virtual DbSet<Kho> Khoes { get; set; }
         public virtual DbSet<MaTienTe> MaTienTes { get; set; }
         public virtual DbSet<MayXay> MayXays { get; set; }
+        public virtual DbSet<NhanVien> NhanViens { get; set; }
         public virtual DbSet<NhapXuat> NhapXuats { get; set; }
         public virtual DbSet<NhomThanhPham> NhomThanhPhams { get; set; }
-        public virtual DbSet<NVKH> NVKHs { get; set; }
         public virtual DbSet<PhieuThu> PhieuThus { get; set; }
         public virtual DbSet<SanPham> SanPhams { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
-        public virtual DbSet<TaiKhoan> TaiKhoans { get; set; }
         public virtual DbSet<TramCan> TramCans { get; set; }
         public virtual DbSet<Xe> Xes { get; set; }
         public virtual DbSet<XeXuc> XeXucs { get; set; }
@@ -67,6 +67,23 @@ namespace CanKT.Models
                 .Property(e => e.donGia)
                 .HasPrecision(19, 4);
 
+            modelBuilder.Entity<KhachHang>()
+                .Property(e => e.maKH)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<KhachHang>()
+                .Property(e => e.maSoThue)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<KhachHang>()
+                .Property(e => e.email)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<KhachHang>()
+                .HasMany(e => e.Gias)
+                .WithOptional(e => e.KhachHang)
+                .HasForeignKey(e => e.maKhachHang);
+
             modelBuilder.Entity<Kho>()
                 .Property(e => e.maDonVi)
                 .IsUnicode(false);
@@ -92,6 +109,26 @@ namespace CanKT.Models
                 .Property(e => e.maMayXay)
                 .IsUnicode(false);
 
+            modelBuilder.Entity<NhanVien>()
+                .Property(e => e.maNV)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<NhanVien>()
+                .Property(e => e.tenTaiKhoan)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<NhanVien>()
+                .Property(e => e.matKhau)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<NhanVien>()
+                .Property(e => e.quyen)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<NhanVien>()
+                .Property(e => e.email)
+                .IsUnicode(false);
+
             modelBuilder.Entity<NhapXuat>()
                 .Property(e => e.maNhapXuat)
                 .IsUnicode(false);
@@ -104,36 +141,6 @@ namespace CanKT.Models
             modelBuilder.Entity<NhomThanhPham>()
                 .Property(e => e.maNhom)
                 .IsUnicode(false);
-
-            modelBuilder.Entity<NVKH>()
-                .Property(e => e.maNVKH)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<NVKH>()
-                .Property(e => e.tenNVKH)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<NVKH>()
-                .Property(e => e.tenDangNhap)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<NVKH>()
-                .Property(e => e.maSoThue)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<NVKH>()
-                .Property(e => e.email)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<NVKH>()
-                .HasMany(e => e.Gias)
-                .WithOptional(e => e.NVKH)
-                .HasForeignKey(e => e.maKhachHang);
-
-            modelBuilder.Entity<NVKH>()
-                .HasMany(e => e.PhieuThus)
-                .WithOptional(e => e.NVKH)
-                .HasForeignKey(e => e.maKH);
 
             modelBuilder.Entity<PhieuThu>()
                 .Property(e => e.maDon)
@@ -199,19 +206,6 @@ namespace CanKT.Models
                 .HasMany(e => e.PhieuThus)
                 .WithOptional(e => e.SanPham)
                 .HasForeignKey(e => e.maSP);
-
-            modelBuilder.Entity<TaiKhoan>()
-                .Property(e => e.tenTaiKhoan)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<TaiKhoan>()
-                .Property(e => e.matKhau)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<TaiKhoan>()
-                .HasMany(e => e.NVKHs)
-                .WithOptional(e => e.TaiKhoan)
-                .HasForeignKey(e => e.tenDangNhap);
 
             modelBuilder.Entity<TramCan>()
                 .Property(e => e.maDonVi)

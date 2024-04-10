@@ -78,7 +78,7 @@ namespace CanKT
                     string username = txbTen.Text;
                     string password = txbMatkhau.Text;
 
-                    var user = db.TaiKhoans.FirstOrDefault(u => u.tenTaiKhoan == username);
+                    var user = db.NhanViens.FirstOrDefault(u => u.tenTaiKhoan == username);
 
                     //if(db.TaiKhoans.Any(u => u.tenTaiKhoan == username && u.matKhau == password) != false)
                     //{

@@ -75,16 +75,16 @@
     <Compile Include="Models\DonVi.cs" />
     <Compile Include="Models\DonViTinh.cs" />
     <Compile Include="Models\Gia.cs" />
+    <Compile Include="Models\KhachHang.cs" />
     <Compile Include="Models\Kho.cs" />
     <Compile Include="Models\MaTienTe.cs" />
     <Compile Include="Models\MayXay.cs" />
+    <Compile Include="Models\NhanVien.cs" />
     <Compile Include="Models\NhapXuat.cs" />
     <Compile Include="Models\NhomThanhPham.cs" />
-    <Compile Include="Models\NVKH.cs" />
     <Compile Include="Models\PhieuThu.cs" />
     <Compile Include="Models\SanPham.cs" />
     <Compile Include="Models\sysdiagram.cs" />
-    <Compile Include="Models\TaiKhoan.cs" />
     <Compile Include="Models\TramCan.cs" />
     <Compile Include="Models\Xe.cs" />
     <Compile Include="Models\XeXuc.cs" />
@@ -124,6 +124,7 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="Resources\BBCC_logo.png" />
+    <None Include="Resources\camera_pic.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

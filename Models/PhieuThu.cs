@@ -51,13 +51,13 @@ namespace CanKT.Models
         [StringLength(50)]
         public string maMayXuc { get; set; }
 
+        public virtual KhachHang KhachHang { get; set; }
+
         public virtual Kho Kho { get; set; }
 
         public virtual MayXay MayXay { get; set; }
 
         public virtual NhapXuat NhapXuat { get; set; }
-
-        public virtual NVKH NVKH { get; set; }
 
         public virtual SanPham SanPham { get; set; }
 
