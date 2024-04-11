@@ -96,8 +96,10 @@ namespace CanKT
                             //check quyen user
                             
                             MessageBox.Show("Đăng nhập thành công", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            
-                            FrmMain frmMain = new FrmMain();
+
+                            string tentaikhoan = user.tenTaiKhoan;
+
+                            FrmMain frmMain = new FrmMain(tentaikhoan);
                             this.Hide();
                             frmMain.ShowDialog();
                         }

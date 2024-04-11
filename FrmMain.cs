@@ -11,10 +11,14 @@ namespace CanKT
 {
     public partial class FrmMain : Form
     {
-        public FrmMain()
+        private string tentk;
+        public FrmMain(string tentaikhoan)
         {
             InitializeComponent();
+            this.tentk = tentaikhoan;
         }
+
+
 
         private Form currentFormChild;
 
@@ -39,6 +43,11 @@ namespace CanKT
             childForm.Show();
         }
 
+        private void cânXeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenChildForm(new FrmCan(tentk));
+        }
+
         private void đăngXuấtToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var result = MessageBox.Show("Bạn có thực sự muốn đăng xuất không?", "Thông báo", MessageBoxButtons.YesNo);
@@ -50,18 +59,43 @@ namespace CanKT
             }
         }
 
+        #region Exit_Function
+        private bool isExiting = false;
+
         private void thoátToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            isExiting = true;
             var result = MessageBox.Show("Bạn có thực sự muốn thoát không?", "Thông báo", MessageBoxButtons.YesNo);
             if (result == DialogResult.Yes)
             {
-                Application.Exit();
+                ExitApplication();
             }
         }
 
-        private void cânXeToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ExitApplication()
         {
-            OpenChildForm(new FrmCan());
+            Application.Exit();
         }
+
+        private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (!isExiting)
+            {
+                isExiting = true;
+                var result = MessageBox.Show("Bạn có thực sự muốn thoát không?", "Thông báo", MessageBoxButtons.YesNo);
+                if (result == DialogResult.No)
+                {
+                    isExiting = false;
+                    e.Cancel = true;
+                }
+                else
+                {
+                    ExitApplication();
+                }
+            }
+        }
+        #endregion
+
+        //next
     }
 }
