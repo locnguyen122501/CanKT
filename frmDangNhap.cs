@@ -8,15 +8,16 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using CanKT.Models;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace CanKT
 {
-    public partial class frmDangNhap : Form
+    public partial class FrmDangNhap : Form
     {
         CanDBContext db = new CanDBContext();
 
-        public frmDangNhap()
+        public FrmDangNhap()
         {
             InitializeComponent();
 
@@ -77,7 +78,7 @@ namespace CanKT
                     string username = txbTen.Text;
                     string password = txbMatkhau.Text;
 
-                    var user = db.TaiKhoans.FirstOrDefault(u => u.tenTaiKhoan == username);
+                    var user = db.NhanViens.FirstOrDefault(u => u.tenTaiKhoan == username);
 
                     //if(db.TaiKhoans.Any(u => u.tenTaiKhoan == username && u.matKhau == password) != false)
                     //{
@@ -92,21 +93,13 @@ namespace CanKT
                     {
                         if (user.matKhau == password)
                         {
-                            MessageBox.Show("Thanh cong!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
                             //check quyen user
-
-                            //if ()
-                            //{
-
-                            //}
-                            //else
-                            //{
-                            //    MessageBox.Show("Đăng nhập thành công", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            //    this.Hide();
-                            //    FrmChinh frmChinh = new FrmChinh();
-                            //    frmChinh.ShowDialog();
-                            //}
+                            
+                            MessageBox.Show("Đăng nhập thành công", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            
+                            FrmMain frmMain = new FrmMain();
+                            this.Hide();
+                            frmMain.ShowDialog();
                         }
                         else
                         {
@@ -132,17 +125,33 @@ namespace CanKT
             }
         }
 
-
-
         protected override void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);
 
-            //kiem tra da nhan phim T chua va co dang focus vao 2 textbox Ten, MK khong
-            if (e.KeyCode == Keys.T && !txbTen.Focused && !txbMatkhau.Focused)
+            //kiem tra da nhan phim escape chua va co dang focus vao 2 textbox Ten, MK khong
+            if (e.Control && e.KeyCode == Keys.T)
             {
                 btnThoat.PerformClick();
             }
+        }
+
+        private void txbTen_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
+                txbMatkhau.Focus();
+            }         
+        }
+
+        private void txbMatkhau_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                btnDangnhap.PerformClick();
+            }          
         }
     }
 }

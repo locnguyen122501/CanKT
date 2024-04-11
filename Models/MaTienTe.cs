@@ -9,6 +9,12 @@ namespace CanKT.Models
     [Table("MaTienTe")]
     public partial class MaTienTe
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public MaTienTe()
+        {
+            Gias = new HashSet<Gia>();
+        }
+
         [Key]
         [Column("maTienTe")]
         [StringLength(50)]
@@ -18,5 +24,8 @@ namespace CanKT.Models
         public string tenTienTe { get; set; }
 
         public int? trangThai { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Gia> Gias { get; set; }
     }
 }

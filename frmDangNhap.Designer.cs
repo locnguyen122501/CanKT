@@ -1,6 +1,6 @@
 ﻿namespace CanKT
 {
-    partial class frmDangNhap
+    partial class FrmDangNhap
     {
         /// <summary>
         /// Required designer variable.
@@ -35,13 +35,15 @@
             this.lbMatkhau = new System.Windows.Forms.Label();
             this.lbTen = new System.Windows.Forms.Label();
             this.txbTen = new System.Windows.Forms.TextBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // checkboxHienthi
             // 
             this.checkboxHienthi.AutoSize = true;
             this.checkboxHienthi.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.checkboxHienthi.Location = new System.Drawing.Point(130, 194);
+            this.checkboxHienthi.Location = new System.Drawing.Point(134, 223);
             this.checkboxHienthi.Name = "checkboxHienthi";
             this.checkboxHienthi.Size = new System.Drawing.Size(109, 17);
             this.checkboxHienthi.TabIndex = 20;
@@ -52,7 +54,7 @@
             // btnThoat
             // 
             this.btnThoat.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.btnThoat.Location = new System.Drawing.Point(211, 217);
+            this.btnThoat.Location = new System.Drawing.Point(215, 246);
             this.btnThoat.Name = "btnThoat";
             this.btnThoat.Size = new System.Drawing.Size(75, 23);
             this.btnThoat.TabIndex = 19;
@@ -63,7 +65,7 @@
             // btnDangnhap
             // 
             this.btnDangnhap.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.btnDangnhap.Location = new System.Drawing.Point(130, 217);
+            this.btnDangnhap.Location = new System.Drawing.Point(134, 246);
             this.btnDangnhap.Name = "btnDangnhap";
             this.btnDangnhap.Size = new System.Drawing.Size(75, 23);
             this.btnDangnhap.TabIndex = 18;
@@ -73,17 +75,18 @@
             // 
             // txbMatkhau
             // 
-            this.txbMatkhau.Location = new System.Drawing.Point(130, 168);
+            this.txbMatkhau.Location = new System.Drawing.Point(134, 197);
             this.txbMatkhau.Name = "txbMatkhau";
             this.txbMatkhau.PasswordChar = '*';
             this.txbMatkhau.Size = new System.Drawing.Size(156, 20);
             this.txbMatkhau.TabIndex = 17;
+            this.txbMatkhau.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txbMatkhau_KeyDown);
             // 
             // lbMatkhau
             // 
             this.lbMatkhau.AutoSize = true;
             this.lbMatkhau.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.lbMatkhau.Location = new System.Drawing.Point(43, 175);
+            this.lbMatkhau.Location = new System.Drawing.Point(47, 204);
             this.lbMatkhau.Name = "lbMatkhau";
             this.lbMatkhau.Size = new System.Drawing.Size(52, 13);
             this.lbMatkhau.TabIndex = 16;
@@ -93,7 +96,7 @@
             // 
             this.lbTen.AutoSize = true;
             this.lbTen.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.lbTen.Location = new System.Drawing.Point(43, 142);
+            this.lbTen.Location = new System.Drawing.Point(47, 171);
             this.lbTen.Name = "lbTen";
             this.lbTen.Size = new System.Drawing.Size(26, 13);
             this.lbTen.TabIndex = 15;
@@ -101,19 +104,30 @@
             // 
             // txbTen
             // 
-            this.txbTen.Location = new System.Drawing.Point(130, 135);
+            this.txbTen.Location = new System.Drawing.Point(134, 164);
             this.txbTen.Name = "txbTen";
             this.txbTen.Size = new System.Drawing.Size(156, 20);
             this.txbTen.TabIndex = 14;
             this.txbTen.Enter += new System.EventHandler(this.txbTen_Enter);
+            this.txbTen.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txbTen_KeyDown);
             this.txbTen.Leave += new System.EventHandler(this.txbTen_Leave);
             // 
-            // frmDangNhap
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::CanKT.Properties.Resources.BBCC_logo;
+            this.pictureBox1.Location = new System.Drawing.Point(133, 12);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(110, 128);
+            this.pictureBox1.TabIndex = 21;
+            this.pictureBox1.TabStop = false;
+            // 
+            // FrmDangNhap
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(359, 360);
+            this.ClientSize = new System.Drawing.Size(359, 316);
+            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.checkboxHienthi);
             this.Controls.Add(this.btnThoat);
             this.Controls.Add(this.btnDangnhap);
@@ -122,10 +136,11 @@
             this.Controls.Add(this.lbTen);
             this.Controls.Add(this.txbTen);
             this.MaximizeBox = false;
-            this.Name = "frmDangNhap";
+            this.Name = "FrmDangNhap";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Đăng nhập";
             this.Load += new System.EventHandler(this.frmDangNhap_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -140,6 +155,7 @@
         private System.Windows.Forms.Label lbMatkhau;
         private System.Windows.Forms.Label lbTen;
         private System.Windows.Forms.TextBox txbTen;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
 

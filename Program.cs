@@ -15,7 +15,7 @@ namespace CanKT
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new frmDangNhap());
+            Application.Run(new FrmMain());
         }
     }
 }

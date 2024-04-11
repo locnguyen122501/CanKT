@@ -6,26 +6,33 @@ namespace CanKT.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("NVKH")]
-    public partial class NVKH
+    [Table("NhanVien")]
+    public partial class NhanVien
     {
         [Key]
+        [Column(Order = 0)]
         [StringLength(50)]
-        public string maNVKH { get; set; }
+        public string maNV { get; set; }
 
         [StringLength(50)]
-        public string tenNVKH { get; set; }
-
-        public int? loai { get; set; }
-
-        [StringLength(50)]
-        public string tenDangNhap { get; set; }
+        public string tenNV { get; set; }
 
         [StringLength(50)]
         public string tenKhac { get; set; }
 
+        [Key]
+        [Column(Order = 1)]
         [StringLength(50)]
-        public string maSoThue { get; set; }
+        public string tenTaiKhoan { get; set; }
+
+        [StringLength(50)]
+        public string matKhau { get; set; }
+
+        [StringLength(50)]
+        public string quyen { get; set; }
+
+        [MaxLength(50)]
+        public byte[] maSoThue { get; set; }
 
         [StringLength(50)]
         public string diaChi { get; set; }
@@ -39,7 +46,5 @@ namespace CanKT.Models
         public string ghiChu { get; set; }
 
         public int? trangThai { get; set; }
-
-        public virtual TaiKhoan TaiKhoan { get; set; }
     }
 }

@@ -6,39 +6,48 @@ namespace CanKT.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("XeXuc")]
-    public partial class XeXuc
+    [Table("KhachHang")]
+    public partial class KhachHang
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public XeXuc()
+        public KhachHang()
         {
             PhieuThus = new HashSet<PhieuThu>();
+            Xes = new HashSet<Xe>();
         }
-
-        [StringLength(50)]
-        public string maDonVi { get; set; }
 
         [Key]
         [StringLength(50)]
-        public string maXeXuc { get; set; }
+        public string maKH { get; set; }
 
         [StringLength(50)]
-        public string tenXeXuc { get; set; }
+        public string tenKH { get; set; }
 
         [StringLength(50)]
         public string tenKhac { get; set; }
 
+        public int? loai { get; set; }
+
         [StringLength(50)]
-        public string tenTaiXe { get; set; }
+        public string maSoThue { get; set; }
+
+        [StringLength(50)]
+        public string diaChi { get; set; }
+
+        public int? sdt { get; set; }
+
+        [StringLength(50)]
+        public string email { get; set; }
 
         [StringLength(50)]
         public string ghiChu { get; set; }
 
         public int? trangThai { get; set; }
 
-        public virtual DonVi DonVi { get; set; }
-
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PhieuThu> PhieuThus { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Xe> Xes { get; set; }
     }
 }

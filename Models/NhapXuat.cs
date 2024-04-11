@@ -6,23 +6,31 @@ namespace CanKT.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("TaiKhoan")]
-    public partial class TaiKhoan
+    [Table("NhapXuat")]
+    public partial class NhapXuat
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public TaiKhoan()
+        public NhapXuat()
         {
-            NVKHs = new HashSet<NVKH>();
+            PhieuThus = new HashSet<PhieuThu>();
         }
 
         [Key]
         [StringLength(50)]
-        public string tenTaiKhoan { get; set; }
+        public string maNhapXuat { get; set; }
 
         [StringLength(50)]
-        public string matKhau { get; set; }
+        public string tenNhapXuat { get; set; }
+
+        [StringLength(50)]
+        public string tenKhac { get; set; }
+
+        [StringLength(50)]
+        public string ghiChu { get; set; }
+
+        public int? trangThai { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<NVKH> NVKHs { get; set; }
+        public virtual ICollection<PhieuThu> PhieuThus { get; set; }
     }
 }

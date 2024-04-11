@@ -12,6 +12,7 @@ namespace CanKT.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public DonVi()
         {
+            Gias = new HashSet<Gia>();
             Khoes = new HashSet<Kho>();
             MayXays = new HashSet<MayXay>();
             TramCans = new HashSet<TramCan>();
@@ -32,6 +33,9 @@ namespace CanKT.Models
         public string ghiChu { get; set; }
 
         public int? trangThai { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Gia> Gias { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Kho> Khoes { get; set; }
