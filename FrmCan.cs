@@ -18,14 +18,12 @@ namespace CanKT
     {
         CanDBContext db = new CanDBContext();
 
-        //private string tentaikhoan;
         public FrmCan(string tentaikhoan)
         {
             InitializeComponent();
 
             lblWelcome.Text = "Xin chào " + tentaikhoan;
 
-            //this.tentaikhoan = tentaikhoan;
             LoadDataIntoDataGridView();
         }
 
@@ -52,6 +50,7 @@ namespace CanKT
 
                 decimal tlxevao = Convert.ToDecimal(item.trongLuongXeVao);
                 row.Cells["Column4"].Value = tlxevao.ToString("N0");
+                //row.Cells["Column4"].Value = tlxevao.ToString();
 
                 decimal tlxera = Convert.ToDecimal(item.trongLuongXeRa);
                 row.Cells["Column5"].Value = tlxera.ToString("N0");
@@ -86,14 +85,14 @@ namespace CanKT
                 txbMaPhieu.Text = selectedRow.Cells["Column1"].Value.ToString();
                 txbSoXe.Text = selectedRow.Cells["Column2"].Value.ToString();
                 txbMaKH.Text = selectedRow.Cells["Column3"].Value.ToString();
-                txbTLXeRa.Text = selectedRow.Cells["Column4"].Value.ToString();
-                txbTLXeVao.Text = selectedRow.Cells["Column5"].Value.ToString();
+                txbTLXeVao.Text = selectedRow.Cells["Column4"].Value.ToString();
+                txbTLXeRa.Text = selectedRow.Cells["Column5"].Value.ToString();
                 txbMaSP.Text = selectedRow.Cells["Column6"].Value.ToString();
                 txbDonGia.Text = selectedRow.Cells["Column7"].Value.ToString();
                 txbSoLuongTan.Text = selectedRow.Cells["Column8"].Value.ToString();
                 txbSoLuongM3.Text = selectedRow.Cells["Column9"].Value.ToString();
-                txbTienHang.Text = selectedRow.Cells["Column10"].Value.ToString();
-
+                //txbTienHang.Text = selectedRow.Cells["Column10"].Value.ToString();
+                txbTienHang.Text = string.Format("{0:N0}", (selectedRow.Cells["Column10"].Value));
             }
         }
 
@@ -109,13 +108,14 @@ namespace CanKT
                 txbMaPhieu.Text = selectedRow.Cells["Column1"].Value.ToString();
                 txbSoXe.Text = selectedRow.Cells["Column2"].Value.ToString();
                 txbMaKH.Text = selectedRow.Cells["Column3"].Value.ToString();
-                txbTLXeRa.Text = selectedRow.Cells["Column4"].Value.ToString();
-                txbTLXeVao.Text = selectedRow.Cells["Column5"].Value.ToString();
+                txbTLXeVao.Text = selectedRow.Cells["Column4"].Value.ToString();
+                txbTLXeRa.Text = selectedRow.Cells["Column5"].Value.ToString();
                 txbMaSP.Text = selectedRow.Cells["Column6"].Value.ToString();
                 txbDonGia.Text = selectedRow.Cells["Column7"].Value.ToString();
                 txbSoLuongTan.Text = selectedRow.Cells["Column8"].Value.ToString();
-                //txbSoLuongM3.Text = selectedRow.Cells["Column9"].Value.ToString();
-                txbTienHang.Text = selectedRow.Cells["Column10"].Value.ToString();
+                txbSoLuongM3.Text = selectedRow.Cells["Column9"].Value.ToString();
+                //txbTienHang.Text = selectedRow.Cells["Column10"].Value.ToString("N0");
+                txbTienHang.Text = string.Format("{0:N0}", (selectedRow.Cells["Column10"].Value));
 
                 string lenhxuat = txbLenhXuat.Text;
 
@@ -142,9 +142,7 @@ namespace CanKT
 
         private string GetLenhXuatFromPhieuThu(string maDon)
         {
-            // Thực hiện truy vấn tới cơ sở dữ liệu của bạn để lấy tên khách hàng từ mã khách hàng
-            // Ví dụ:
-            // SELECT tenKH FROM TenBangKhachHang WHERE maKH = 'maKH';
+            // Thực hiện truy vấn tới cơ sở dữ liệu của bạn để lấy lệnh xuất từ mã phiếu thu
             // Sau đó trả về tên khách hàng tương ứng
 
             string lenhXuat = "";
@@ -164,8 +162,6 @@ namespace CanKT
         private string GetTenKHFromMaKH(string maKH)
         {
             // Thực hiện truy vấn tới cơ sở dữ liệu của bạn để lấy tên khách hàng từ mã khách hàng
-            // Ví dụ:
-            // SELECT tenKH FROM TenBangKhachHang WHERE maKH = 'maKH';
             // Sau đó trả về tên khách hàng tương ứng
 
             string tenKH = "";
@@ -195,21 +191,23 @@ namespace CanKT
 
         private void TinhTienHang()
         {
-            // Kiểm tra xem giá trị của hai TextBox có thể được chuyển đổi thành số không
-            if (double.TryParse(txbDonGia.Text, out double value1) && double.TryParse(txbSoLuongTan.Text, out double value2))
-            //if(double.TryParse(txbDonGia.Text, out double value1))
+            decimal tien;
+            string temp = "";
+
+            // Kiểm tra xem giá trị của hai txb có thể được chuyển đổi thành số không
+            if (decimal.TryParse(txbDonGia.Text.Replace(",", ""), out decimal value1) && decimal.TryParse(txbSoLuongTan.Text.Replace(",", ""), out decimal value2))
             {
-                double tien = value1 * value2;
+                // Tính tích của hai giá trị và gán kết quả vào txbtienhang
+                tien = value1 * value2;               
 
-                //txbTienHang.Text = tien.ToString("N0");
-                //double tien = value1 * 100;
-                // Tính tích của hai giá trị và gán kết quả vào TextBox thứ ba
-
-                txbTienHang.Text = tien.ToString("N0", CultureInfo.InvariantCulture);
+                //txbTienHang.Text = tien.ToString("N0", CultureInfo.InvariantCulture);
+                txbTienHang.Text = tien.ToString("N0");
+                temp = txbTienHang.ToString();
+                temp = temp.TrimEnd('0').TrimEnd(',');
             }
             else
             {
-                // Nếu một trong hai TextBox không thể chuyển đổi thành số, gán giá trị rỗng cho TextBox thứ ba
+                // Nếu một trong hai TextBox không thể chuyển đổi thành số, gán giá trị rỗng
                 txbTienHang.Text = "";
             }
         }
@@ -221,18 +219,18 @@ namespace CanKT
 
         private void TinhTienThanhToan()
         {
-            // Kiểm tra xem giá trị của hai TextBox có thể được chuyển đổi thành số không
-            if (double.TryParse(txbTienHang.Text, out double value1))
+            // Kiểm tra xem giá trị của hai txb có thể được chuyển đổi thành số không
+            if (decimal.TryParse(txbTienHang.Text.Replace(",", ""), out decimal value1))
             {
-                double tien = value1 + (value1*0.0999998833852334);
-                // Tính tích của hai giá trị và gán kết quả vào TextBox thứ ba
+                decimal tien = value1 + (value1 * (decimal)0.0999998833852334);
+                // Tính tích của hai giá trị và gán kết quả vào txbthanhtoan
 
-                txbThanhToan.Text = tien.ToString("N0");
+                txbThanhToan.Text = tien.ToString("N0");               
             }
             else
             {
-                // Nếu một trong hai TextBox không thể chuyển đổi thành số, gán giá trị rỗng cho TextBox thứ ba
-                txbThanhToan.Text = "";
+                // Nếu không thể chuyển đổi thành số, gán giá trị rỗng cho txb
+                txbThanhToan.Text = "0";
             }
         }
 
@@ -240,32 +238,30 @@ namespace CanKT
         {
             string maSP = txbMaSP.Text;
 
-                // Truy vấn dữ liệu từ bảng khác để lấy tên khách hàng tương ứng
+            // Truy vấn dữ liệu từ bảng khác để lấy hệ số tương ứng
             string heSo = GetHeSoFromMaSP(maSP);
             double temp = double.Parse(heSo);
 
                 
-            // Kiểm tra xem giá trị của hai TextBox có thể được chuyển đổi thành số không
-            if (double.TryParse(txbSoLuongTan.Text, out double value1))
+            // Kiểm tra xem giá trị của hai txb có thể được chuyển đổi thành số không
+            if (double.TryParse(txbSoLuongTan.Text.Replace(",", ""), out double value1))
             {
                 double m3 = (value1)/(temp);
-                // Tính tích của hai giá trị và gán kết quả vào TextBox thứ ba
+                // Tính tích của hai giá trị và gán kết quả vào txbsoluongm3
 
                 txbSoLuongM3.Text = m3.ToString("N0");
             }
             else
             {
-                // Nếu một trong hai TextBox không thể chuyển đổi thành số, gán giá trị rỗng cho TextBox thứ ba
+                // Nếu không thể chuyển đổi thành số, gán giá trị rỗng cho txb
                 txbSoLuongM3.Text = "";
             }
         }
 
         private string GetHeSoFromMaSP(string maSP)
         {
-            // Thực hiện truy vấn tới cơ sở dữ liệu của bạn để lấy tên khách hàng từ mã khách hàng
-            // Ví dụ:
-            // SELECT tenKH FROM TenBangKhachHang WHERE maKH = 'maKH';
-            // Sau đó trả về tên khách hàng tương ứng
+            // Thực hiện truy vấn tới cơ sở dữ liệu của bạn để lấy hệ số từ mã sản phẩm
+            // Sau đó trả về hệ số tương ứng
             string ma = maSP;
 
             double heSo = 0;
@@ -289,8 +285,10 @@ namespace CanKT
         {
             string maSP = txbMaSP.Text;
             string tenSP = GetTenSPFromMaSP(maSP);
+            string giaSP = GetGiaFromMaSP(maSP);
 
             txbTenSP.Text = tenSP.ToString();
+            txbDonGia.Text = giaSP.ToString();
         }
 
         private string GetTenSPFromMaSP(string maSP)
@@ -307,6 +305,22 @@ namespace CanKT
                 }
             }
             return tenSP;
+        }
+
+        private string GetGiaFromMaSP(string maSP)
+        {
+            string giaSP = "";
+
+            using (var db = new CanDBContext())
+            {
+                var gia = db.Gias.FirstOrDefault(g => g.maThanhPham == maSP);
+
+                if (gia != null)
+                {
+                    giaSP = string.Format("{0:#,##0}", gia.donGia);
+                }
+            }
+            return giaSP;
         }
 
         private void txbMaPhieu_TextChanged(object sender, EventArgs e)
@@ -445,6 +459,35 @@ namespace CanKT
             return tenMXuc;
         }
 
+        private void txbTLXeRa_TextChanged(object sender, EventArgs e)
+        {
+            int soluongtan;
+
+            // Loại bỏ dấu phân tách hàng nghìn và chuyển đổi về kiểu số nguyên
+            
+            
+
+            int trongluongxevao;
+            //if (int.TryParse(txbTLXeVao.Text, out trongluongxevao))
+            //{
+            //    int tlxevao = int.Parse(trongluongxevao.Replace(",", ""));
+            //}
+
+            if (int.TryParse(txbTLXeVao.Text.Replace(",", ""), out trongluongxevao))
+            {
+
+            }
+
+            int trongluongxera;
+            if (int.TryParse(txbTLXeRa.Text.Replace(",", ""), out trongluongxera))
+            {
+
+            }
+
+            soluongtan = trongluongxera - trongluongxevao;
+            txbSoLuongTan.Text = soluongtan.ToString("N0");
+        }
+
         #region KeyDown_Code
         private void txbSoXe_KeyDown(object sender, KeyEventArgs e)
         {
@@ -517,6 +560,20 @@ namespace CanKT
                 txbMaXeXuc.Focus();
             }
         }
+
+        private void txbMaXeXuc_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
+                txbSalan.Focus();
+            }
+        }
+
+        private void txbSalan_KeyDown(object sender, KeyEventArgs e)
+        {
+            themData();
+        }
         #endregion
 
         //next
@@ -525,5 +582,139 @@ namespace CanKT
         {
             this.Close();
         }
+
+        private void themData()
+        {
+            string maphieu = txbMaPhieu.Text;
+            string soxe = txbSoXe.Text;
+
+            int trongluongxevao = int.Parse(txbTLXeVao.Text.Replace(",", ""));
+            int trongluongxera = int.Parse(txbTLXeRa.Text.Replace(",", ""));
+
+            string lenhxuat = txbLenhXuat.Text;
+            string makh = txbMaKH.Text;
+            string masp = txbMaSP.Text;
+            int soluongtan = int.Parse(txbSoLuongTan.Text.Replace(",", ""));
+            int soluongm3 = int.Parse(txbSoLuongM3.Text.Replace(",", ""));
+            decimal dongia = decimal.Parse(txbDonGia.Text);
+            dongia = Math.Round(dongia / 1000) * 1000;
+            decimal thanhtien = decimal.Parse(txbTienHang.Text);
+            thanhtien = Math.Round(thanhtien / 1000) * 1000;
+            decimal thanhtoan = decimal.Parse(txbThanhToan.Text);
+            thanhtoan = Math.Round(thanhtoan / 1000) * 1000;
+            string makho = txbMaKho.Text;
+            string mamayxay = txbMaMayXay.Text;
+            string mamayxuc = txbMaXeXuc.Text;
+
+            // Tạo đối tượng mới từ dữ liệu đã nhận được
+            PhieuThu phieuThu = new PhieuThu
+            {
+                maDon = maphieu,
+                bienSoXe = soxe,
+                trongLuongXeVao = trongluongxevao,
+                trongLuongXeRa = trongluongxera,
+                lenhXuat = lenhxuat,
+                maKH = makh,
+                maSP = masp,
+                soLuongTan = soluongtan,
+                soLuongM3 = soluongm3,
+                donGia = dongia,
+                thanhTien = thanhtien,
+                tienThanhToan = thanhtoan,
+                maKho = makho,
+                maMayXay = mamayxay,
+                maMayXuc = mamayxuc,
+
+            };
+
+            // Thêm đối tượng vào cơ sở dữ liệu bằng Entity Framework
+            using (var db = new CanDBContext())
+            {
+                db.PhieuThus.Add(phieuThu);
+                db.SaveChanges();
+            }
+
+            // Thông báo thành công
+            MessageBox.Show("Thêm khách hàng thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            // Xóa dữ liệu trong các textbox sau khi thêm thành công (tuỳ chọn)
+            txbSoXe.Clear();
+            LoadDataIntoDataGridView();
+
+        }
+
+        #region KeyPressChuyenInHoa
+        private void txbSoXe_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (char.IsLower(e.KeyChar))
+            {
+                // Chuyển đổi ký tự nhập vào thành chữ hoa
+                e.KeyChar = char.ToUpper(e.KeyChar);
+            }
+        }
+
+        private void txbMaKH_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (char.IsLower(e.KeyChar))
+            {
+                // Chuyển đổi ký tự nhập vào thành chữ hoa
+                e.KeyChar = char.ToUpper(e.KeyChar);
+            }
+        }
+
+        private void txbMaSP_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (char.IsLower(e.KeyChar))
+            {
+                // Chuyển đổi ký tự nhập vào thành chữ hoa
+                e.KeyChar = char.ToUpper(e.KeyChar);
+            }
+        }
+
+        private void txbMaKho_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (char.IsLower(e.KeyChar))
+            {
+                // Chuyển đổi ký tự nhập vào thành chữ hoa
+                e.KeyChar = char.ToUpper(e.KeyChar);
+            }
+        }
+
+        private void txbMaMayXay_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (char.IsLower(e.KeyChar))
+            {
+                // Chuyển đổi ký tự nhập vào thành chữ hoa
+                e.KeyChar = char.ToUpper(e.KeyChar);
+            }
+        }
+
+        private void txbMaXeXuc_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (char.IsLower(e.KeyChar))
+            {
+                // Chuyển đổi ký tự nhập vào thành chữ hoa
+                e.KeyChar = char.ToUpper(e.KeyChar);
+            }
+        }
+        #endregion
+
+        #region KeyLeaveThemdauphay
+        private void txbTLXeVao_Leave(object sender, EventArgs e)
+        {
+            if (int.TryParse(txbTLXeVao.Text, out int tlvao))
+            {
+                txbTLXeVao.Text = tlvao.ToString("N0");
+            }
+        }
+
+        private void txbTLXeRa_Leave(object sender, EventArgs e)
+        {
+            if (int.TryParse(txbTLXeRa.Text, out int tlra))
+            {
+                txbTLXeRa.Text = tlra.ToString("N0");
+            }
+        }
+        #endregion
     }
 }

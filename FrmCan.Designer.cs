@@ -103,6 +103,8 @@
             // dgvCan
             // 
             this.dgvCan.AllowUserToAddRows = false;
+            this.dgvCan.AllowUserToResizeColumns = false;
+            this.dgvCan.AllowUserToResizeRows = false;
             this.dgvCan.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -262,9 +264,9 @@
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(8, 25);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(333, 25);
+            this.label1.Size = new System.Drawing.Size(349, 25);
             this.label1.TabIndex = 41;
-            this.label1.Text = "XN KHAI THÁC ĐÁ TÂN CAN 1,2 ";
+            this.label1.Text = "XN KHAI THÁC ĐÁ TÂN CANG 1,2 ";
             // 
             // txbMaPhieu
             // 
@@ -314,6 +316,8 @@
             this.txbMaXeXuc.Size = new System.Drawing.Size(56, 31);
             this.txbMaXeXuc.TabIndex = 36;
             this.txbMaXeXuc.TextChanged += new System.EventHandler(this.txbMaXeXuc_TextChanged);
+            this.txbMaXeXuc.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txbMaXeXuc_KeyDown);
+            this.txbMaXeXuc.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txbMaXeXuc_KeyPress);
             // 
             // txbTenMayXay
             // 
@@ -344,6 +348,7 @@
             this.txbMaMayXay.TabIndex = 33;
             this.txbMaMayXay.TextChanged += new System.EventHandler(this.txbMaMayXay_TextChanged);
             this.txbMaMayXay.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txbMaMayXay_KeyDown);
+            this.txbMaMayXay.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txbMaMayXay_KeyPress);
             // 
             // txbTenKho
             // 
@@ -374,6 +379,7 @@
             this.txbMaKho.TabIndex = 30;
             this.txbMaKho.TextChanged += new System.EventHandler(this.txbMaKho_TextChanged);
             this.txbMaKho.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txbMaKho_KeyDown);
+            this.txbMaKho.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txbMaKho_KeyPress);
             // 
             // lblSalan
             // 
@@ -393,6 +399,7 @@
             this.txbSalan.Name = "txbSalan";
             this.txbSalan.Size = new System.Drawing.Size(176, 31);
             this.txbSalan.TabIndex = 28;
+            this.txbSalan.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txbSalan_KeyDown);
             // 
             // lblThanhToan
             // 
@@ -486,9 +493,9 @@
             // 
             this.txbDonGia.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txbDonGia.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
-            this.txbDonGia.Location = new System.Drawing.Point(488, 204);
+            this.txbDonGia.Location = new System.Drawing.Point(481, 204);
             this.txbDonGia.Name = "txbDonGia";
-            this.txbDonGia.Size = new System.Drawing.Size(119, 31);
+            this.txbDonGia.Size = new System.Drawing.Size(126, 31);
             this.txbDonGia.TabIndex = 16;
             this.txbDonGia.TextChanged += new System.EventHandler(this.txbDonGia_TextChanged);
             // 
@@ -508,7 +515,7 @@
             this.txbTenSP.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
             this.txbTenSP.Location = new System.Drawing.Point(247, 204);
             this.txbTenSP.Name = "txbTenSP";
-            this.txbTenSP.Size = new System.Drawing.Size(235, 31);
+            this.txbTenSP.Size = new System.Drawing.Size(228, 31);
             this.txbTenSP.TabIndex = 14;
             // 
             // lblTenSP
@@ -531,6 +538,7 @@
             this.txbMaSP.TabIndex = 12;
             this.txbMaSP.TextChanged += new System.EventHandler(this.txbMaSP_TextChanged);
             this.txbMaSP.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txbMaSP_KeyDown);
+            this.txbMaSP.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txbMaSP_KeyPress);
             // 
             // lblMaSP
             // 
@@ -570,6 +578,7 @@
             this.txbMaKH.Size = new System.Drawing.Size(84, 31);
             this.txbMaKH.TabIndex = 7;
             this.txbMaKH.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txbMaKH_KeyDown);
+            this.txbMaKH.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txbMaKH_KeyPress);
             // 
             // lblKhachHang
             // 
@@ -590,6 +599,7 @@
             this.txbTLXeVao.Size = new System.Drawing.Size(180, 31);
             this.txbTLXeVao.TabIndex = 5;
             this.txbTLXeVao.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txbTLXeVao_KeyDown);
+            this.txbTLXeVao.Leave += new System.EventHandler(this.txbTLXeVao_Leave);
             // 
             // lblTLXeRa
             // 
@@ -609,7 +619,9 @@
             this.txbTLXeRa.Name = "txbTLXeRa";
             this.txbTLXeRa.Size = new System.Drawing.Size(180, 31);
             this.txbTLXeRa.TabIndex = 3;
+            this.txbTLXeRa.TextChanged += new System.EventHandler(this.txbTLXeRa_TextChanged);
             this.txbTLXeRa.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txbTLXeRa_KeyDown);
+            this.txbTLXeRa.Leave += new System.EventHandler(this.txbTLXeRa_Leave);
             // 
             // lblTLXeVao
             // 
@@ -630,6 +642,7 @@
             this.txbSoXe.Size = new System.Drawing.Size(241, 31);
             this.txbSoXe.TabIndex = 1;
             this.txbSoXe.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txbSoXe_KeyDown);
+            this.txbSoXe.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txbSoXe_KeyPress);
             // 
             // lblSoXe
             // 
