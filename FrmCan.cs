@@ -17,9 +17,15 @@ namespace CanKT
     public partial class FrmCan : Form
     {
         CanDBContext db = new CanDBContext();
-        public FrmCan()
+
+        //private string tentaikhoan;
+        public FrmCan(string tentaikhoan)
         {
             InitializeComponent();
+
+            lblWelcome.Text = "Xin chào " + tentaikhoan;
+
+            //this.tentaikhoan = tentaikhoan;
             LoadDataIntoDataGridView();
         }
 
@@ -514,5 +520,10 @@ namespace CanKT
         #endregion
 
         //next
+
+        private void btnXong_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }
