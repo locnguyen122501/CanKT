@@ -28,6 +28,9 @@ namespace CanKT.Models
         public int? loaiXe { get; set; }
 
         [StringLength(50)]
+        public string maKH { get; set; }
+
+        [StringLength(50)]
         public string tenTaiXe { get; set; }
 
         public int? trongLuongBanThan { get; set; }
@@ -41,6 +44,8 @@ namespace CanKT.Models
         public string ghiChu { get; set; }
 
         public int? trangThai { get; set; }
+
+        public virtual KhachHang KhachHang { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PhieuThu> PhieuThus { get; set; }

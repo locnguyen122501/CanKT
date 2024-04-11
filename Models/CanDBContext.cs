@@ -56,10 +56,6 @@ namespace CanKT.Models
                 .IsUnicode(false);
 
             modelBuilder.Entity<Gia>()
-                .Property(e => e.maKhachHang)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<Gia>()
                 .Property(e => e.maNgoaiTe)
                 .IsUnicode(false);
 
@@ -78,11 +74,6 @@ namespace CanKT.Models
             modelBuilder.Entity<KhachHang>()
                 .Property(e => e.email)
                 .IsUnicode(false);
-
-            modelBuilder.Entity<KhachHang>()
-                .HasMany(e => e.Gias)
-                .WithOptional(e => e.KhachHang)
-                .HasForeignKey(e => e.maKhachHang);
 
             modelBuilder.Entity<Kho>()
                 .Property(e => e.maDonVi)
@@ -217,6 +208,10 @@ namespace CanKT.Models
 
             modelBuilder.Entity<Xe>()
                 .Property(e => e.bienSoXe)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<Xe>()
+                .Property(e => e.maKH)
                 .IsUnicode(false);
 
             modelBuilder.Entity<XeXuc>()

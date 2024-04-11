@@ -29,17 +29,9 @@
         private void InitializeComponent()
         {
             this.dgvCan = new System.Windows.Forms.DataGridView();
-            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column9 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column10 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.txbMaPhieu = new System.Windows.Forms.TextBox();
+            this.lblMaPhieu = new System.Windows.Forms.Label();
             this.txbTenXeXuc = new System.Windows.Forms.TextBox();
             this.lblXeXuc = new System.Windows.Forms.Label();
             this.txbMaXeXuc = new System.Windows.Forms.TextBox();
@@ -79,6 +71,16 @@
             this.button1 = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column9 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column10 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCan)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -87,6 +89,7 @@
             // 
             // dgvCan
             // 
+            this.dgvCan.AllowUserToAddRows = false;
             this.dgvCan.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -104,74 +107,18 @@
             this.Column9,
             this.Column10});
             this.dgvCan.Location = new System.Drawing.Point(0, 408);
+            this.dgvCan.MultiSelect = false;
             this.dgvCan.Name = "dgvCan";
             this.dgvCan.Size = new System.Drawing.Size(1232, 177);
             this.dgvCan.TabIndex = 0;
             this.dgvCan.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvCan_CellClick);
             this.dgvCan.SelectionChanged += new System.EventHandler(this.dgvCan_SelectionChanged);
             // 
-            // Column1
-            // 
-            this.Column1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Column1.HeaderText = "Mã đơn";
-            this.Column1.Name = "Column1";
-            // 
-            // Column2
-            // 
-            this.Column2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Column2.HeaderText = "Số xe";
-            this.Column2.Name = "Column2";
-            // 
-            // Column3
-            // 
-            this.Column3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Column3.HeaderText = "Mã KH";
-            this.Column3.Name = "Column3";
-            // 
-            // Column4
-            // 
-            this.Column4.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Column4.HeaderText = "SL vào";
-            this.Column4.Name = "Column4";
-            // 
-            // Column5
-            // 
-            this.Column5.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Column5.HeaderText = "SL ra";
-            this.Column5.Name = "Column5";
-            // 
-            // Column6
-            // 
-            this.Column6.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Column6.HeaderText = "Mã SP";
-            this.Column6.Name = "Column6";
-            // 
-            // Column7
-            // 
-            this.Column7.HeaderText = "Đơn giá";
-            this.Column7.Name = "Column7";
-            // 
-            // Column8
-            // 
-            this.Column8.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Column8.HeaderText = "SL (Tấn)";
-            this.Column8.Name = "Column8";
-            // 
-            // Column9
-            // 
-            this.Column9.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Column9.HeaderText = "SL (M³)";
-            this.Column9.Name = "Column9";
-            // 
-            // Column10
-            // 
-            this.Column10.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Column10.HeaderText = "Thanh toán";
-            this.Column10.Name = "Column10";
-            // 
             // groupBox1
             // 
             this.groupBox1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.groupBox1.Controls.Add(this.txbMaPhieu);
+            this.groupBox1.Controls.Add(this.lblMaPhieu);
             this.groupBox1.Controls.Add(this.txbTenXeXuc);
             this.groupBox1.Controls.Add(this.lblXeXuc);
             this.groupBox1.Controls.Add(this.txbMaXeXuc);
@@ -214,19 +161,38 @@
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             // 
+            // txbMaPhieu
+            // 
+            this.txbMaPhieu.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txbMaPhieu.Location = new System.Drawing.Point(430, 19);
+            this.txbMaPhieu.Name = "txbMaPhieu";
+            this.txbMaPhieu.Size = new System.Drawing.Size(123, 31);
+            this.txbMaPhieu.TabIndex = 40;
+            this.txbMaPhieu.TextChanged += new System.EventHandler(this.txbMaPhieu_TextChanged);
+            // 
+            // lblMaPhieu
+            // 
+            this.lblMaPhieu.AutoSize = true;
+            this.lblMaPhieu.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMaPhieu.Location = new System.Drawing.Point(395, 30);
+            this.lblMaPhieu.Name = "lblMaPhieu";
+            this.lblMaPhieu.Size = new System.Drawing.Size(29, 20);
+            this.lblMaPhieu.TabIndex = 39;
+            this.lblMaPhieu.Text = "Số";
+            // 
             // txbTenXeXuc
             // 
             this.txbTenXeXuc.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txbTenXeXuc.Location = new System.Drawing.Point(579, 298);
+            this.txbTenXeXuc.Location = new System.Drawing.Point(543, 298);
             this.txbTenXeXuc.Name = "txbTenXeXuc";
-            this.txbTenXeXuc.Size = new System.Drawing.Size(151, 31);
+            this.txbTenXeXuc.Size = new System.Drawing.Size(166, 31);
             this.txbTenXeXuc.TabIndex = 38;
             // 
             // lblXeXuc
             // 
             this.lblXeXuc.AutoSize = true;
             this.lblXeXuc.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblXeXuc.Location = new System.Drawing.Point(496, 275);
+            this.lblXeXuc.Location = new System.Drawing.Point(480, 275);
             this.lblXeXuc.Name = "lblXeXuc";
             this.lblXeXuc.Size = new System.Drawing.Size(57, 20);
             this.lblXeXuc.TabIndex = 37;
@@ -235,24 +201,25 @@
             // txbMaXeXuc
             // 
             this.txbMaXeXuc.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txbMaXeXuc.Location = new System.Drawing.Point(500, 298);
+            this.txbMaXeXuc.Location = new System.Drawing.Point(481, 298);
             this.txbMaXeXuc.Name = "txbMaXeXuc";
-            this.txbMaXeXuc.Size = new System.Drawing.Size(73, 31);
+            this.txbMaXeXuc.Size = new System.Drawing.Size(56, 31);
             this.txbMaXeXuc.TabIndex = 36;
+            this.txbMaXeXuc.TextChanged += new System.EventHandler(this.txbMaXeXuc_TextChanged);
             // 
             // txbTenMayXay
             // 
             this.txbTenMayXay.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txbTenMayXay.Location = new System.Drawing.Point(343, 298);
+            this.txbTenMayXay.Location = new System.Drawing.Point(309, 298);
             this.txbTenMayXay.Name = "txbTenMayXay";
-            this.txbTenMayXay.Size = new System.Drawing.Size(151, 31);
+            this.txbTenMayXay.Size = new System.Drawing.Size(166, 31);
             this.txbTenMayXay.TabIndex = 35;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(260, 275);
+            this.label2.Location = new System.Drawing.Point(243, 275);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(65, 20);
             this.label2.TabIndex = 34;
@@ -261,15 +228,17 @@
             // txbMaMayXay
             // 
             this.txbMaMayXay.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txbMaMayXay.Location = new System.Drawing.Point(264, 298);
+            this.txbMaMayXay.Location = new System.Drawing.Point(247, 298);
             this.txbMaMayXay.Name = "txbMaMayXay";
-            this.txbMaMayXay.Size = new System.Drawing.Size(73, 31);
+            this.txbMaMayXay.Size = new System.Drawing.Size(56, 31);
             this.txbMaMayXay.TabIndex = 33;
+            this.txbMaMayXay.TextChanged += new System.EventHandler(this.txbMaMayXay_TextChanged);
+            this.txbMaMayXay.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txbMaMayXay_KeyDown);
             // 
             // txbTenKho
             // 
             this.txbTenKho.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txbTenKho.Location = new System.Drawing.Point(92, 298);
+            this.txbTenKho.Location = new System.Drawing.Point(75, 298);
             this.txbTenKho.Name = "txbTenKho";
             this.txbTenKho.Size = new System.Drawing.Size(166, 31);
             this.txbTenKho.TabIndex = 32;
@@ -289,14 +258,16 @@
             this.txbMaKho.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txbMaKho.Location = new System.Drawing.Point(13, 298);
             this.txbMaKho.Name = "txbMaKho";
-            this.txbMaKho.Size = new System.Drawing.Size(73, 31);
+            this.txbMaKho.Size = new System.Drawing.Size(56, 31);
             this.txbMaKho.TabIndex = 30;
+            this.txbMaKho.TextChanged += new System.EventHandler(this.txbMaKho_TextChanged);
+            this.txbMaKho.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txbMaKho_KeyDown);
             // 
             // lblSalan
             // 
             this.lblSalan.AutoSize = true;
             this.lblSalan.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSalan.Location = new System.Drawing.Point(734, 275);
+            this.lblSalan.Location = new System.Drawing.Point(721, 275);
             this.lblSalan.Name = "lblSalan";
             this.lblSalan.Size = new System.Drawing.Size(50, 20);
             this.lblSalan.TabIndex = 29;
@@ -305,9 +276,9 @@
             // txbSalan
             // 
             this.txbSalan.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txbSalan.Location = new System.Drawing.Point(738, 298);
+            this.txbSalan.Location = new System.Drawing.Point(725, 298);
             this.txbSalan.Name = "txbSalan";
-            this.txbSalan.Size = new System.Drawing.Size(153, 31);
+            this.txbSalan.Size = new System.Drawing.Size(166, 31);
             this.txbSalan.TabIndex = 28;
             // 
             // lblThanhToan
@@ -374,7 +345,6 @@
             this.txbSoLuongM3.Name = "txbSoLuongM3";
             this.txbSoLuongM3.Size = new System.Drawing.Size(119, 31);
             this.txbSoLuongM3.TabIndex = 19;
-            this.txbSoLuongM3.TextChanged += new System.EventHandler(this.txbSoLuongM3_TextChanged);
             // 
             // txbSoLuongTan
             // 
@@ -417,16 +387,16 @@
             // txbTenSP
             // 
             this.txbTenSP.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txbTenSP.Location = new System.Drawing.Point(266, 204);
+            this.txbTenSP.Location = new System.Drawing.Point(247, 204);
             this.txbTenSP.Name = "txbTenSP";
-            this.txbTenSP.Size = new System.Drawing.Size(216, 31);
+            this.txbTenSP.Size = new System.Drawing.Size(235, 31);
             this.txbTenSP.TabIndex = 14;
             // 
             // lblTenSP
             // 
             this.lblTenSP.AutoSize = true;
             this.lblTenSP.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTenSP.Location = new System.Drawing.Point(262, 181);
+            this.lblTenSP.Location = new System.Drawing.Point(247, 181);
             this.lblTenSP.Name = "lblTenSP";
             this.lblTenSP.Size = new System.Drawing.Size(61, 20);
             this.lblTenSP.TabIndex = 13;
@@ -437,8 +407,10 @@
             this.txbMaSP.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txbMaSP.Location = new System.Drawing.Point(109, 204);
             this.txbMaSP.Name = "txbMaSP";
-            this.txbMaSP.Size = new System.Drawing.Size(151, 31);
+            this.txbMaSP.Size = new System.Drawing.Size(132, 31);
             this.txbMaSP.TabIndex = 12;
+            this.txbMaSP.TextChanged += new System.EventHandler(this.txbMaSP_TextChanged);
+            this.txbMaSP.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txbMaSP_KeyDown);
             // 
             // lblMaSP
             // 
@@ -457,13 +429,14 @@
             this.txbLenhXuat.Name = "txbLenhXuat";
             this.txbLenhXuat.Size = new System.Drawing.Size(90, 31);
             this.txbLenhXuat.TabIndex = 10;
+            this.txbLenhXuat.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txbLenhXuat_KeyDown);
             // 
             // txbTenKH
             // 
             this.txbTenKH.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txbTenKH.Location = new System.Drawing.Point(266, 147);
+            this.txbTenKH.Location = new System.Drawing.Point(247, 147);
             this.txbTenKH.Name = "txbTenKH";
-            this.txbTenKH.Size = new System.Drawing.Size(285, 31);
+            this.txbTenKH.Size = new System.Drawing.Size(327, 31);
             this.txbTenKH.TabIndex = 8;
             // 
             // txbMaKH
@@ -471,8 +444,9 @@
             this.txbMaKH.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txbMaKH.Location = new System.Drawing.Point(157, 147);
             this.txbMaKH.Name = "txbMaKH";
-            this.txbMaKH.Size = new System.Drawing.Size(103, 31);
+            this.txbMaKH.Size = new System.Drawing.Size(84, 31);
             this.txbMaKH.TabIndex = 7;
+            this.txbMaKH.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txbMaKH_KeyDown);
             // 
             // lblKhachHang
             // 
@@ -491,7 +465,7 @@
             this.txbTLXeVao.Name = "txbTLXeVao";
             this.txbTLXeVao.Size = new System.Drawing.Size(180, 31);
             this.txbTLXeVao.TabIndex = 5;
-            this.txbTLXeVao.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txbTLXeRa_KeyDown);
+            this.txbTLXeVao.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txbTLXeVao_KeyDown);
             // 
             // lblTLXeRa
             // 
@@ -510,7 +484,7 @@
             this.txbTLXeRa.Name = "txbTLXeRa";
             this.txbTLXeRa.Size = new System.Drawing.Size(180, 31);
             this.txbTLXeRa.TabIndex = 3;
-            this.txbTLXeRa.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txbTLXeVao_KeyDown);
+            this.txbTLXeRa.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txbTLXeRa_KeyDown);
             // 
             // lblTLXeVao
             // 
@@ -573,6 +547,75 @@
             this.pictureBox1.TabIndex = 4;
             this.pictureBox1.TabStop = false;
             // 
+            // Column1
+            // 
+            this.Column1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Column1.HeaderText = "Mã đơn";
+            this.Column1.Name = "Column1";
+            this.Column1.ReadOnly = true;
+            // 
+            // Column2
+            // 
+            this.Column2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Column2.HeaderText = "Số xe";
+            this.Column2.Name = "Column2";
+            this.Column2.ReadOnly = true;
+            // 
+            // Column3
+            // 
+            this.Column3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Column3.HeaderText = "Mã KH";
+            this.Column3.Name = "Column3";
+            this.Column3.ReadOnly = true;
+            // 
+            // Column4
+            // 
+            this.Column4.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Column4.HeaderText = "SL vào";
+            this.Column4.Name = "Column4";
+            this.Column4.ReadOnly = true;
+            // 
+            // Column5
+            // 
+            this.Column5.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Column5.HeaderText = "SL ra";
+            this.Column5.Name = "Column5";
+            this.Column5.ReadOnly = true;
+            // 
+            // Column6
+            // 
+            this.Column6.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Column6.HeaderText = "Mã SP";
+            this.Column6.Name = "Column6";
+            this.Column6.ReadOnly = true;
+            // 
+            // Column7
+            // 
+            this.Column7.HeaderText = "Đơn giá";
+            this.Column7.Name = "Column7";
+            this.Column7.ReadOnly = true;
+            // 
+            // Column8
+            // 
+            this.Column8.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Column8.HeaderText = "SL (Tấn)";
+            this.Column8.Name = "Column8";
+            this.Column8.ReadOnly = true;
+            // 
+            // Column9
+            // 
+            this.Column9.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Column9.HeaderText = "SL (M³)";
+            this.Column9.Name = "Column9";
+            this.Column9.ReadOnly = true;
+            // 
+            // Column10
+            // 
+            this.Column10.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Column10.HeaderText = "Thành tiền";
+            this.Column10.Name = "Column10";
+            this.Column10.ReadOnly = true;
+            // 
             // FrmCan
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -602,18 +645,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.DataGridView dgvCan;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column6;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column7;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column8;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column9;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column10;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.TextBox txbSoXe;
         private System.Windows.Forms.Label lblSoXe;
@@ -654,5 +685,18 @@
         private System.Windows.Forms.Label lblSalan;
         private System.Windows.Forms.TextBox txbSalan;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.TextBox txbMaPhieu;
+        private System.Windows.Forms.Label lblMaPhieu;
+        private System.Windows.Forms.DataGridView dgvCan;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column6;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column7;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column8;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column9;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column10;
     }
 }

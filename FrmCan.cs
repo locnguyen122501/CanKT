@@ -31,8 +31,6 @@ namespace CanKT
 
         private void LoadDataIntoDataGridView()
         {
-            
-
             // Truy vấn dữ liệu từ DbSet trong DbContext
             var data = db.PhieuThus.ToList();
 
@@ -45,48 +43,30 @@ namespace CanKT
                 row.Cells["Column1"].Value = item.maDon; 
                 row.Cells["Column2"].Value = item.bienSoXe;
                 row.Cells["Column3"].Value = item.maKH;
-                row.Cells["Column4"].Value = item.trongLuongXeVao;
-                row.Cells["Column5"].Value = item.trongLuongXeRa;
+
+                decimal tlxevao = Convert.ToDecimal(item.trongLuongXeVao);
+                row.Cells["Column4"].Value = tlxevao.ToString("N0");
+
+                decimal tlxera = Convert.ToDecimal(item.trongLuongXeRa);
+                row.Cells["Column5"].Value = tlxera.ToString("N0");
+
                 row.Cells["Column6"].Value = item.maSP;
 
                 //dinh dang tien
                 decimal donGia = Convert.ToDecimal(item.donGia); //chuyen kieu du lieu money sang decimal
                 row.Cells["Column7"].Value = donGia.ToString("N0");
 
-                decimal test = Convert.ToDecimal(item.soLuongTan);
-                row.Cells["Column8"].Value = test.ToString("N0");
+                decimal tan = Convert.ToDecimal(item.soLuongTan);
+                row.Cells["Column8"].Value = tan.ToString("N0");
 
-                //row.Cells["Column8"].Value = item.soLuongTan;
-                row.Cells["Column9"].Value = item.soLuongM3;
+                decimal m3 = Convert.ToDecimal(item.soLuongM3);
+                row.Cells["Column9"].Value = m3.ToString("N0");
 
-                decimal thanhTien = Convert.ToDecimal(item.thanhTien); //chuyen kieu du lieu money sang decimal
-                //row.Cells["Column10"].Value = thanhTien.ToString("#,0.###", CultureInfo.InvariantCulture);
+                decimal thanhTien = Convert.ToDecimal(item.thanhTien); //chuyen kieu du lieu money sang decimal               
                 row.Cells["Column10"].Value = thanhTien.ToString("N0");
             }
         }
-
-        private void txbSoXe_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
-                txbTLXeRa.Focus();
-            }
-        }
-
-        private void txbTLXeVao_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
-                txbTLXeVao.Focus();
-            }
-        }
-
-        private void txbTLXeRa_KeyDown(object sender, KeyEventArgs e)
-        {
-
-        }
+       
 
         private void dgvCan_SelectionChanged(object sender, EventArgs e)
         {
@@ -97,6 +77,7 @@ namespace CanKT
                 DataGridViewRow selectedRow = dgvCan.SelectedRows[0];
 
                 // Lấy dữ liệu từ các cột của dòng được chọn và đổ vào các txb
+                txbMaPhieu.Text = selectedRow.Cells["Column1"].Value.ToString();
                 txbSoXe.Text = selectedRow.Cells["Column2"].Value.ToString();
                 txbMaKH.Text = selectedRow.Cells["Column3"].Value.ToString();
                 txbTLXeRa.Text = selectedRow.Cells["Column4"].Value.ToString();
@@ -105,7 +86,7 @@ namespace CanKT
                 txbDonGia.Text = selectedRow.Cells["Column7"].Value.ToString();
                 txbSoLuongTan.Text = selectedRow.Cells["Column8"].Value.ToString();
                 txbSoLuongM3.Text = selectedRow.Cells["Column9"].Value.ToString();
-                txbThanhToan.Text = selectedRow.Cells["Column10"].Value.ToString();
+                txbTienHang.Text = selectedRow.Cells["Column10"].Value.ToString();
 
             }
         }
@@ -119,6 +100,7 @@ namespace CanKT
                 DataGridViewRow selectedRow = dgvCan.Rows[e.RowIndex];
 
                 // Đổ dữ liệu từ các cột của dòng được click vào các TextBox tương ứng
+                txbMaPhieu.Text = selectedRow.Cells["Column1"].Value.ToString();
                 txbSoXe.Text = selectedRow.Cells["Column2"].Value.ToString();
                 txbMaKH.Text = selectedRow.Cells["Column3"].Value.ToString();
                 txbTLXeRa.Text = selectedRow.Cells["Column4"].Value.ToString();
@@ -126,15 +108,15 @@ namespace CanKT
                 txbMaSP.Text = selectedRow.Cells["Column6"].Value.ToString();
                 txbDonGia.Text = selectedRow.Cells["Column7"].Value.ToString();
                 txbSoLuongTan.Text = selectedRow.Cells["Column8"].Value.ToString();
-                txbSoLuongM3.Text = selectedRow.Cells["Column9"].Value.ToString();
-                txbThanhToan.Text = selectedRow.Cells["Column10"].Value.ToString();
+                //txbSoLuongM3.Text = selectedRow.Cells["Column9"].Value.ToString();
+                txbTienHang.Text = selectedRow.Cells["Column10"].Value.ToString();
 
                 string lenhxuat = txbLenhXuat.Text;
 
                 if (e.RowIndex >= 0)
                 {
                     string maDon = dgvCan.Rows[e.RowIndex].Cells["Column1"].Value.ToString();
-                    string lenhXuat = GetDataFromPhieuThu(maDon);
+                    string lenhXuat = GetLenhXuatFromPhieuThu(maDon);
                     txbLenhXuat.Text = lenhXuat;
                 }
 
@@ -152,7 +134,7 @@ namespace CanKT
             }
         }
 
-        private string GetDataFromPhieuThu(string maDon)
+        private string GetLenhXuatFromPhieuThu(string maDon)
         {
             // Thực hiện truy vấn tới cơ sở dữ liệu của bạn để lấy tên khách hàng từ mã khách hàng
             // Ví dụ:
@@ -202,6 +184,7 @@ namespace CanKT
         private void txbSoLuongTan_TextChanged(object sender, EventArgs e)
         {
             TinhTienHang();
+            ChuyenDoiTanM3();
         }
 
         private void TinhTienHang()
@@ -235,7 +218,7 @@ namespace CanKT
             // Kiểm tra xem giá trị của hai TextBox có thể được chuyển đổi thành số không
             if (double.TryParse(txbTienHang.Text, out double value1))
             {
-                double tien = value1 + (value1*0.1);
+                double tien = value1 + (value1*0.0999998833852334);
                 // Tính tích của hai giá trị và gán kết quả vào TextBox thứ ba
 
                 txbThanhToan.Text = tien.ToString("N0");
@@ -247,14 +230,9 @@ namespace CanKT
             }
         }
 
-        private void txbSoLuongM3_TextChanged(object sender, EventArgs e)
-        {
-            ChuyenDoiTanM3();
-        }
-
         private void ChuyenDoiTanM3()
         {
-            string maSP = txbMaSP.ToString();
+            string maSP = txbMaSP.Text;
 
                 // Truy vấn dữ liệu từ bảng khác để lấy tên khách hàng tương ứng
             string heSo = GetHeSoFromMaSP(maSP);
@@ -264,7 +242,7 @@ namespace CanKT
             // Kiểm tra xem giá trị của hai TextBox có thể được chuyển đổi thành số không
             if (double.TryParse(txbSoLuongTan.Text, out double value1))
             {
-                double m3 = value1 * temp;
+                double m3 = (value1)/(temp);
                 // Tính tích của hai giá trị và gán kết quả vào TextBox thứ ba
 
                 txbSoLuongM3.Text = m3.ToString("N0");
@@ -300,5 +278,241 @@ namespace CanKT
 
             return temp;
         }
+
+        private void txbMaSP_TextChanged(object sender, EventArgs e)
+        {
+            string maSP = txbMaSP.Text;
+            string tenSP = GetTenSPFromMaSP(maSP);
+
+            txbTenSP.Text = tenSP.ToString();
+        }
+
+        private string GetTenSPFromMaSP(string maSP)
+        {
+            string tenSP = "";
+
+            using (var db = new CanDBContext())
+            {
+                var sanpham = db.SanPhams.FirstOrDefault(sp => sp.maThanhPham == maSP);
+
+                if (sanpham != null)
+                {
+                    tenSP = sanpham.tenThanhPham;
+                }
+            }
+            return tenSP;
+        }
+
+        private void txbMaPhieu_TextChanged(object sender, EventArgs e)
+        {
+            string maPhieu = txbMaPhieu.Text;
+            string maKho = GetMaKhoFromMaPhieu(maPhieu);
+            string maMayXay = GetMaMayXayFromMaPhieu(maPhieu);
+            string maMayXuc = GetMaMayXucFromMaPhieu(maPhieu);
+
+            txbMaKho.Text = maKho.ToString();
+            txbMaMayXay.Text = maMayXay.ToString();
+            txbMaXeXuc.Text = maMayXuc.ToString();
+        }
+
+        private string GetMaKhoFromMaPhieu(string maPhieu)
+        {
+            string maKho = "";
+
+            using (var db = new CanDBContext())
+            {
+                var phieuthu = db.PhieuThus.FirstOrDefault(p => p.maDon == maPhieu);
+
+                if (phieuthu != null)
+                {
+                    maKho = phieuthu.maKho;
+                }
+            }
+            return maKho;
+        }
+
+        private string GetMaMayXayFromMaPhieu(string maPhieu)
+        {
+            string maMXay = "";
+
+            using (var db = new CanDBContext())
+            {
+                var phieuthu = db.PhieuThus.FirstOrDefault(p => p.maDon == maPhieu);
+
+                if (phieuthu != null)
+                {
+                    maMXay = phieuthu.maMayXay;
+                }
+            }
+            return maMXay;
+        }
+
+        private string GetMaMayXucFromMaPhieu(string maPhieu)
+        {
+            string maMXuc = "";
+
+            using (var db = new CanDBContext())
+            {
+                var phieuthu = db.PhieuThus.FirstOrDefault(p => p.maDon == maPhieu);
+
+                if (phieuthu != null)
+                {
+                    maMXuc = phieuthu.maMayXuc;
+                }
+            }
+            return maMXuc;
+        }
+
+
+        //lay ten kho tu ma kho
+        private void txbMaKho_TextChanged(object sender, EventArgs e)
+        {
+            string maKho = txbMaKho.Text;
+            string tenKho = GetTenKhoFromMaKho(maKho);
+
+            txbTenKho.Text = tenKho.ToString();
+        }
+
+        private string GetTenKhoFromMaKho(string maKho)
+        {
+            string tenKho = "";
+
+            using (var db = new CanDBContext())
+            {
+                var kho = db.Khoes.FirstOrDefault(p => p.maKho == maKho);
+
+                if (kho != null)
+                {
+                    tenKho = kho.tenKho;
+                }
+            }
+            return tenKho;
+        }
+
+        //lay ten may xay tu ma may xay
+        private void txbMaMayXay_TextChanged(object sender, EventArgs e)
+        {
+            string maMXay = txbMaMayXay.Text;
+            string tenMXay = GetTenMayXayFromMaMayXay(maMXay);
+
+            txbTenMayXay.Text = tenMXay.ToString();
+        }
+
+        private string GetTenMayXayFromMaMayXay(string maMXay)
+        {
+            string tenMXay = "";
+
+            using (var db = new CanDBContext())
+            {
+                var mayxay = db.MayXays.FirstOrDefault(mx => mx.maMayXay == maMXay);
+
+                if (mayxay != null)
+                {
+                    tenMXay = mayxay.tenMayXay;
+                }
+            }
+            return tenMXay;
+        }
+
+        //lay ten may xuc tu ma may xuc
+        private void txbMaXeXuc_TextChanged(object sender, EventArgs e)
+        {
+            string maMXuc = txbMaXeXuc.Text;
+            string tenMXuc = GetTenXeXucFromMaXeXuc(maMXuc);
+
+            txbTenXeXuc.Text = tenMXuc.ToString();
+        }
+
+        private string GetTenXeXucFromMaXeXuc(string maMXuc)
+        {
+            string tenMXuc = "";
+
+            using (var db = new CanDBContext())
+            {
+                var mayxuc = db.XeXucs.FirstOrDefault(xx => xx.maXeXuc == maMXuc);
+
+                if (mayxuc != null)
+                {
+                    tenMXuc = mayxuc.tenXeXuc;
+                }
+            }
+            return tenMXuc;
+        }
+
+        #region KeyDown_Code
+        private void txbSoXe_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
+                txbTLXeVao.Focus();
+            }
+        }
+
+        private void txbTLXeVao_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
+                txbTLXeRa.Focus();
+            }
+        }
+
+        private void txbTLXeRa_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
+                txbMaKH.Focus();
+            }
+        }
+
+        private void txbMaKH_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
+                txbLenhXuat.Focus();
+            }
+        }
+
+        private void txbLenhXuat_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
+                txbMaSP.Focus();
+            }
+        }
+
+        private void txbMaSP_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
+                txbMaKho.Focus();
+            }
+        }
+
+        private void txbMaKho_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
+                txbMaMayXay.Focus();
+            }
+        }
+
+        private void txbMaMayXay_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
+                txbMaXeXuc.Focus();
+            }
+        }
+        #endregion
+
+        //next
     }
 }

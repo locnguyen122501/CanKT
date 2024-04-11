@@ -23,9 +23,6 @@ namespace CanKT.Models
         public string maKho { get; set; }
 
         [StringLength(50)]
-        public string maKhachHang { get; set; }
-
-        [StringLength(50)]
         public string maNgoaiTe { get; set; }
 
         [Column(TypeName = "money")]
@@ -44,8 +41,6 @@ namespace CanKT.Models
         public virtual Kho Kho { get; set; }
 
         public virtual MaTienTe MaTienTe { get; set; }
-
-        public virtual KhachHang KhachHang { get; set; }
 
         public virtual SanPham SanPham { get; set; }
     }
