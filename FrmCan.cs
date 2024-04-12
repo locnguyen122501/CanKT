@@ -31,10 +31,18 @@ namespace CanKT
         private void FrmCan_Load(object sender, EventArgs e)
         {
             this.ActiveControl = txbSoXe;
+
+            // Lấy mã phiếu tiếp theo từ cơ sở dữ liệu
+            string nextMaPhieu = db.GetNextMaPhieu();
+
+            // Gán mã phiếu vào textbox
+            txbMaPhieu.Text = nextMaPhieu;
         }
 
         private void LoadDataIntoDataGridView()
         {
+            dgvCan.Rows.Clear();
+
             // Truy vấn dữ liệu từ DbSet trong DbContext
             var data = db.PhieuThus.ToList();
 
@@ -72,7 +80,7 @@ namespace CanKT
             }
         }
        
-
+        //đổ dữ liệu lên các txb khi click vào dòng hoặc ô của phiếu tương ứng
         private void dgvCan_SelectionChanged(object sender, EventArgs e)
         {
             // Kiểm tra xem có dòng nào được chọn hay không
@@ -114,10 +122,9 @@ namespace CanKT
                 txbDonGia.Text = selectedRow.Cells["Column7"].Value.ToString();
                 txbSoLuongTan.Text = selectedRow.Cells["Column8"].Value.ToString();
                 txbSoLuongM3.Text = selectedRow.Cells["Column9"].Value.ToString();
-                //txbTienHang.Text = selectedRow.Cells["Column10"].Value.ToString("N0");
                 txbTienHang.Text = string.Format("{0:N0}", (selectedRow.Cells["Column10"].Value));
 
-                string lenhxuat = txbLenhXuat.Text;
+                string lenhxuat = txbLenhXuat.Text;                
 
                 if (e.RowIndex >= 0)
                 {
@@ -125,21 +132,9 @@ namespace CanKT
                     string lenhXuat = GetLenhXuatFromPhieuThu(maDon);
                     txbLenhXuat.Text = lenhXuat;
                 }
-
-                if (e.RowIndex >= 0)
-                {
-                    // Lấy mã khách hàng từ cột "maKH" của dòng được chọn
-                    string maKH = dgvCan.Rows[e.RowIndex].Cells["Column3"].Value.ToString();
-
-                    // Truy vấn dữ liệu từ bảng khác để lấy tên khách hàng tương ứng
-                    string tenKH = GetTenKHFromMaKH(maKH); // Thay thế hàm này bằng cách truy vấn thực tế từ cơ sở dữ liệu của bạn
-
-                    // Đổ dữ liệu tên khách hàng vào TextBox tương ứng
-                    txbTenKH.Text = tenKH;
-                }
             }
         }
-
+        
         private string GetLenhXuatFromPhieuThu(string maDon)
         {
             // Thực hiện truy vấn tới cơ sở dữ liệu của bạn để lấy lệnh xuất từ mã phiếu thu
@@ -159,6 +154,45 @@ namespace CanKT
             return lenhXuat;
         }
 
+        //xu ly khi nhap vao ma se load thong tin tuong ung
+        //bao gom xu ly tinh tien hang, thanh toan
+        #region xulytextchanged
+
+        private void txbSoXe_TextChanged(object sender, EventArgs e)
+        {
+            string soXe = txbSoXe.Text;
+            string maKH = GetMaKHFromMaXe(soXe);
+
+            txbMaKH.Text = maKH.ToString();
+        }
+
+        private string GetMaKHFromMaXe(string soXe)
+        {
+            // Thực hiện truy vấn tới cơ sở dữ liệu của bạn để lấy tên khách hàng từ mã khách hàng
+            // Sau đó trả về tên khách hàng tương ứng
+
+            string maKH = "";
+
+            using (var db = new CanDBContext())
+            {
+                var xe = db.Xes.FirstOrDefault(x => x.bienSoXe == soXe);
+
+                if (xe != null)
+                {
+                    maKH = xe.maKH;
+                }               
+            }
+            return maKH;
+        }
+
+        private void txbMaKH_TextChanged(object sender, EventArgs e)
+        {
+            string maKH = txbMaKH.Text;
+            string tenKH = GetTenKHFromMaKH(maKH);
+
+            txbTenKH.Text = tenKH.ToString();
+        }
+
         private string GetTenKHFromMaKH(string maKH)
         {
             // Thực hiện truy vấn tới cơ sở dữ liệu của bạn để lấy tên khách hàng từ mã khách hàng
@@ -166,13 +200,13 @@ namespace CanKT
 
             string tenKH = "";
 
-            using (var db = new CanDBContext()) 
+            using (var db = new CanDBContext())
             {
-                var khachHang = db.KhachHangs.FirstOrDefault(kh => kh.maKH == maKH);
+                var khachhang = db.KhachHangs.FirstOrDefault(kh => kh.maKH == maKH);
 
-                if (khachHang != null)
+                if (khachhang != null)
                 {
-                    tenKH = khachHang.tenKH;
+                    tenKH = khachhang.tenKH;
                 }
             }
             return tenKH;
@@ -185,8 +219,7 @@ namespace CanKT
 
         private void txbSoLuongTan_TextChanged(object sender, EventArgs e)
         {
-            TinhTienHang();
-            ChuyenDoiTanM3();
+            TinhTienHang();            
         }
 
         private void TinhTienHang()
@@ -208,7 +241,7 @@ namespace CanKT
             else
             {
                 // Nếu một trong hai TextBox không thể chuyển đổi thành số, gán giá trị rỗng
-                txbTienHang.Text = "";
+                txbTienHang.Text = "0";
             }
         }
 
@@ -232,31 +265,7 @@ namespace CanKT
                 // Nếu không thể chuyển đổi thành số, gán giá trị rỗng cho txb
                 txbThanhToan.Text = "0";
             }
-        }
-
-        private void ChuyenDoiTanM3()
-        {
-            string maSP = txbMaSP.Text;
-
-            // Truy vấn dữ liệu từ bảng khác để lấy hệ số tương ứng
-            string heSo = GetHeSoFromMaSP(maSP);
-            double temp = double.Parse(heSo);
-
-                
-            // Kiểm tra xem giá trị của hai txb có thể được chuyển đổi thành số không
-            if (double.TryParse(txbSoLuongTan.Text.Replace(",", ""), out double value1))
-            {
-                double m3 = (value1)/(temp);
-                // Tính tích của hai giá trị và gán kết quả vào txbsoluongm3
-
-                txbSoLuongM3.Text = m3.ToString("N0");
-            }
-            else
-            {
-                // Nếu không thể chuyển đổi thành số, gán giá trị rỗng cho txb
-                txbSoLuongM3.Text = "";
-            }
-        }
+        }      
 
         private string GetHeSoFromMaSP(string maSP)
         {
@@ -289,6 +298,8 @@ namespace CanKT
 
             txbTenSP.Text = tenSP.ToString();
             txbDonGia.Text = giaSP.ToString();
+
+            ChuyenDoiTanM3();
         }
 
         private string GetTenSPFromMaSP(string maSP)
@@ -309,7 +320,7 @@ namespace CanKT
 
         private string GetGiaFromMaSP(string maSP)
         {
-            string giaSP = "";
+            string giaSP = "0";
 
             using (var db = new CanDBContext())
             {
@@ -321,6 +332,30 @@ namespace CanKT
                 }
             }
             return giaSP;
+        }
+
+        private void ChuyenDoiTanM3()
+        {
+            string maSP = txbMaSP.Text;
+
+            // Truy vấn dữ liệu từ bảng khác để lấy hệ số tương ứng
+            string heSo = GetHeSoFromMaSP(maSP);
+            double temp = double.Parse(heSo);
+
+
+            // Kiểm tra xem giá trị của hai txb có thể được chuyển đổi thành số không
+            if (double.TryParse(txbSoLuongTan.Text.Replace(",", ""), out double value1))
+            {
+                double m3 = (value1) / (temp);
+                // Tính tích của hai giá trị và gán kết quả vào txbsoluongm3
+
+                txbSoLuongM3.Text = m3.ToString("N0");
+            }
+            else
+            {
+                // Nếu không thể chuyển đổi thành số, gán giá trị rỗng cho txb
+                txbSoLuongM3.Text = "0";
+            }
         }
 
         private void txbMaPhieu_TextChanged(object sender, EventArgs e)
@@ -464,14 +499,8 @@ namespace CanKT
             int soluongtan;
 
             // Loại bỏ dấu phân tách hàng nghìn và chuyển đổi về kiểu số nguyên
-            
-            
 
             int trongluongxevao;
-            //if (int.TryParse(txbTLXeVao.Text, out trongluongxevao))
-            //{
-            //    int tlxevao = int.Parse(trongluongxevao.Replace(",", ""));
-            //}
 
             if (int.TryParse(txbTLXeVao.Text.Replace(",", ""), out trongluongxevao))
             {
@@ -487,7 +516,10 @@ namespace CanKT
             soluongtan = trongluongxera - trongluongxevao;
             txbSoLuongTan.Text = soluongtan.ToString("N0");
         }
+        #endregion
 
+
+        //an Enter de sang txb tiep theo
         #region KeyDown_Code
         private void txbSoXe_KeyDown(object sender, KeyEventArgs e)
         {
@@ -512,18 +544,10 @@ namespace CanKT
             if (e.KeyCode == Keys.Enter)
             {
                 e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
-                txbMaKH.Focus();
-            }
-        }
-
-        private void txbMaKH_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
                 txbLenhXuat.Focus();
             }
         }
+
 
         private void txbLenhXuat_KeyDown(object sender, KeyEventArgs e)
         {
@@ -575,73 +599,6 @@ namespace CanKT
             themData();
         }
         #endregion
-
-        //next
-
-        private void btnXong_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
-        private void themData()
-        {
-            string maphieu = txbMaPhieu.Text;
-            string soxe = txbSoXe.Text;
-
-            int trongluongxevao = int.Parse(txbTLXeVao.Text.Replace(",", ""));
-            int trongluongxera = int.Parse(txbTLXeRa.Text.Replace(",", ""));
-
-            string lenhxuat = txbLenhXuat.Text;
-            string makh = txbMaKH.Text;
-            string masp = txbMaSP.Text;
-            int soluongtan = int.Parse(txbSoLuongTan.Text.Replace(",", ""));
-            int soluongm3 = int.Parse(txbSoLuongM3.Text.Replace(",", ""));
-            decimal dongia = decimal.Parse(txbDonGia.Text);
-            dongia = Math.Round(dongia / 1000) * 1000;
-            decimal thanhtien = decimal.Parse(txbTienHang.Text);
-            thanhtien = Math.Round(thanhtien / 1000) * 1000;
-            decimal thanhtoan = decimal.Parse(txbThanhToan.Text);
-            thanhtoan = Math.Round(thanhtoan / 1000) * 1000;
-            string makho = txbMaKho.Text;
-            string mamayxay = txbMaMayXay.Text;
-            string mamayxuc = txbMaXeXuc.Text;
-
-            // Tạo đối tượng mới từ dữ liệu đã nhận được
-            PhieuThu phieuThu = new PhieuThu
-            {
-                maDon = maphieu,
-                bienSoXe = soxe,
-                trongLuongXeVao = trongluongxevao,
-                trongLuongXeRa = trongluongxera,
-                lenhXuat = lenhxuat,
-                maKH = makh,
-                maSP = masp,
-                soLuongTan = soluongtan,
-                soLuongM3 = soluongm3,
-                donGia = dongia,
-                thanhTien = thanhtien,
-                tienThanhToan = thanhtoan,
-                maKho = makho,
-                maMayXay = mamayxay,
-                maMayXuc = mamayxuc,
-
-            };
-
-            // Thêm đối tượng vào cơ sở dữ liệu bằng Entity Framework
-            using (var db = new CanDBContext())
-            {
-                db.PhieuThus.Add(phieuThu);
-                db.SaveChanges();
-            }
-
-            // Thông báo thành công
-            MessageBox.Show("Thêm khách hàng thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-            // Xóa dữ liệu trong các textbox sau khi thêm thành công (tuỳ chọn)
-            txbSoXe.Clear();
-            LoadDataIntoDataGridView();
-
-        }
 
         #region KeyPressChuyenInHoa
         private void txbSoXe_KeyPress(object sender, KeyPressEventArgs e)
@@ -713,6 +670,267 @@ namespace CanKT
             if (int.TryParse(txbTLXeRa.Text, out int tlra))
             {
                 txbTLXeRa.Text = tlra.ToString("N0");
+            }
+        }
+
+
+        #endregion
+
+        //next
+        private void btnXong_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        #region buttonChucNang
+        //them data vao db
+        private void themData()
+        {
+            string maphieu = txbMaPhieu.Text;
+            string soxe = txbSoXe.Text;
+
+            int trongluongxevao = int.Parse(txbTLXeVao.Text.Replace(",", ""));
+            int trongluongxera = int.Parse(txbTLXeRa.Text.Replace(",", ""));
+
+            string lenhxuat = txbLenhXuat.Text;
+            string makh = txbMaKH.Text;
+            string masp = txbMaSP.Text;
+            int soluongtan = int.Parse(txbSoLuongTan.Text.Replace(",", ""));
+            int soluongm3 = int.Parse(txbSoLuongM3.Text.Replace(",", ""));
+            decimal dongia = decimal.Parse(txbDonGia.Text);
+            dongia = Math.Round(dongia / 1000) * 1000;
+            decimal thanhtien = decimal.Parse(txbTienHang.Text);
+            thanhtien = Math.Round(thanhtien / 1000) * 1000;
+            decimal thanhtoan = decimal.Parse(txbThanhToan.Text);
+            thanhtoan = Math.Round(thanhtoan / 1000) * 1000;
+            string makho = txbMaKho.Text;
+            string mamayxay = txbMaMayXay.Text;
+            string mamayxuc = txbMaXeXuc.Text;
+
+            // Tạo đối tượng mới từ dữ liệu đã nhận được
+            PhieuThu phieuThu = new PhieuThu
+            {
+                maDon = maphieu,
+                bienSoXe = soxe,
+                trongLuongXeVao = trongluongxevao,
+                trongLuongXeRa = trongluongxera,
+                lenhXuat = lenhxuat,
+                maKH = makh,
+                maSP = masp,
+                soLuongTan = soluongtan,
+                soLuongM3 = soluongm3,
+                donGia = dongia,
+                thanhTien = thanhtien,
+                tienThanhToan = thanhtoan,
+                maKho = makho,
+                maMayXay = mamayxay,
+                maMayXuc = mamayxuc,
+
+            };
+
+            // Thêm đối tượng vào cơ sở dữ liệu bằng Entity Framework
+            using (var db = new CanDBContext())
+            {
+                db.PhieuThus.Add(phieuThu);
+                db.SaveChanges();
+            }
+
+            // Thông báo thành công
+            MessageBox.Show("Thêm phiếu thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            // Xóa dữ liệu trong các textbox sau khi thêm thành công
+            txbSoXe.Clear();
+            txbTLXeVao.Text = "0";
+            txbTLXeRa.Text = "0";
+            txbLenhXuat.Clear();
+            txbMaSP.Clear();
+            txbSoLuongM3.Text = "0";
+            txbMaKho.Clear();
+            txbMaMayXay.Clear();
+            txbMaXeXuc.Clear();
+
+            // Lấy mã phiếu tiếp theo từ cơ sở dữ liệu
+            string nextMaPhieu = db.GetNextMaPhieu();
+
+            // Gán mã phiếu vào textbox
+            txbMaPhieu.Text = nextMaPhieu;
+
+            LoadDataIntoDataGridView();
+
+        }
+
+
+        //update db
+        private void btnSua_Click(object sender, EventArgs e)
+        {
+            // Lấy dữ liệu từ các textbox
+            string maDon = txbMaPhieu.Text;
+
+            string soxe = txbSoXe.Text;
+
+            int trongluongxevao = int.Parse(txbTLXeVao.Text.Replace(",", ""));
+            int trongluongxera = int.Parse(txbTLXeRa.Text.Replace(",", ""));
+
+            string lenhxuat = txbLenhXuat.Text;
+            string makh = txbMaKH.Text;
+            string masp = txbMaSP.Text;
+            int soluongtan = int.Parse(txbSoLuongTan.Text.Replace(",", ""));
+            int soluongm3 = int.Parse(txbSoLuongM3.Text.Replace(",", ""));
+            decimal dongia = decimal.Parse(txbDonGia.Text);
+            dongia = Math.Round(dongia / 1000) * 1000;
+            decimal thanhtien = decimal.Parse(txbTienHang.Text);
+            thanhtien = Math.Round(thanhtien / 1000) * 1000;
+            decimal thanhtoan = decimal.Parse(txbThanhToan.Text);
+            thanhtoan = Math.Round(thanhtoan / 1000) * 1000;
+            string makho = txbMaKho.Text;
+            string mamayxay = txbMaMayXay.Text;
+            string mamayxuc = txbMaXeXuc.Text;
+
+            // Truy vấn dữ liệu tương ứng từ cơ sở dữ liệu bằng mã sản phẩm
+            using (var db = new CanDBContext())
+            {
+                var phieuthu = db.PhieuThus.FirstOrDefault(p => p.maDon == maDon); // Thay thế "Products" bằng tên bảng của bạn
+                if (phieuthu != null)
+                {
+                    // Cập nhật các thuộc tính của đối tượng dữ liệu
+                    phieuthu.bienSoXe = soxe;
+                    phieuthu.trongLuongXeVao = trongluongxevao;
+                    phieuthu.trongLuongXeRa = trongluongxera;
+                    phieuthu.lenhXuat = lenhxuat;
+                    phieuthu.maKH = makh;
+                    phieuthu.maSP = masp;
+                    phieuthu.soLuongTan = soluongtan;
+                    phieuthu.soLuongM3 = soluongm3;
+                    phieuthu.donGia = dongia;
+                    phieuthu.thanhTien = thanhtien;
+                    phieuthu.tienThanhToan = thanhtoan;
+                    phieuthu.maKho = makho;
+                    phieuthu.maMayXay = mamayxay;
+                    phieuthu.maMayXuc = mamayxuc;
+
+                    // Lưu thay đổi vào cơ sở dữ liệu
+                    db.SaveChanges();
+
+                }
+            }
+
+            // Thông báo thành công
+            MessageBox.Show("Cập nhật phiếu thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            // Lấy mã phiếu tiếp theo từ cơ sở dữ liệu
+            string nextMaPhieu = db.GetNextMaPhieu();
+
+            // Gán mã phiếu vào textbox
+            txbMaPhieu.Text = nextMaPhieu;
+
+            LoadDataIntoDataGridView();
+
+            // Xóa dữ liệu trong các textbox sau khi update thành công
+            txbSoXe.Clear();
+            txbTLXeVao.Text = "0";
+            txbTLXeRa.Text = "0";
+            txbLenhXuat.Clear();
+            txbMaSP.Clear();
+            txbSoLuongM3.Text = "0";
+            txbMaKho.Clear();
+            txbMaMayXay.Clear();
+            txbMaXeXuc.Clear();
+
+
+            //khong update lai dgv
+        }
+
+        private void btnHuy_Click(object sender, EventArgs e)
+        {
+            //xoa du lieu theo dong duoc chon
+            if (dgvCan.SelectedRows.Count > 0)
+            {
+                // Lấy ID hoặc thông tin cần thiết từ hàng được chọn
+                string maphieu = dgvCan.SelectedRows[0].Cells["Column1"].Value.ToString();
+
+                // Thực hiện xóa dữ liệu từ cơ sở dữ liệu
+                if (XoaDuLieu(maphieu))
+                {
+                    // Nếu xóa thành công, cập nhật lại hiển thị trên DataGridView
+                    MessageBox.Show("Xóa phiếu thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    LoadDataIntoDataGridView();
+                }
+                else
+                {
+                    // Nếu xóa không thành công, hiển thị thông báo lỗi
+                    MessageBox.Show("Lỗi khi xóa dữ liệu!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                //xoa du lieu theo o duoc chon
+                if (dgvCan.SelectedCells.Count > 0)
+                {
+
+                    // Lấy chỉ số của ô đang được chọn
+                    int selectedRowIndex = dgvCan.SelectedCells[0].RowIndex;
+
+                    // Lấy giá trị của ô ID tương ứng trong hàng đó
+                    string maphieu = dgvCan.Rows[selectedRowIndex].Cells["Column1"].Value.ToString();
+
+                    // Thực hiện xóa dữ liệu từ cơ sở dữ liệu
+                    if (XoaDuLieu(maphieu))
+                    {
+                        // Nếu xóa thành công, cập nhật lại hiển thị trên DataGridView
+                        MessageBox.Show("Xóa phiếu thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        // Lấy mã phiếu tiếp theo từ cơ sở dữ liệu
+                        string nextMaPhieu = db.GetNextMaPhieu();
+
+                        // Gán mã phiếu vào textbox
+                        txbMaPhieu.Text = nextMaPhieu;
+
+                        // Xóa dữ liệu trong các textbox sau khi update thành công
+                        txbSoXe.Clear();
+                        txbTLXeVao.Text = "0";
+                        txbTLXeRa.Text = "0";
+                        txbLenhXuat.Clear();
+                        txbMaSP.Clear();
+                        txbSoLuongM3.Text = "0";
+                        txbMaKho.Clear();
+                        txbMaMayXay.Clear();
+                        txbMaXeXuc.Clear();
+
+                        LoadDataIntoDataGridView();
+                    }
+                    else
+                    {
+                        // Nếu xóa không thành công, hiển thị thông báo lỗi
+                        MessageBox.Show("Lỗi khi xóa dữ liệu!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+        }
+
+        private bool XoaDuLieu(string maphieu)
+        {
+            try
+            {
+                // Thực hiện xóa dữ liệu từ cơ sở dữ liệu bằng Entity Framework Core
+                using (var db = new CanDBContext())
+                {
+                    var entity = db.PhieuThus.Find(maphieu);
+                    if (entity != null)
+                    {
+                        db.PhieuThus.Remove(entity);
+                        db.SaveChanges();
+
+                        return true;
+                    }
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                // Xử lý lỗi nếu có
+                MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
             }
         }
         #endregion

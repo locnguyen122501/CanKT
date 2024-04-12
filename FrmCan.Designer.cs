@@ -85,8 +85,8 @@
             this.btnXong = new System.Windows.Forms.Button();
             this.button9 = new System.Windows.Forms.Button();
             this.button8 = new System.Windows.Forms.Button();
-            this.button7 = new System.Windows.Forms.Button();
-            this.button6 = new System.Windows.Forms.Button();
+            this.btnSua = new System.Windows.Forms.Button();
+            this.btnHuy = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
@@ -419,6 +419,7 @@
             this.txbThanhToan.Name = "txbThanhToan";
             this.txbThanhToan.Size = new System.Drawing.Size(153, 31);
             this.txbThanhToan.TabIndex = 26;
+            this.txbThanhToan.Text = "0";
             // 
             // lblTienHang
             // 
@@ -438,6 +439,7 @@
             this.txbTienHang.Name = "txbTienHang";
             this.txbTienHang.Size = new System.Drawing.Size(153, 31);
             this.txbTienHang.TabIndex = 24;
+            this.txbTienHang.Text = "0";
             this.txbTienHang.TextChanged += new System.EventHandler(this.txbTienHang_TextChanged);
             // 
             // label4
@@ -468,6 +470,7 @@
             this.txbSoLuongM3.Name = "txbSoLuongM3";
             this.txbSoLuongM3.Size = new System.Drawing.Size(119, 31);
             this.txbSoLuongM3.TabIndex = 19;
+            this.txbSoLuongM3.Text = "0";
             // 
             // txbSoLuongTan
             // 
@@ -477,6 +480,7 @@
             this.txbSoLuongTan.Name = "txbSoLuongTan";
             this.txbSoLuongTan.Size = new System.Drawing.Size(119, 31);
             this.txbSoLuongTan.TabIndex = 18;
+            this.txbSoLuongTan.Text = "0";
             this.txbSoLuongTan.TextChanged += new System.EventHandler(this.txbSoLuongTan_TextChanged);
             // 
             // lblSoLuongTan
@@ -497,6 +501,7 @@
             this.txbDonGia.Name = "txbDonGia";
             this.txbDonGia.Size = new System.Drawing.Size(126, 31);
             this.txbDonGia.TabIndex = 16;
+            this.txbDonGia.Text = "0";
             this.txbDonGia.TextChanged += new System.EventHandler(this.txbDonGia_TextChanged);
             // 
             // lblDonGia
@@ -577,7 +582,7 @@
             this.txbMaKH.Name = "txbMaKH";
             this.txbMaKH.Size = new System.Drawing.Size(84, 31);
             this.txbMaKH.TabIndex = 7;
-            this.txbMaKH.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txbMaKH_KeyDown);
+            this.txbMaKH.TextChanged += new System.EventHandler(this.txbMaKH_TextChanged);
             this.txbMaKH.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txbMaKH_KeyPress);
             // 
             // lblKhachHang
@@ -598,6 +603,7 @@
             this.txbTLXeVao.Name = "txbTLXeVao";
             this.txbTLXeVao.Size = new System.Drawing.Size(180, 31);
             this.txbTLXeVao.TabIndex = 5;
+            this.txbTLXeVao.Text = "0";
             this.txbTLXeVao.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txbTLXeVao_KeyDown);
             this.txbTLXeVao.Leave += new System.EventHandler(this.txbTLXeVao_Leave);
             // 
@@ -619,6 +625,7 @@
             this.txbTLXeRa.Name = "txbTLXeRa";
             this.txbTLXeRa.Size = new System.Drawing.Size(180, 31);
             this.txbTLXeRa.TabIndex = 3;
+            this.txbTLXeRa.Text = "0";
             this.txbTLXeRa.TextChanged += new System.EventHandler(this.txbTLXeRa_TextChanged);
             this.txbTLXeRa.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txbTLXeRa_KeyDown);
             this.txbTLXeRa.Leave += new System.EventHandler(this.txbTLXeRa_Leave);
@@ -641,6 +648,7 @@
             this.txbSoXe.Name = "txbSoXe";
             this.txbSoXe.Size = new System.Drawing.Size(241, 31);
             this.txbSoXe.TabIndex = 1;
+            this.txbSoXe.TextChanged += new System.EventHandler(this.txbSoXe_TextChanged);
             this.txbSoXe.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txbSoXe_KeyDown);
             this.txbSoXe.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txbSoXe_KeyPress);
             // 
@@ -669,8 +677,8 @@
             this.groupBox2.Controls.Add(this.btnXong);
             this.groupBox2.Controls.Add(this.button9);
             this.groupBox2.Controls.Add(this.button8);
-            this.groupBox2.Controls.Add(this.button7);
-            this.groupBox2.Controls.Add(this.button6);
+            this.groupBox2.Controls.Add(this.btnSua);
+            this.groupBox2.Controls.Add(this.btnHuy);
             this.groupBox2.Controls.Add(this.button5);
             this.groupBox2.Controls.Add(this.button4);
             this.groupBox2.Controls.Add(this.button3);
@@ -712,23 +720,25 @@
             this.button8.Text = "Thứ tự";
             this.button8.UseVisualStyleBackColor = true;
             // 
-            // button7
+            // btnSua
             // 
-            this.button7.Location = new System.Drawing.Point(601, 12);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(68, 23);
-            this.button7.TabIndex = 10;
-            this.button7.Text = "Sửa";
-            this.button7.UseVisualStyleBackColor = true;
+            this.btnSua.Location = new System.Drawing.Point(601, 12);
+            this.btnSua.Name = "btnSua";
+            this.btnSua.Size = new System.Drawing.Size(68, 23);
+            this.btnSua.TabIndex = 10;
+            this.btnSua.Text = "Sửa";
+            this.btnSua.UseVisualStyleBackColor = true;
+            this.btnSua.Click += new System.EventHandler(this.btnSua_Click);
             // 
-            // button6
+            // btnHuy
             // 
-            this.button6.Location = new System.Drawing.Point(527, 12);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(68, 23);
-            this.button6.TabIndex = 9;
-            this.button6.Text = "Hủy";
-            this.button6.UseVisualStyleBackColor = true;
+            this.btnHuy.Location = new System.Drawing.Point(527, 12);
+            this.btnHuy.Name = "btnHuy";
+            this.btnHuy.Size = new System.Drawing.Size(68, 23);
+            this.btnHuy.TabIndex = 9;
+            this.btnHuy.Text = "Hủy";
+            this.btnHuy.UseVisualStyleBackColor = true;
+            this.btnHuy.Click += new System.EventHandler(this.btnHuy_Click);
             // 
             // button5
             // 
@@ -882,8 +892,8 @@
         private System.Windows.Forms.Button btnXeRa;
         private System.Windows.Forms.Button button9;
         private System.Windows.Forms.Button button8;
-        private System.Windows.Forms.Button button7;
-        private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.Button btnSua;
+        private System.Windows.Forms.Button btnHuy;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button3;

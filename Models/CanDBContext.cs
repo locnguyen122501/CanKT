@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Linq;
@@ -226,6 +226,23 @@ namespace CanKT.Models
                 .HasMany(e => e.PhieuThus)
                 .WithOptional(e => e.XeXuc)
                 .HasForeignKey(e => e.maMayXuc);
+        }
+
+        public string GetNextMaPhieu()
+        {
+            string nextMaPhieu = "1";
+
+            // Truy vấn mã phiếu mới nhất từ cơ sở dữ liệu
+            var latestPhieu = PhieuThus.OrderByDescending(p => p.maDon).FirstOrDefault();
+
+            if (latestPhieu != null)
+            {
+                // Nếu đã có dữ liệu, tăng mã phiếu mới nhất lên 1 để tạo mã mới
+                int currentMaPhieu = int.Parse(latestPhieu.maDon);
+                nextMaPhieu = (currentMaPhieu + 1).ToString();
+            }
+
+            return nextMaPhieu;
         }
     }
 }
