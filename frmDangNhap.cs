@@ -153,7 +153,13 @@ namespace CanKT
             {
                 e.SuppressKeyPress = true;
                 btnDangnhap.PerformClick();
-            }          
+            }
+
+            if (e.KeyCode == Keys.Escape)
+            {
+                e.SuppressKeyPress = true;
+                txbTen.Focus();
+            }
         }
     }
 }

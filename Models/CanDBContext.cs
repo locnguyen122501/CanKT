@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Linq;
@@ -23,6 +23,7 @@ namespace CanKT.Models
         public virtual DbSet<NhapXuat> NhapXuats { get; set; }
         public virtual DbSet<NhomThanhPham> NhomThanhPhams { get; set; }
         public virtual DbSet<PhieuThu> PhieuThus { get; set; }
+        public virtual DbSet<SaLan> SaLans { get; set; }
         public virtual DbSet<SanPham> SanPhams { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<TramCan> TramCans { get; set; }
@@ -177,6 +178,14 @@ namespace CanKT.Models
                 .Property(e => e.maMayXuc)
                 .IsUnicode(false);
 
+            modelBuilder.Entity<SaLan>()
+                .Property(e => e.maDonVi)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<SaLan>()
+                .Property(e => e.maSaLan)
+                .IsUnicode(false);
+
             modelBuilder.Entity<SanPham>()
                 .Property(e => e.maThanhPham)
                 .IsUnicode(false);
@@ -226,6 +235,38 @@ namespace CanKT.Models
                 .HasMany(e => e.PhieuThus)
                 .WithOptional(e => e.XeXuc)
                 .HasForeignKey(e => e.maMayXuc);
+        }
+
+        public string GetNextMaPhieu()
+        {
+            string nextMaPhieu = "1";
+
+            // Truy vấn mã phiếu mới nhất từ cơ sở dữ liệu
+            var latestPhieu = PhieuThus.OrderByDescending(p => p.maDon).FirstOrDefault();
+
+            if (latestPhieu != null)
+            {
+                // Nếu đã có dữ liệu, tăng mã phiếu mới nhất lên 1 để tạo mã mới
+                int currentMaPhieu = int.Parse(latestPhieu.maDon);
+                nextMaPhieu = (currentMaPhieu + 1).ToString();
+            }
+
+            return nextMaPhieu;
+        }
+
+        public string GetOldestMaPhieu()
+        {
+            string prevMaPhieu = "0";
+
+            // Truy vấn mã phiếu cũ nhất từ cơ sở dữ liệu
+            var oldestPhieu = PhieuThus.OrderBy(p => p.maDon).FirstOrDefault();
+
+            if (oldestPhieu != null)
+            {
+                prevMaPhieu = oldestPhieu.maDon.ToString();
+            }
+
+            return prevMaPhieu;
         }
     }
 }
