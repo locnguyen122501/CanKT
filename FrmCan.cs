@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.Entity;
+using System.Data.Entity.Migrations.Infrastructure;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
@@ -18,13 +19,18 @@ namespace CanKT
     {
         CanDBContext db = new CanDBContext();
 
+        int prevMP = 0;
+
         public FrmCan(string tentaikhoan)
         {
             InitializeComponent();
 
+            this.KeyPreview = true;
+
             lblWelcome.Text = "Xin chào " + tentaikhoan;
 
             LoadDataIntoDataGridView();
+            
         }
 
 
@@ -32,11 +38,16 @@ namespace CanKT
         {
             this.ActiveControl = txbSoXe;
 
-            // Lấy mã phiếu tiếp theo từ cơ sở dữ liệu
+            // Lấy mã phiếu tiếp theo từ cơ sở dữ liệu và gán vào txb
             string nextMaPhieu = db.GetNextMaPhieu();
-
-            // Gán mã phiếu vào textbox
             txbMaPhieu.Text = nextMaPhieu;
+
+            //vi khong co txb nen gan vao gia tri prevMP tao ben tren
+            int prevMaPhieu = int.Parse(db.GetOldestMaPhieu());
+            prevMP = prevMaPhieu;
+
+            btnXeVao.Enabled = false;
+            btnPhieuSau.Enabled = false;
         }
 
         private void LoadDataIntoDataGridView()
@@ -225,7 +236,6 @@ namespace CanKT
         private void TinhTienHang()
         {
             decimal tien;
-            string temp = "";
 
             // Kiểm tra xem giá trị của hai txb có thể được chuyển đổi thành số không
             if (decimal.TryParse(txbDonGia.Text.Replace(",", ""), out decimal value1) && decimal.TryParse(txbSoLuongTan.Text.Replace(",", ""), out decimal value2))
@@ -233,10 +243,7 @@ namespace CanKT
                 // Tính tích của hai giá trị và gán kết quả vào txbtienhang
                 tien = value1 * value2;               
 
-                //txbTienHang.Text = tien.ToString("N0", CultureInfo.InvariantCulture);
-                txbTienHang.Text = tien.ToString("N0");
-                temp = txbTienHang.ToString();
-                temp = temp.TrimEnd('0').TrimEnd(',');
+                txbTienHang.Text = tien.ToString("N0").TrimEnd('0').TrimEnd(',');
             }
             else
             {
@@ -258,7 +265,7 @@ namespace CanKT
                 decimal tien = value1 + (value1 * (decimal)0.0999998833852334);
                 // Tính tích của hai giá trị và gán kết quả vào txbthanhtoan
 
-                txbThanhToan.Text = tien.ToString("N0");               
+                txbThanhToan.Text = tien.ToString("N0").TrimEnd('0').TrimEnd(',');               
             }
             else
             {
@@ -368,6 +375,9 @@ namespace CanKT
             txbMaKho.Text = maKho.ToString();
             txbMaMayXay.Text = maMayXay.ToString();
             txbMaXeXuc.Text = maMayXuc.ToString();
+
+            kiemTraPhieuMoiNhat();
+            kiemTraPhieuCuNhat(prevMP);
         }
 
         private string GetMaKhoFromMaPhieu(string maPhieu)
@@ -519,7 +529,7 @@ namespace CanKT
         #endregion
 
 
-        //an Enter de sang txb tiep theo
+        //an Enter de sang txb tiep theo, Escape de ve txb truoc
         #region KeyDown_Code
         private void txbSoXe_KeyDown(object sender, KeyEventArgs e)
         {
@@ -537,6 +547,12 @@ namespace CanKT
                 e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
                 txbTLXeRa.Focus();
             }
+
+            if (e.KeyCode == Keys.Escape)
+            {
+                e.SuppressKeyPress = true; // Ngăn không cho phím Escape tạo ký tự mới trong TextBox
+                txbSoXe.Focus();
+            }
         }
 
         private void txbTLXeRa_KeyDown(object sender, KeyEventArgs e)
@@ -545,6 +561,12 @@ namespace CanKT
             {
                 e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
                 txbLenhXuat.Focus();
+            }
+
+            if (e.KeyCode == Keys.Escape)
+            {
+                e.SuppressKeyPress = true; // Ngăn không cho phím Escape tạo ký tự mới trong TextBox
+                txbTLXeVao.Focus();
             }
         }
 
@@ -556,6 +578,12 @@ namespace CanKT
                 e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
                 txbMaSP.Focus();
             }
+
+            if (e.KeyCode == Keys.Escape)
+            {
+                e.SuppressKeyPress = true; // Ngăn không cho phím Escape tạo ký tự mới trong TextBox
+                txbTLXeRa.Focus();
+            }
         }
 
         private void txbMaSP_KeyDown(object sender, KeyEventArgs e)
@@ -564,6 +592,12 @@ namespace CanKT
             {
                 e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
                 txbMaKho.Focus();
+            }
+
+            if (e.KeyCode == Keys.Escape)
+            {
+                e.SuppressKeyPress = true; // Ngăn không cho phím Escape tạo ký tự mới trong TextBox
+                txbLenhXuat.Focus();
             }
         }
 
@@ -574,6 +608,12 @@ namespace CanKT
                 e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
                 txbMaMayXay.Focus();
             }
+
+            if (e.KeyCode == Keys.Escape)
+            {
+                e.SuppressKeyPress = true; // Ngăn không cho phím Escape tạo ký tự mới trong TextBox
+                txbMaSP.Focus();
+            }
         }
 
         private void txbMaMayXay_KeyDown(object sender, KeyEventArgs e)
@@ -582,6 +622,12 @@ namespace CanKT
             {
                 e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
                 txbMaXeXuc.Focus();
+            }
+
+            if (e.KeyCode == Keys.Escape)
+            {
+                e.SuppressKeyPress = true; // Ngăn không cho phím Escape tạo ký tự mới trong TextBox
+                txbMaKho.Focus();
             }
         }
 
@@ -592,11 +638,27 @@ namespace CanKT
                 e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
                 txbSalan.Focus();
             }
+
+            if (e.KeyCode == Keys.Escape)
+            {
+                e.SuppressKeyPress = true; // Ngăn không cho phím Escape tạo ký tự mới trong TextBox
+                txbMaMayXay.Focus();
+            }
         }
 
         private void txbSalan_KeyDown(object sender, KeyEventArgs e)
         {
-            themData();
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
+                themData();
+            }           
+
+            if (e.KeyCode == Keys.Escape)
+            {
+                e.SuppressKeyPress = true; // Ngăn không cho phím Escape tạo ký tự mới trong TextBox
+                txbMaXeXuc.Focus();
+            }
         }
         #endregion
 
@@ -676,12 +738,76 @@ namespace CanKT
 
         #endregion
 
-        //next
-        private void btnXong_Click(object sender, EventArgs e)
+        //phim tat cho cac button chuc nang
+        protected override void OnKeyDown(KeyEventArgs e)
         {
-            this.Close();
+            base.OnKeyDown(e);
+
+            if (ActiveControl is System.Windows.Forms.TextBox)
+            {
+                // Đang nhập trong TextBox, không xử lý các phím tắt
+                return;
+            }
+
+            if (e.KeyCode == Keys.Escape)
+            {
+                dgvCan.Focus();
+            }
+
+            //kiem tra da nhan Ctrl+P chua de trigger btnTimPhieu
+            if (e.KeyCode == Keys.P)
+            {
+                btnTimPhieu.PerformClick();
+            }
+
+            //kiem tra da nhan Ctrl+A chua de tao moi phieu
+            if (e.Control && e.KeyCode == Keys.A)
+            {
+                txbSoXe.Clear();
+                txbTLXeVao.Text = "0";
+                txbTLXeRa.Text = "0";
+                txbLenhXuat.Clear();
+                txbMaSP.Clear();
+                txbSoLuongM3.Text = "0";
+                txbMaKho.Clear();
+                txbMaMayXay.Clear();
+                txbMaXeXuc.Clear();
+
+                // Lấy mã phiếu tiếp theo từ cơ sở dữ liệu
+                string nextMaPhieu = db.GetNextMaPhieu();
+
+                // Gán mã phiếu vào textbox
+                txbMaPhieu.Text = nextMaPhieu;
+
+                this.ActiveControl = txbSoXe;
+            }
+
+            //kiem tra da nhan Ctrl+S chua de luu phieu
+            if (e.Control && e.KeyCode == Keys.S)
+            {
+                btnSua.PerformClick();
+            }
+
+            //kiem tra da nhan Ctrl+D chua de xoa phieu
+            if (e.Control && e.KeyCode == Keys.H)
+            {
+                btnHuy.PerformClick();
+            }
+
+            //kiem tra da nhan Ctrl+Q chua de trigger btnPhieuTruoc
+            if (e.KeyCode == Keys.Q)
+            {
+                btnPhieuTruoc.PerformClick();
+            }
+
+            //kiem tra da nhan Ctrl+E chua de trigger btnPhieuSau
+            if (e.KeyCode == Keys.E)
+            {
+                btnPhieuSau.PerformClick();
+            }
         }
 
+        //cac phim chuc nang
         #region buttonChucNang
         //them data vao db
         private void themData()
@@ -759,7 +885,6 @@ namespace CanKT
 
         }
 
-
         //update db
         private void btnSua_Click(object sender, EventArgs e)
         {
@@ -810,7 +935,6 @@ namespace CanKT
 
                     // Lưu thay đổi vào cơ sở dữ liệu
                     db.SaveChanges();
-
                 }
             }
 
@@ -823,7 +947,7 @@ namespace CanKT
             // Gán mã phiếu vào textbox
             txbMaPhieu.Text = nextMaPhieu;
 
-            LoadDataIntoDataGridView();
+            
 
             // Xóa dữ liệu trong các textbox sau khi update thành công
             txbSoXe.Clear();
@@ -836,10 +960,12 @@ namespace CanKT
             txbMaMayXay.Clear();
             txbMaXeXuc.Clear();
 
-
             //khong update lai dgv
+            LoadDataIntoDataGridView();
+
         }
 
+        //XOA DATA
         private void btnHuy_Click(object sender, EventArgs e)
         {
             //xoa du lieu theo dong duoc chon
@@ -933,6 +1059,182 @@ namespace CanKT
                 return false;
             }
         }
+
+        private void btnPhieuTruoc_Click(object sender, EventArgs e)
+        {
+            int temp = int.Parse(txbMaPhieu.Text) - 1;
+
+            string maphieu = temp.ToString();
+            using (var db = new CanDBContext())
+            {
+                var phieuThu = db.PhieuThus.FirstOrDefault(p => p.maDon == maphieu);
+
+                if (phieuThu != null)
+                {
+                    txbMaPhieu.Text = phieuThu.maDon.ToString();
+                    txbSoXe.Text = phieuThu.bienSoXe.ToString();
+                    txbTLXeVao.Text = string.Format("{0:N0}", phieuThu.trongLuongXeVao);
+                    txbTLXeRa.Text = string.Format("{0:N0}", phieuThu.trongLuongXeRa);
+                    txbLenhXuat.Text = phieuThu.lenhXuat;
+                    txbMaKH.Text = phieuThu.maKH;
+                    txbMaSP.Text = phieuThu.maSP;
+                    txbSoLuongTan.Text = string.Format("{0:N0}", phieuThu.soLuongTan);
+                    txbSoLuongM3.Text = string.Format("{0:N0}", phieuThu.soLuongM3);
+                    txbDonGia.Text = string.Format("{0:N0}", phieuThu.donGia);
+                    txbTienHang.Text = string.Format("{0:N0}", phieuThu.thanhTien);
+                    txbThanhToan.Text = string.Format("{0:N0}", phieuThu.tienThanhToan);
+                    txbMaKho.Text = phieuThu.maKho;
+                    txbMaMayXay.Text = phieuThu.maMayXay;
+                    txbMaXeXuc.Text = phieuThu.maMayXuc;
+                }
+            }
+        }
+
+        private void btnPhieuSau_Click(object sender, EventArgs e)
+        {
+            int temp = int.Parse(txbMaPhieu.Text) + 1;
+
+            string maphieu = temp.ToString();
+            using (var db = new CanDBContext())
+            {
+                var phieuThu = db.PhieuThus.FirstOrDefault(p => p.maDon == maphieu);
+
+                if (phieuThu != null)
+                {
+                    txbMaPhieu.Text = phieuThu.maDon.ToString();
+                    txbSoXe.Text = phieuThu.bienSoXe.ToString();                    
+                    txbTLXeVao.Text = string.Format("{0:N0}", phieuThu.trongLuongXeVao);
+                    txbTLXeRa.Text = string.Format("{0:N0}", phieuThu.trongLuongXeRa);
+                    txbLenhXuat.Text = phieuThu.lenhXuat;
+                    txbMaKH.Text = phieuThu.maKH;
+                    txbMaSP.Text = phieuThu.maSP;
+                    txbSoLuongTan.Text = string.Format("{0:N0}", phieuThu.soLuongTan);
+                    txbSoLuongM3.Text = string.Format("{0:N0}", phieuThu.soLuongM3);
+                    txbDonGia.Text = string.Format("{0:N0}", phieuThu.donGia);
+                    txbTienHang.Text = string.Format("{0:N0}", phieuThu.thanhTien);
+                    txbThanhToan.Text = string.Format("{0:N0}", phieuThu.tienThanhToan);
+                    txbMaKho.Text = phieuThu.maKho;
+                    txbMaMayXay.Text = phieuThu.maMayXay;
+                    txbMaXeXuc.Text = phieuThu.maMayXuc;
+                }
+            }
+        }
+
+        /*dung 2 vong lap de kiem tra ma phieu 
+        - vong lap 1:
+        neu ma phieu khong ton tai trong db -> khong xem duoc phieu sau (btnPhieuSau khong sang len de click)
+        - vong lap 2: ma phieu ton tai
+        kiem tra phieu do co phai phieu moi nhat hay khong
+        neu la phieu moi nhat -> khong xem duoc phieu sau (btnPhieuSau khong sang len de click)
+        con lai -> xem phieu sau (btnPhieuSau sang len de click)
+        */
+
+        //bo ham nay vao trong txbMaPhieu_TextChanged
+        //de kiem tra xem phieu nay co phai la phieu moi nhat/khong ton tai khong 
+        private void kiemTraPhieuMoiNhat()
+        {
+
+            // Truy vấn mã phiếu mới nhất từ cơ sở dữ liệu
+            //var latestPhieu = PhieuThus.OrderByDescending(p => p.maDon).FirstOrDefault();
+
+            string maDon = txbMaPhieu.Text;
+            int nextMaPhieu = int.Parse(db.GetNextMaPhieu()) - 1;
+
+            using (var db = new CanDBContext())
+            {
+                var phieuThu = db.PhieuThus.OrderByDescending(p => p.maDon).FirstOrDefault(kh => kh.maDon == maDon);
+
+                if (phieuThu == null)
+                {
+                    btnPhieuSau.Enabled = false;
+                }
+                else
+                {
+                    int temp = int.Parse(phieuThu.maDon.ToString());
+                    if(temp < nextMaPhieu)
+                    {
+                        btnPhieuSau.Enabled = true;
+                    }
+                    else
+                    {
+                        btnPhieuSau.Enabled = false;
+                    }
+                }
+            }
+        }
+
+
+        //tuong tu => kiem tra phieu cu nhat
+        //cung bo ham nay vao trong txbMaPhieu_TextChanged
+        private void kiemTraPhieuCuNhat(int prevMaPhieu)
+        {
+
+            // Truy vấn mã phiếu mới nhất từ cơ sở dữ liệu
+            //var latestPhieu = PhieuThus.OrderByDescending(p => p.maDon).FirstOrDefault();
+
+            string maDon = txbMaPhieu.Text;
+            //int nextMaPhieu = int.Parse(db.GetNextMaPhieu()) - 1;
+
+            using (var db = new CanDBContext())
+            {
+                var phieuThu = db.PhieuThus.OrderBy(p => p.maDon).FirstOrDefault(kh => kh.maDon == maDon);
+
+                if (phieuThu == null)
+                {
+                    btnPhieuTruoc.Enabled = false;
+                }
+                else
+                {
+                    int temp = int.Parse(phieuThu.maDon.ToString());
+                    if (temp > prevMaPhieu)
+                    {
+                        btnPhieuTruoc.Enabled = true;
+                    }
+                    else
+                    {
+                        btnPhieuTruoc.Enabled = false;
+                    }
+                }
+            }
+        }
+
+        private void btnTimPhieu_Click(object sender, EventArgs e)
+        {
+            using (var dialog = new FrmTimPhieu())
+            {
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    string maPhieu = dialog.MaPhieu;
+                    // Truy xuất thông tin phiếu từ cơ sở dữ liệu
+                    var phieu = db.PhieuThus.FirstOrDefault(p => p.maDon == maPhieu);
+                    if (phieu != null)
+                    {
+                        // Hiển thị thông tin tương ứng lên các textbox
+                        txbMaPhieu.Text = phieu.maDon;
+                        txbSoXe.Text = phieu.bienSoXe;
+                        txbTLXeVao.Text = phieu.trongLuongXeVao.ToString();
+                        txbTLXeRa.Text = phieu.trongLuongXeRa.ToString();
+                        txbLenhXuat.Text = phieu.lenhXuat;
+                        txbMaSP.Text = phieu.maSP;
+                        txbMaKho.Text = phieu.maKho;
+                        txbMaMayXay.Text = phieu.maMayXay;
+                        txbMaXeXuc.Text = phieu.maMayXuc;
+
+                    }
+                    else
+                    {
+                        MessageBox.Show("Không tìm thấy thông tin cho mã phiếu " + maPhieu, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                }
+            }
+        }
+
+        private void btnXong_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
         #endregion
+
+        
     }
 }

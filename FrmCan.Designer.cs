@@ -88,10 +88,10 @@
             this.btnSua = new System.Windows.Forms.Button();
             this.btnHuy = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
+            this.btnTimPhieu = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnPhieuSau = new System.Windows.Forms.Button();
+            this.btnPhieuTruoc = new System.Windows.Forms.Button();
             this.btnXeRa = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCan)).BeginInit();
@@ -387,9 +387,9 @@
             this.lblSalan.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSalan.Location = new System.Drawing.Point(711, 275);
             this.lblSalan.Name = "lblSalan";
-            this.lblSalan.Size = new System.Drawing.Size(50, 20);
+            this.lblSalan.Size = new System.Drawing.Size(54, 20);
             this.lblSalan.TabIndex = 29;
-            this.lblSalan.Text = "Salan";
+            this.lblSalan.Text = "Sà lan";
             // 
             // txbSalan
             // 
@@ -680,10 +680,10 @@
             this.groupBox2.Controls.Add(this.btnSua);
             this.groupBox2.Controls.Add(this.btnHuy);
             this.groupBox2.Controls.Add(this.button5);
-            this.groupBox2.Controls.Add(this.button4);
+            this.groupBox2.Controls.Add(this.btnTimPhieu);
             this.groupBox2.Controls.Add(this.button3);
-            this.groupBox2.Controls.Add(this.button2);
-            this.groupBox2.Controls.Add(this.button1);
+            this.groupBox2.Controls.Add(this.btnPhieuSau);
+            this.groupBox2.Controls.Add(this.btnPhieuTruoc);
             this.groupBox2.Controls.Add(this.btnXeRa);
             this.groupBox2.Controls.Add(this.btnXeVao);
             this.groupBox2.Location = new System.Drawing.Point(12, 357);
@@ -749,14 +749,15 @@
             this.button5.Text = "Chi tiết";
             this.button5.UseVisualStyleBackColor = true;
             // 
-            // button4
+            // btnTimPhieu
             // 
-            this.button4.Location = new System.Drawing.Point(379, 12);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(68, 23);
-            this.button4.TabIndex = 7;
-            this.button4.Text = "Phiếu";
-            this.button4.UseVisualStyleBackColor = true;
+            this.btnTimPhieu.Location = new System.Drawing.Point(379, 12);
+            this.btnTimPhieu.Name = "btnTimPhieu";
+            this.btnTimPhieu.Size = new System.Drawing.Size(68, 23);
+            this.btnTimPhieu.TabIndex = 7;
+            this.btnTimPhieu.Text = "Phiếu";
+            this.btnTimPhieu.UseVisualStyleBackColor = true;
+            this.btnTimPhieu.Click += new System.EventHandler(this.btnTimPhieu_Click);
             // 
             // button3
             // 
@@ -767,23 +768,25 @@
             this.button3.Text = "Liệt kê";
             this.button3.UseVisualStyleBackColor = true;
             // 
-            // button2
+            // btnPhieuSau
             // 
-            this.button2.Location = new System.Drawing.Point(231, 12);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(68, 23);
-            this.button2.TabIndex = 5;
-            this.button2.Text = "Sau";
-            this.button2.UseVisualStyleBackColor = true;
+            this.btnPhieuSau.Location = new System.Drawing.Point(231, 12);
+            this.btnPhieuSau.Name = "btnPhieuSau";
+            this.btnPhieuSau.Size = new System.Drawing.Size(68, 23);
+            this.btnPhieuSau.TabIndex = 5;
+            this.btnPhieuSau.Text = "Sau";
+            this.btnPhieuSau.UseVisualStyleBackColor = true;
+            this.btnPhieuSau.Click += new System.EventHandler(this.btnPhieuSau_Click);
             // 
-            // button1
+            // btnPhieuTruoc
             // 
-            this.button1.Location = new System.Drawing.Point(157, 12);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(68, 23);
-            this.button1.TabIndex = 4;
-            this.button1.Text = "Trước";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btnPhieuTruoc.Location = new System.Drawing.Point(157, 12);
+            this.btnPhieuTruoc.Name = "btnPhieuTruoc";
+            this.btnPhieuTruoc.Size = new System.Drawing.Size(68, 23);
+            this.btnPhieuTruoc.TabIndex = 4;
+            this.btnPhieuTruoc.Text = "Trước";
+            this.btnPhieuTruoc.UseVisualStyleBackColor = true;
+            this.btnPhieuTruoc.Click += new System.EventHandler(this.btnPhieuTruoc_Click);
             // 
             // btnXeRa
             // 
@@ -895,10 +898,10 @@
         private System.Windows.Forms.Button btnSua;
         private System.Windows.Forms.Button btnHuy;
         private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button btnTimPhieu;
         private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnPhieuSau;
+        private System.Windows.Forms.Button btnPhieuTruoc;
         private System.Windows.Forms.Button btnXong;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label lblWelcome;
