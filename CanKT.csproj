@@ -53,6 +53,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FrmChiTiet.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmChiTiet.Designer.cs">
+      <DependentUpon>FrmChiTiet.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -70,6 +76,12 @@
     </Compile>
     <Compile Include="FrmDangNhap.Designer.cs">
       <DependentUpon>FrmDangNhap.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmThuTu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmThuTu.Designer.cs">
+      <DependentUpon>FrmThuTu.cs</DependentUpon>
     </Compile>
     <Compile Include="FrmTimPhieu.cs">
       <SubType>Form</SubType>
@@ -97,6 +109,9 @@
     <Compile Include="Models\XeXuc.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="FrmChiTiet.resx">
+      <DependentUpon>FrmChiTiet.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FrmMain.resx">
       <DependentUpon>FrmMain.cs</DependentUpon>
     </EmbeddedResource>
@@ -105,6 +120,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FrmDangNhap.resx">
       <DependentUpon>FrmDangNhap.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmThuTu.resx">
+      <DependentUpon>FrmThuTu.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmTimPhieu.resx">
       <DependentUpon>FrmTimPhieu.cs</DependentUpon>

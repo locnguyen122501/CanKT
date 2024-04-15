@@ -14,6 +14,7 @@ using System.Windows.Forms;
 using CanKT.Models;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.IO;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace CanKT
 {
@@ -50,18 +51,13 @@ namespace CanKT
 
         private void FrmCan_Load(object sender, EventArgs e)
         {
-            this.ActiveControl = txbSoXe;
-
             // Lấy mã phiếu tiếp theo từ cơ sở dữ liệu và gán vào txb
             string nextMaPhieu = db.GetNextMaPhieu();
             txbMaPhieu.Text = nextMaPhieu;
 
             //vi khong co txb nen gan vao gia tri prevMP tao ben tren
             int prevMaPhieu = int.Parse(db.GetOldestMaPhieu());
-            prevMP = prevMaPhieu;
-
-            btnXeRa.Enabled = false;
-            btnPhieuSau.Enabled = false;
+            prevMP = prevMaPhieu;           
 
             if (quyenuser == "Admin")
             {
@@ -254,6 +250,7 @@ namespace CanKT
         private void txbSoLuongTan_TextChanged(object sender, EventArgs e)
         {
             TinhTienHang();
+            ChuyenDoiTanM3();
         }
 
         private void TinhTienHang()
@@ -329,7 +326,7 @@ namespace CanKT
             txbTenSP.Text = tenSP.ToString();
             txbDonGia.Text = giaSP.ToString();
 
-            ChuyenDoiTanM3();
+            
         }
 
         private string GetTenSPFromMaSP(string maSP)
@@ -565,16 +562,27 @@ namespace CanKT
 
         private void txbTLXeVao_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
+            if (txbTLXeVao.Enabled == true)
             {
-                e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
-                txbTLXeRa.Focus();
-            }
+                if (e.KeyCode == Keys.Enter)
+                {
+                    e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
+                    txbLenhXuat.Focus();
+                }
 
-            if (e.KeyCode == Keys.Escape)
+                if (e.KeyCode == Keys.Escape)
+                {
+                    e.SuppressKeyPress = true; // Ngăn không cho phím Escape tạo ký tự mới trong TextBox
+                    txbSoXe.Focus();
+                }
+            }
+            else
             {
-                e.SuppressKeyPress = true; // Ngăn không cho phím Escape tạo ký tự mới trong TextBox
-                txbSoXe.Focus();
+                if (e.KeyCode == Keys.Enter)
+                {
+                    e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
+                    txbTLXeRa.Focus();
+                }
             }
         }
 
@@ -605,7 +613,7 @@ namespace CanKT
             if (e.KeyCode == Keys.Escape)
             {
                 e.SuppressKeyPress = true; // Ngăn không cho phím Escape tạo ký tự mới trong TextBox
-                txbTLXeRa.Focus();
+                txbMaKH.Focus();
             }
         }
 
@@ -674,7 +682,19 @@ namespace CanKT
             if (e.KeyCode == Keys.Enter)
             {
                 e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
-                themData();
+
+                string maphieu = txbMaPhieu.Text;
+
+                //neu chua co ma phieu thi se them, neu co roi thi se cap nhat
+                var phieu = db.PhieuThus.FirstOrDefault(u => u.maDon == maphieu);
+                if (phieu != null)
+                {
+                    btnSua.PerformClick();
+                }
+                else
+                {
+                    themData();
+                }
             }           
 
             if (e.KeyCode == Keys.Escape)
@@ -839,19 +859,19 @@ namespace CanKT
             string soxe = txbSoXe.Text;
 
             int trongluongxevao = int.Parse(txbTLXeVao.Text.Replace(",", ""));
-            int trongluongxera = int.Parse(txbTLXeRa.Text.Replace(",", ""));
+            //int trongluongxera = int.Parse(txbTLXeRa.Text.Replace(",", ""));
 
             string lenhxuat = txbLenhXuat.Text;
             string makh = txbMaKH.Text;
             string masp = txbMaSP.Text;
-            int soluongtan = int.Parse(txbSoLuongTan.Text.Replace(",", ""));
-            int soluongm3 = int.Parse(txbSoLuongM3.Text.Replace(",", ""));
+            //int soluongtan = int.Parse(txbSoLuongTan.Text.Replace(",", ""));
+            //int soluongm3 = int.Parse(txbSoLuongM3.Text.Replace(",", ""));
             decimal dongia = decimal.Parse(txbDonGia.Text);
             dongia = Math.Round(dongia / 1000) * 1000;
-            decimal thanhtien = decimal.Parse(txbTienHang.Text);
-            thanhtien = Math.Round(thanhtien / 1000) * 1000;
-            decimal thanhtoan = decimal.Parse(txbThanhToan.Text);
-            thanhtoan = Math.Round(thanhtoan / 1000) * 1000;
+            //decimal thanhtien = decimal.Parse(txbTienHang.Text);
+            //thanhtien = Math.Round(thanhtien / 1000) * 1000;
+            //decimal thanhtoan = decimal.Parse(txbThanhToan.Text);
+            //thanhtoan = Math.Round(thanhtoan / 1000) * 1000;
             string makho = txbMaKho.Text;
             string mamayxay = txbMaMayXay.Text;
             string mamayxuc = txbMaXeXuc.Text;
@@ -862,19 +882,18 @@ namespace CanKT
                 maDon = maphieu,
                 bienSoXe = soxe,
                 trongLuongXeVao = trongluongxevao,
-                trongLuongXeRa = trongluongxera,
+                //trongLuongXeRa = trongluongxera,
                 lenhXuat = lenhxuat,
                 maKH = makh,
                 maSP = masp,
-                soLuongTan = soluongtan,
-                soLuongM3 = soluongm3,
+                //soLuongTan = soluongtan,
+                //soLuongM3 = soluongm3,
                 donGia = dongia,
-                thanhTien = thanhtien,
-                tienThanhToan = thanhtoan,
+                //thanhTien = thanhtien,
+                //tienThanhToan = thanhtoan,
                 maKho = makho,
                 maMayXay = mamayxay,
                 maMayXuc = mamayxuc,
-
             };
 
             // Thêm đối tượng vào cơ sở dữ liệu bằng Entity Framework
@@ -930,19 +949,7 @@ namespace CanKT
             thanhtien = Math.Round(thanhtien / 1000) * 1000;
             decimal thanhtoan = decimal.Parse(txbThanhToan.Text);
             thanhtoan = Math.Round(thanhtoan / 1000) * 1000;
-            //string makho = "";
-
-            //if (cbbMaKho.SelectedItem != null)
-            //{
-            //    // Lấy giá trị của mục được chọn từ ComboBox
-            //    makho = cbbMaKho.SelectedItem.ToString();
-            //}
-            //else
-            //{
-            //    // Nếu không có mục nào được chọn, bạn có thể cung cấp một giá trị mặc định hoặc thông báo lỗi tùy ý
-            //    MessageBox.Show("Vui lòng chọn một kho!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            //    return; // hoặc thực hiện xử lý khác tùy theo yêu cầu của bạn
-            //}
+            
             string makho = txbMaKho.Text;
             string mamayxay = txbMaMayXay.Text;
             string mamayxuc = txbMaXeXuc.Text;
@@ -950,7 +957,7 @@ namespace CanKT
             // Truy vấn dữ liệu tương ứng từ cơ sở dữ liệu bằng mã sản phẩm
             using (var db = new CanDBContext())
             {
-                var phieuthu = db.PhieuThus.FirstOrDefault(p => p.maDon == madon); // Thay thế "Products" bằng tên bảng của bạn
+                var phieuthu = db.PhieuThus.FirstOrDefault(p => p.maDon == madon);
                 if (phieuthu != null)
                 {
                     if (quyenuser == "Admin")
@@ -973,6 +980,7 @@ namespace CanKT
                     }
                     else
                     {
+                        phieuthu.trongLuongXeRa = trongluongxera;
                         phieuthu.maSP = masp;
                         phieuthu.maKho = makho;
                         phieuthu.maMayXay = mamayxay;
@@ -1004,7 +1012,7 @@ namespace CanKT
             txbMaMayXay.Clear();
             txbMaXeXuc.Clear();
 
-            //khong update lai dgv
+            //khong load lai dgv
             LoadDataIntoDataGridView();
 
         }
@@ -1274,6 +1282,36 @@ namespace CanKT
             }
         }
 
+        //Sap xep phieu theo ma phieu, so xe hoac ma khach
+        private void btnThuTu_Click(object sender, EventArgs e)
+        {
+            FrmThuTu frmThuTu = new FrmThuTu();
+            frmThuTu.ShowDialog();
+
+            string sortBy = frmThuTu.SortBy;
+            SortData(sortBy);
+        }
+
+        private void SortData(string sortBy)
+        {
+            switch (sortBy)
+            {
+                case "Mã Phiếu":
+                    dgvCan.Sort(dgvCan.Columns["Column1"], ListSortDirection.Ascending);
+                    break;
+                case "Mã Xe":
+                    dgvCan.Sort(dgvCan.Columns["Column2"], ListSortDirection.Ascending);
+                    break;
+                case "Mã Khách Hàng":
+                    dgvCan.Sort(dgvCan.Columns["Column3"], ListSortDirection.Ascending);
+                    break;
+                default:
+                    // Mặc định sắp xếp theo mã phiếu
+                    dgvCan.Sort(dgvCan.Columns["Column1"], ListSortDirection.Ascending);
+                    break;
+            }
+        }
+
         private void btnXong_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -1355,10 +1393,6 @@ namespace CanKT
 
 
         //mo va load cong COM
-        private void btnThuTu_Click(object sender, EventArgs e)
-        {
-            
-        }
 
         private void serialPort1_Open()
         {
@@ -1397,6 +1431,7 @@ namespace CanKT
         private void serialPort1_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
         {
             string tDataFromComPort, Receive_Data, Show_Data, message = "";
+
             try
             {
                 tDataFromComPort = serialPort1.ReadLine();
@@ -1418,6 +1453,49 @@ namespace CanKT
             {
                 message = ex.Message.ToString();
             }
+        }
+
+        private void btnXeVao_Click(object sender, EventArgs e)
+        {
+            //disable cac function cua btnXeRa
+            txbTLXeRa.Enabled = false;
+            txbSoLuongTan.Enabled = false;
+            txbSoLuongM3.Enabled = false;
+            txbDonGia.Enabled = false;
+            txbTienHang.Enabled = false;
+            txbThanhToan.Enabled = false;
+
+            btnSua.Enabled = false;
+
+            txbSoXe.Enabled = true;
+            txbTLXeVao.Enabled = true;
+            txbMaKH.Enabled = true;
+            txbLenhXuat.Enabled = true; //xin ngau nhieu, se sua sau
+            txbMaSP.Enabled = true;
+            txbMaKho.Enabled = true;
+            txbMaMayXay.Enabled = true;
+            txbMaXeXuc.Enabled = true;
+            txbSalan.Enabled = true;
+
+            this.ActiveControl = txbSoXe;
+        }
+
+        private void btnXeRa_Click(object sender, EventArgs e)
+        {
+            //disable cac function cua btnXeVao
+            txbSoXe.Enabled = false;
+            txbTLXeVao.Enabled = false;
+            txbMaKH.Enabled = false;
+            txbLenhXuat.Enabled = false; //xin ngau nhieu, se sua sau
+
+            txbTLXeRa.Enabled = true;
+            txbSoLuongTan.Enabled = true;
+            txbSoLuongM3.Enabled = true;
+            txbDonGia.Enabled = true;
+            txbTienHang.Enabled = true;
+            txbThanhToan.Enabled = true;
+
+            this.ActiveControl = txbMaSP;
         }
     }
 }

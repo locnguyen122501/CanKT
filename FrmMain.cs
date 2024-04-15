@@ -78,6 +78,11 @@ namespace CanKT
             Application.Exit();
         }
 
+        private void phiếuNhậpxuấtToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenChildForm(new FrmChiTiet());
+        }
+
         private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (!isExiting)
