@@ -11,11 +11,12 @@ namespace CanKT
 {
     public partial class FrmMain : Form
     {
-        private string tentk;
-        public FrmMain(string tentaikhoan)
+        private string tentk, quyen;
+        public FrmMain(string tentaikhoan, string quyen)
         {
             InitializeComponent();
             this.tentk = tentaikhoan;
+            this.quyen = quyen;
         }
 
 
@@ -45,7 +46,7 @@ namespace CanKT
 
         private void cânXeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenChildForm(new FrmCan(tentk));
+            OpenChildForm(new FrmCan(tentk, quyen));
         }
 
         private void đăngXuấtToolStripMenuItem_Click(object sender, EventArgs e)

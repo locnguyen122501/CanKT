@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.dgvCan = new System.Windows.Forms.DataGridView();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -84,7 +85,7 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.btnXong = new System.Windows.Forms.Button();
             this.button9 = new System.Windows.Forms.Button();
-            this.button8 = new System.Windows.Forms.Button();
+            this.btnThuTu = new System.Windows.Forms.Button();
             this.btnSua = new System.Windows.Forms.Button();
             this.btnHuy = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
@@ -94,6 +95,7 @@
             this.btnPhieuTruoc = new System.Windows.Forms.Button();
             this.btnXeRa = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dgvCan)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -676,7 +678,7 @@
             this.groupBox2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.groupBox2.Controls.Add(this.btnXong);
             this.groupBox2.Controls.Add(this.button9);
-            this.groupBox2.Controls.Add(this.button8);
+            this.groupBox2.Controls.Add(this.btnThuTu);
             this.groupBox2.Controls.Add(this.btnSua);
             this.groupBox2.Controls.Add(this.btnHuy);
             this.groupBox2.Controls.Add(this.button5);
@@ -711,28 +713,29 @@
             this.button9.Text = "In";
             this.button9.UseVisualStyleBackColor = true;
             // 
-            // button8
+            // btnThuTu
             // 
-            this.button8.Location = new System.Drawing.Point(675, 12);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(68, 23);
-            this.button8.TabIndex = 11;
-            this.button8.Text = "Thứ tự";
-            this.button8.UseVisualStyleBackColor = true;
+            this.btnThuTu.Location = new System.Drawing.Point(675, 12);
+            this.btnThuTu.Name = "btnThuTu";
+            this.btnThuTu.Size = new System.Drawing.Size(68, 23);
+            this.btnThuTu.TabIndex = 11;
+            this.btnThuTu.Text = "Thứ tự";
+            this.btnThuTu.UseVisualStyleBackColor = true;
+            this.btnThuTu.Click += new System.EventHandler(this.btnThuTu_Click);
             // 
             // btnSua
             // 
-            this.btnSua.Location = new System.Drawing.Point(601, 12);
+            this.btnSua.Location = new System.Drawing.Point(527, 12);
             this.btnSua.Name = "btnSua";
             this.btnSua.Size = new System.Drawing.Size(68, 23);
             this.btnSua.TabIndex = 10;
-            this.btnSua.Text = "Sửa";
+            this.btnSua.Text = "Cập nhật";
             this.btnSua.UseVisualStyleBackColor = true;
             this.btnSua.Click += new System.EventHandler(this.btnSua_Click);
             // 
             // btnHuy
             // 
-            this.btnHuy.Location = new System.Drawing.Point(527, 12);
+            this.btnHuy.Location = new System.Drawing.Point(601, 12);
             this.btnHuy.Name = "btnHuy";
             this.btnHuy.Size = new System.Drawing.Size(68, 23);
             this.btnHuy.TabIndex = 9;
@@ -894,7 +897,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column10;
         private System.Windows.Forms.Button btnXeRa;
         private System.Windows.Forms.Button button9;
-        private System.Windows.Forms.Button button8;
+        private System.Windows.Forms.Button btnThuTu;
         private System.Windows.Forms.Button btnSua;
         private System.Windows.Forms.Button btnHuy;
         private System.Windows.Forms.Button button5;
@@ -905,5 +908,6 @@
         private System.Windows.Forms.Button btnXong;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label lblWelcome;
+        private System.IO.Ports.SerialPort serialPort1;
     }
 }

@@ -6,12 +6,14 @@ using System.Data.Entity;
 using System.Data.Entity.Migrations.Infrastructure;
 using System.Drawing;
 using System.Globalization;
+using System.IO.Ports;
 using System.Linq;
 using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Windows.Forms;
 using CanKT.Models;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.IO;
 
 namespace CanKT
 {
@@ -21,16 +23,28 @@ namespace CanKT
 
         int prevMP = 0;
 
-        public FrmCan(string tentaikhoan)
+        string quyenuser = "";
+
+        public FrmCan(string tentaikhoan, string quyen)
         {
             InitializeComponent();
 
             this.KeyPreview = true;
 
-            lblWelcome.Text = "Xin chào " + tentaikhoan;
+            quyenuser = quyen;
+
+            if (quyenuser == "Admin")
+            {
+                lblWelcome.Text = "Quản lý " + tentaikhoan;
+            }
+            else
+            {
+                lblWelcome.Text = "Nhân viên " + tentaikhoan;
+            }
 
             LoadDataIntoDataGridView();
-            
+            SetupAutoCompleteForTextBoxes();
+            serialPort1_Open();
         }
 
 
@@ -46,8 +60,17 @@ namespace CanKT
             int prevMaPhieu = int.Parse(db.GetOldestMaPhieu());
             prevMP = prevMaPhieu;
 
-            btnXeVao.Enabled = false;
+            btnXeRa.Enabled = false;
             btnPhieuSau.Enabled = false;
+
+            if (quyenuser == "Admin")
+            {
+                btnHuy.Enabled = true;
+            }
+            else
+            {
+                btnHuy.Enabled = false;
+            }
         }
 
         private void LoadDataIntoDataGridView()
@@ -230,7 +253,7 @@ namespace CanKT
 
         private void txbSoLuongTan_TextChanged(object sender, EventArgs e)
         {
-            TinhTienHang();            
+            TinhTienHang();
         }
 
         private void TinhTienHang()
@@ -889,7 +912,7 @@ namespace CanKT
         private void btnSua_Click(object sender, EventArgs e)
         {
             // Lấy dữ liệu từ các textbox
-            string maDon = txbMaPhieu.Text;
+            string madon = txbMaPhieu.Text;
 
             string soxe = txbSoXe.Text;
 
@@ -907,6 +930,19 @@ namespace CanKT
             thanhtien = Math.Round(thanhtien / 1000) * 1000;
             decimal thanhtoan = decimal.Parse(txbThanhToan.Text);
             thanhtoan = Math.Round(thanhtoan / 1000) * 1000;
+            //string makho = "";
+
+            //if (cbbMaKho.SelectedItem != null)
+            //{
+            //    // Lấy giá trị của mục được chọn từ ComboBox
+            //    makho = cbbMaKho.SelectedItem.ToString();
+            //}
+            //else
+            //{
+            //    // Nếu không có mục nào được chọn, bạn có thể cung cấp một giá trị mặc định hoặc thông báo lỗi tùy ý
+            //    MessageBox.Show("Vui lòng chọn một kho!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            //    return; // hoặc thực hiện xử lý khác tùy theo yêu cầu của bạn
+            //}
             string makho = txbMaKho.Text;
             string mamayxay = txbMaMayXay.Text;
             string mamayxuc = txbMaXeXuc.Text;
@@ -914,24 +950,34 @@ namespace CanKT
             // Truy vấn dữ liệu tương ứng từ cơ sở dữ liệu bằng mã sản phẩm
             using (var db = new CanDBContext())
             {
-                var phieuthu = db.PhieuThus.FirstOrDefault(p => p.maDon == maDon); // Thay thế "Products" bằng tên bảng của bạn
+                var phieuthu = db.PhieuThus.FirstOrDefault(p => p.maDon == madon); // Thay thế "Products" bằng tên bảng của bạn
                 if (phieuthu != null)
                 {
-                    // Cập nhật các thuộc tính của đối tượng dữ liệu
-                    phieuthu.bienSoXe = soxe;
-                    phieuthu.trongLuongXeVao = trongluongxevao;
-                    phieuthu.trongLuongXeRa = trongluongxera;
-                    phieuthu.lenhXuat = lenhxuat;
-                    phieuthu.maKH = makh;
-                    phieuthu.maSP = masp;
-                    phieuthu.soLuongTan = soluongtan;
-                    phieuthu.soLuongM3 = soluongm3;
-                    phieuthu.donGia = dongia;
-                    phieuthu.thanhTien = thanhtien;
-                    phieuthu.tienThanhToan = thanhtoan;
-                    phieuthu.maKho = makho;
-                    phieuthu.maMayXay = mamayxay;
-                    phieuthu.maMayXuc = mamayxuc;
+                    if (quyenuser == "Admin")
+                    {
+                        // Cập nhật các thuộc tính của đối tượng dữ liệu
+                        phieuthu.bienSoXe = soxe;
+                        phieuthu.trongLuongXeVao = trongluongxevao;
+                        phieuthu.trongLuongXeRa = trongluongxera;
+                        phieuthu.lenhXuat = lenhxuat;
+                        phieuthu.maKH = makh;
+                        phieuthu.maSP = masp;
+                        phieuthu.soLuongTan = soluongtan;
+                        phieuthu.soLuongM3 = soluongm3;
+                        phieuthu.donGia = dongia;
+                        phieuthu.thanhTien = thanhtien;
+                        phieuthu.tienThanhToan = thanhtoan;
+                        phieuthu.maKho = makho;
+                        phieuthu.maMayXay = mamayxay;
+                        phieuthu.maMayXuc = mamayxuc;                        
+                    }
+                    else
+                    {
+                        phieuthu.maSP = masp;
+                        phieuthu.maKho = makho;
+                        phieuthu.maMayXay = mamayxay;
+                        phieuthu.maMayXuc = mamayxuc;
+                    }
 
                     // Lưu thay đổi vào cơ sở dữ liệu
                     db.SaveChanges();
@@ -946,9 +992,7 @@ namespace CanKT
 
             // Gán mã phiếu vào textbox
             txbMaPhieu.Text = nextMaPhieu;
-
-            
-
+          
             // Xóa dữ liệu trong các textbox sau khi update thành công
             txbSoXe.Clear();
             txbTLXeVao.Text = "0";
@@ -1034,6 +1078,7 @@ namespace CanKT
             }
         }
 
+        //ham xoa cua btnHuy
         private bool XoaDuLieu(string maphieu)
         {
             try
@@ -1233,8 +1278,146 @@ namespace CanKT
         {
             this.Close();
         }
+
         #endregion
 
-        
+
+        //goi y khi nhap trong cac txb
+        private void SetupAutoCompleteForTextBoxes()
+        {
+            // truy van data tu db
+            var datasoxe = db.Xes.Select(item => item.bienSoXe).Distinct().ToList();
+
+            // Tạo một AutoCompleteStringCollection và thêm các giá trị từ kết quả truy vấn vào collection cho txbSoXe
+            AutoCompleteStringCollection autoCompleteCollection1 = new AutoCompleteStringCollection();
+            foreach (var item in datasoxe)
+            {
+                autoCompleteCollection1.Add(item);
+            }
+
+            // Thiết lập AutoCompleteMode và AutoCompleteSource cho txbSoXe
+            txbSoXe.AutoCompleteMode = AutoCompleteMode.Suggest;
+            txbSoXe.AutoCompleteSource = AutoCompleteSource.CustomSource;
+            txbSoXe.AutoCompleteCustomSource = autoCompleteCollection1;
+
+            //sanpham
+            var datasp = db.SanPhams.Select(item => item.maThanhPham).Distinct().ToList();
+
+            AutoCompleteStringCollection autoCompleteCollection2 = new AutoCompleteStringCollection();
+            foreach (var item in datasp)
+            {
+                autoCompleteCollection2.Add(item);
+            }
+
+            txbMaSP.AutoCompleteMode = AutoCompleteMode.Suggest;
+            txbMaSP.AutoCompleteSource = AutoCompleteSource.CustomSource;
+            txbMaSP.AutoCompleteCustomSource = autoCompleteCollection2;
+
+            //kho
+            var datakho = db.Khoes.Select(item => item.maKho).Distinct().ToList();
+
+            AutoCompleteStringCollection autoCompleteCollection3 = new AutoCompleteStringCollection();
+            foreach (var item in datakho)
+            {
+                autoCompleteCollection3.Add(item);
+            }
+
+            txbMaKho.AutoCompleteMode = AutoCompleteMode.Suggest;
+            txbMaKho.AutoCompleteSource = AutoCompleteSource.CustomSource;
+            txbMaKho.AutoCompleteCustomSource = autoCompleteCollection3;
+
+            //may xay
+            var datamx = db.MayXays.Select(item => item.maMayXay).Distinct().ToList();
+
+            AutoCompleteStringCollection autoCompleteCollection4 = new AutoCompleteStringCollection();
+            foreach (var item in datamx)
+            {
+                autoCompleteCollection4.Add(item);
+            }
+
+            txbMaMayXay.AutoCompleteMode = AutoCompleteMode.Suggest;
+            txbMaMayXay.AutoCompleteSource = AutoCompleteSource.CustomSource;
+            txbMaMayXay.AutoCompleteCustomSource = autoCompleteCollection4;
+
+            //xe xuc
+            var dataxx = db.XeXucs.Select(item => item.maXeXuc).Distinct().ToList();
+
+            AutoCompleteStringCollection autoCompleteCollection5 = new AutoCompleteStringCollection();
+            foreach (var item in dataxx)
+            {
+                autoCompleteCollection5.Add(item);
+            }
+
+            txbMaXeXuc.AutoCompleteMode = AutoCompleteMode.Suggest;
+            txbMaXeXuc.AutoCompleteSource = AutoCompleteSource.CustomSource;
+            txbMaXeXuc.AutoCompleteCustomSource = autoCompleteCollection5;
+        }
+
+
+        //mo va load cong COM
+        private void btnThuTu_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void serialPort1_Open()
+        {
+            int comLength, RefreshCount = 0;
+            string[] arrayCom;
+            string comName;
+            try
+            {
+                comLength = SerialPort.GetPortNames().Length;
+                arrayCom = new string[comLength];
+                arrayCom = SerialPort.GetPortNames();
+                comLength = SerialPort.GetPortNames().Length;
+                comName = arrayCom[RefreshCount].ToString();
+                //btnThuTu.Text = comName;
+                RefreshCount = RefreshCount + 1;
+                if (serialPort1.IsOpen)
+                {
+                    serialPort1.Close();
+                }
+                serialPort1.PortName = comName;
+                serialPort1.Open();
+                if (RefreshCount == comLength)
+                {
+                    RefreshCount = 0;
+                }
+                MessageBox.Show("Success!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Open COM Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        //lay du lieu tu can
+        private void serialPort1_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
+        {
+            string tDataFromComPort, Receive_Data, Show_Data, message = "";
+            try
+            {
+                tDataFromComPort = serialPort1.ReadLine();
+                if (tDataFromComPort != "")
+                {
+                    Receive_Data = tDataFromComPort.ToString();
+                    Show_Data = Receive_Data.Replace("+", "").Replace("kg", "").Replace("-", "").Replace("g", "").Replace(" ", "").Replace("\r", "").ToString();
+                    if (txbTLXeRa.InvokeRequired)
+                    {
+                        txbTLXeRa.Invoke(new MethodInvoker(delegate { txbTLXeRa.Text = Show_Data.Trim(); }));   //Lấy giá trị và hiển thị trọng lượng vào txb
+                    }
+                    else
+                    {
+                        txbTLXeRa.Text = Show_Data.Trim();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                message = ex.Message.ToString();
+            }
+        }
     }
 }
