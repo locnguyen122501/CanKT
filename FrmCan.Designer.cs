@@ -94,6 +94,8 @@
             this.btnXeRa = new System.Windows.Forms.Button();
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.txbGhiChu = new System.Windows.Forms.TextBox();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dgvCan)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -201,6 +203,7 @@
             // groupBox1
             // 
             this.groupBox1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.groupBox1.Controls.Add(this.txbGhiChu);
             this.groupBox1.Controls.Add(this.lblWelcome);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.txbMaPhieu);
@@ -273,7 +276,7 @@
             this.txbMaPhieu.Enabled = false;
             this.txbMaPhieu.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txbMaPhieu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
-            this.txbMaPhieu.Location = new System.Drawing.Point(430, 19);
+            this.txbMaPhieu.Location = new System.Drawing.Point(419, 19);
             this.txbMaPhieu.Name = "txbMaPhieu";
             this.txbMaPhieu.Size = new System.Drawing.Size(123, 31);
             this.txbMaPhieu.TabIndex = 40;
@@ -283,7 +286,7 @@
             // 
             this.lblMaPhieu.AutoSize = true;
             this.lblMaPhieu.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblMaPhieu.Location = new System.Drawing.Point(386, 25);
+            this.lblMaPhieu.Location = new System.Drawing.Point(375, 25);
             this.lblMaPhieu.Name = "lblMaPhieu";
             this.lblMaPhieu.Size = new System.Drawing.Size(38, 25);
             this.lblMaPhieu.TabIndex = 39;
@@ -667,7 +670,7 @@
             this.txbSoXe.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
             this.txbSoXe.Location = new System.Drawing.Point(157, 73);
             this.txbSoXe.Name = "txbSoXe";
-            this.txbSoXe.Size = new System.Drawing.Size(241, 31);
+            this.txbSoXe.Size = new System.Drawing.Size(256, 31);
             this.txbSoXe.TabIndex = 1;
             this.txbSoXe.TextChanged += new System.EventHandler(this.txbSoXe_TextChanged);
             this.txbSoXe.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txbSoXe_KeyDown);
@@ -814,6 +817,19 @@
             this.pictureBox1.TabIndex = 4;
             this.pictureBox1.TabStop = false;
             // 
+            // txbGhiChu
+            // 
+            this.txbGhiChu.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txbGhiChu.Location = new System.Drawing.Point(419, 73);
+            this.txbGhiChu.Name = "txbGhiChu";
+            this.txbGhiChu.Size = new System.Drawing.Size(374, 31);
+            this.txbGhiChu.TabIndex = 43;
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
+            // 
             // FrmCan
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -909,5 +925,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label lblWelcome;
         private System.IO.Ports.SerialPort serialPort1;
+        private System.Windows.Forms.TextBox txbGhiChu;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
     }
 }

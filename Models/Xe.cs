@@ -40,9 +40,6 @@ namespace CanKT.Models
         [Column(TypeName = "date")]
         public DateTime? ngayKetDangKiem { get; set; }
 
-        [StringLength(50)]
-        public string ghiChu { get; set; }
-
         public int? trangThai { get; set; }
 
         public virtual KhachHang KhachHang { get; set; }

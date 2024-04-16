@@ -39,6 +39,7 @@
             this.Column8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column9 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column10 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column11 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCan)).BeginInit();
             this.SuspendLayout();
             // 
@@ -62,7 +63,8 @@
             this.Column7,
             this.Column8,
             this.Column9,
-            this.Column10});
+            this.Column10,
+            this.Column11});
             this.dgvCan.Location = new System.Drawing.Point(-1, -4);
             this.dgvCan.MultiSelect = false;
             this.dgvCan.Name = "dgvCan";
@@ -138,6 +140,11 @@
             this.Column10.Name = "Column10";
             this.Column10.ReadOnly = true;
             // 
+            // Column11
+            // 
+            this.Column11.HeaderText = "Trạng thái";
+            this.Column11.Name = "Column11";
+            // 
             // FrmChiTiet
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -152,6 +159,7 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.Load += new System.EventHandler(this.FrmChiTiet_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvCan)).EndInit();
             this.ResumeLayout(false);
 
@@ -170,5 +178,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column8;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column9;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column10;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column11;
     }
 }

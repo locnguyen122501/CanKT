@@ -25,7 +25,16 @@ namespace CanKT
 
         private void FrmMain_Load(object sender, EventArgs e)
         {
-            
+            //if (quyen == "Admin")
+            //{
+            //    phiếuNhậpxuấtToolStripMenuItem.Visible = true;
+            //}
+            //else
+            //{
+            //    phiếuNhậpxuấtToolStripMenuItem.Visible = false;
+            //}
+
+            //set quyen nhu tren
         }
 
         private void OpenChildForm(Form childForm)

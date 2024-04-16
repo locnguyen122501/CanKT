@@ -37,6 +37,7 @@ namespace CanKT
             if (quyenuser == "Admin")
             {
                 lblWelcome.Text = "Quản lý " + tentaikhoan;
+                btnHuy.Enabled = true;
             }
             else
             {
@@ -567,7 +568,7 @@ namespace CanKT
                 if (e.KeyCode == Keys.Enter)
                 {
                     e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
-                    txbLenhXuat.Focus();
+                    txbMaSP.Focus();
                 }
 
                 if (e.KeyCode == Keys.Escape)
@@ -604,17 +605,20 @@ namespace CanKT
 
         private void txbLenhXuat_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
+            if (txbTLXeVao.Enabled == false)
             {
-                e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
-                txbMaSP.Focus();
-            }
+                if (e.KeyCode == Keys.Enter)
+                {
+                    e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
+                    txbMaSP.Focus();
+                }
 
-            if (e.KeyCode == Keys.Escape)
-            {
-                e.SuppressKeyPress = true; // Ngăn không cho phím Escape tạo ký tự mới trong TextBox
-                txbMaKH.Focus();
-            }
+                if (e.KeyCode == Keys.Escape)
+                {
+                    e.SuppressKeyPress = true; // Ngăn không cho phím Escape tạo ký tự mới trong TextBox
+                    txbMaKH.Focus();
+                }
+            }               
         }
 
         private void txbMaSP_KeyDown(object sender, KeyEventArgs e)
@@ -861,7 +865,7 @@ namespace CanKT
             int trongluongxevao = int.Parse(txbTLXeVao.Text.Replace(",", ""));
             //int trongluongxera = int.Parse(txbTLXeRa.Text.Replace(",", ""));
 
-            string lenhxuat = txbLenhXuat.Text;
+            //string lenhxuat = txbLenhXuat.Text;
             string makh = txbMaKH.Text;
             string masp = txbMaSP.Text;
             //int soluongtan = int.Parse(txbSoLuongTan.Text.Replace(",", ""));
@@ -883,7 +887,7 @@ namespace CanKT
                 bienSoXe = soxe,
                 trongLuongXeVao = trongluongxevao,
                 //trongLuongXeRa = trongluongxera,
-                lenhXuat = lenhxuat,
+                //lenhXuat = lenhxuat,
                 maKH = makh,
                 maSP = masp,
                 //soLuongTan = soluongtan,
@@ -954,6 +958,8 @@ namespace CanKT
             string mamayxay = txbMaMayXay.Text;
             string mamayxuc = txbMaXeXuc.Text;
 
+            int trangthai = 1;
+
             // Truy vấn dữ liệu tương ứng từ cơ sở dữ liệu bằng mã sản phẩm
             using (var db = new CanDBContext())
             {
@@ -976,24 +982,42 @@ namespace CanKT
                         phieuthu.tienThanhToan = thanhtoan;
                         phieuthu.maKho = makho;
                         phieuthu.maMayXay = mamayxay;
-                        phieuthu.maMayXuc = mamayxuc;                        
+                        phieuthu.maMayXuc = mamayxuc;
+                        phieuthu.trangThai = trangthai;
+
+                        // Thông báo thành công
+                        MessageBox.Show("Cập nhật phiếu thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     else
                     {
-                        phieuthu.trongLuongXeRa = trongluongxera;
-                        phieuthu.maSP = masp;
-                        phieuthu.maKho = makho;
-                        phieuthu.maMayXay = mamayxay;
-                        phieuthu.maMayXuc = mamayxuc;
+                        if (phieuthu.trongLuongXeRa == null)
+                        {
+                            phieuthu.trongLuongXeRa = trongluongxera;
+                            phieuthu.lenhXuat = lenhxuat;
+                            phieuthu.soLuongTan = soluongtan;
+                            phieuthu.soLuongM3 = soluongm3;
+                            phieuthu.donGia = dongia;
+                            phieuthu.thanhTien = thanhtien;
+                            phieuthu.tienThanhToan = thanhtoan;
+                            phieuthu.maSP = masp;
+                            phieuthu.maKho = makho;
+                            phieuthu.maMayXay = mamayxay;
+                            phieuthu.maMayXuc = mamayxuc;
+
+                            // Thông báo thành công
+                            MessageBox.Show("Cập nhật phiếu thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Không có quyền sửa phiếu có sẵn!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        
                     }
 
                     // Lưu thay đổi vào cơ sở dữ liệu
                     db.SaveChanges();
                 }
             }
-
-            // Thông báo thành công
-            MessageBox.Show("Cập nhật phiếu thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             // Lấy mã phiếu tiếp theo từ cơ sở dữ liệu
             string nextMaPhieu = db.GetNextMaPhieu();
@@ -1030,14 +1054,25 @@ namespace CanKT
                 if (XoaDuLieu(maphieu))
                 {
                     // Nếu xóa thành công, cập nhật lại hiển thị trên DataGridView
-                    MessageBox.Show("Xóa phiếu thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Đã hủy phiếu thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    // Xóa dữ liệu trong các textbox sau khi update thành công
+                    txbSoXe.Clear();
+                    txbTLXeVao.Text = "0";
+                    txbTLXeRa.Text = "0";
+                    txbLenhXuat.Clear();
+                    txbMaSP.Clear();
+                    txbSoLuongM3.Text = "0";
+                    txbMaKho.Clear();
+                    txbMaMayXay.Clear();
+                    txbMaXeXuc.Clear();
 
                     LoadDataIntoDataGridView();
                 }
                 else
                 {
                     // Nếu xóa không thành công, hiển thị thông báo lỗi
-                    MessageBox.Show("Lỗi khi xóa dữ liệu!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Lỗi khi hủy phiếu!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             else
@@ -1056,7 +1091,7 @@ namespace CanKT
                     if (XoaDuLieu(maphieu))
                     {
                         // Nếu xóa thành công, cập nhật lại hiển thị trên DataGridView
-                        MessageBox.Show("Xóa phiếu thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Đã hủy phiếu thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                         // Lấy mã phiếu tiếp theo từ cơ sở dữ liệu
                         string nextMaPhieu = db.GetNextMaPhieu();
@@ -1080,7 +1115,7 @@ namespace CanKT
                     else
                     {
                         // Nếu xóa không thành công, hiển thị thông báo lỗi
-                        MessageBox.Show("Lỗi khi xóa dữ liệu!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Lỗi khi hủy phiếu!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
@@ -1097,7 +1132,8 @@ namespace CanKT
                     var entity = db.PhieuThus.Find(maphieu);
                     if (entity != null)
                     {
-                        db.PhieuThus.Remove(entity);
+                        //db.PhieuThus.Remove(entity);
+                        entity.trangThai = 0; //khong duoc xoa phieu, chi set trang thai = 0 (huy)
                         db.SaveChanges();
 
                         return true;
@@ -1312,6 +1348,56 @@ namespace CanKT
             }
         }
 
+        private void btnXeVao_Click(object sender, EventArgs e)
+        {
+            //disable cac function cua btnXeRa
+            txbTLXeRa.Enabled = false;
+            txbLenhXuat.Enabled = false; //xin ngau nhieu, se sua sau
+            txbSoLuongTan.Enabled = false;
+            txbSoLuongM3.Enabled = false;
+            txbDonGia.Enabled = false;
+            txbTienHang.Enabled = false;
+            txbThanhToan.Enabled = false;
+
+            btnSua.Enabled = false;
+
+            txbSoXe.Enabled = true;
+            txbTLXeVao.Enabled = true;
+            txbMaKH.Enabled = true;
+            txbMaSP.Enabled = true;
+            txbMaKho.Enabled = true;
+            txbMaMayXay.Enabled = true;
+            txbMaXeXuc.Enabled = true;
+            txbSalan.Enabled = true;
+
+            this.ActiveControl = txbSoXe;
+        }
+
+        private void btnXeRa_Click(object sender, EventArgs e)
+        {
+            //disable cac function cua btnXeVao
+            txbSoXe.Enabled = false;
+            txbTLXeVao.Enabled = false;
+            txbMaKH.Enabled = false;
+
+            txbTLXeRa.Enabled = true;
+            txbLenhXuat.Enabled = true; //xin ngau nhieu, se sua sau
+            txbMaSP.Enabled = true;
+            txbSoLuongTan.Enabled = true;
+            txbSoLuongM3.Enabled = true;
+            txbDonGia.Enabled = true;
+            txbTienHang.Enabled = true;
+            txbThanhToan.Enabled = true;
+            txbMaKho.Enabled = true;
+            txbMaMayXay.Enabled = true;
+            txbMaXeXuc.Enabled = true;
+            txbSalan.Enabled = true;
+
+            btnSua.Enabled = true;
+
+            this.ActiveControl = txbMaSP;
+        }
+
         private void btnXong_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -1453,49 +1539,6 @@ namespace CanKT
             {
                 message = ex.Message.ToString();
             }
-        }
-
-        private void btnXeVao_Click(object sender, EventArgs e)
-        {
-            //disable cac function cua btnXeRa
-            txbTLXeRa.Enabled = false;
-            txbSoLuongTan.Enabled = false;
-            txbSoLuongM3.Enabled = false;
-            txbDonGia.Enabled = false;
-            txbTienHang.Enabled = false;
-            txbThanhToan.Enabled = false;
-
-            btnSua.Enabled = false;
-
-            txbSoXe.Enabled = true;
-            txbTLXeVao.Enabled = true;
-            txbMaKH.Enabled = true;
-            txbLenhXuat.Enabled = true; //xin ngau nhieu, se sua sau
-            txbMaSP.Enabled = true;
-            txbMaKho.Enabled = true;
-            txbMaMayXay.Enabled = true;
-            txbMaXeXuc.Enabled = true;
-            txbSalan.Enabled = true;
-
-            this.ActiveControl = txbSoXe;
-        }
-
-        private void btnXeRa_Click(object sender, EventArgs e)
-        {
-            //disable cac function cua btnXeVao
-            txbSoXe.Enabled = false;
-            txbTLXeVao.Enabled = false;
-            txbMaKH.Enabled = false;
-            txbLenhXuat.Enabled = false; //xin ngau nhieu, se sua sau
-
-            txbTLXeRa.Enabled = true;
-            txbSoLuongTan.Enabled = true;
-            txbSoLuongM3.Enabled = true;
-            txbDonGia.Enabled = true;
-            txbTienHang.Enabled = true;
-            txbThanhToan.Enabled = true;
-
-            this.ActiveControl = txbMaSP;
         }
     }
 }
