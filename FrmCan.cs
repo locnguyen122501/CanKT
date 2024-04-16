@@ -6,12 +6,15 @@ using System.Data.Entity;
 using System.Data.Entity.Migrations.Infrastructure;
 using System.Drawing;
 using System.Globalization;
+using System.IO.Ports;
 using System.Linq;
 using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Windows.Forms;
 using CanKT.Models;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.IO;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace CanKT
 {
@@ -21,33 +24,50 @@ namespace CanKT
 
         int prevMP = 0;
 
-        public FrmCan(string tentaikhoan)
+        string quyenuser = "";
+
+        public FrmCan(string tentaikhoan, string quyen)
         {
             InitializeComponent();
 
             this.KeyPreview = true;
 
-            lblWelcome.Text = "Xin chào " + tentaikhoan;
+            quyenuser = quyen;
+
+            if (quyenuser == "Admin")
+            {
+                lblWelcome.Text = "Quản lý " + tentaikhoan;
+                btnHuy.Enabled = true;
+            }
+            else
+            {
+                lblWelcome.Text = "Nhân viên " + tentaikhoan;
+            }
 
             LoadDataIntoDataGridView();
-            
+            SetupAutoCompleteForTextBoxes();
+            serialPort1_Open();
         }
 
 
         private void FrmCan_Load(object sender, EventArgs e)
         {
-            this.ActiveControl = txbSoXe;
-
             // Lấy mã phiếu tiếp theo từ cơ sở dữ liệu và gán vào txb
             string nextMaPhieu = db.GetNextMaPhieu();
             txbMaPhieu.Text = nextMaPhieu;
 
             //vi khong co txb nen gan vao gia tri prevMP tao ben tren
             int prevMaPhieu = int.Parse(db.GetOldestMaPhieu());
-            prevMP = prevMaPhieu;
+            prevMP = prevMaPhieu;           
 
-            btnXeVao.Enabled = false;
-            btnPhieuSau.Enabled = false;
+            if (quyenuser == "Admin")
+            {
+                btnHuy.Enabled = true;
+            }
+            else
+            {
+                btnHuy.Enabled = false;
+            }
         }
 
         private void LoadDataIntoDataGridView()
@@ -230,7 +250,8 @@ namespace CanKT
 
         private void txbSoLuongTan_TextChanged(object sender, EventArgs e)
         {
-            TinhTienHang();            
+            TinhTienHang();
+            ChuyenDoiTanM3();
         }
 
         private void TinhTienHang()
@@ -306,7 +327,7 @@ namespace CanKT
             txbTenSP.Text = tenSP.ToString();
             txbDonGia.Text = giaSP.ToString();
 
-            ChuyenDoiTanM3();
+            
         }
 
         private string GetTenSPFromMaSP(string maSP)
@@ -542,16 +563,27 @@ namespace CanKT
 
         private void txbTLXeVao_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
+            if (txbTLXeVao.Enabled == true)
             {
-                e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
-                txbTLXeRa.Focus();
-            }
+                if (e.KeyCode == Keys.Enter)
+                {
+                    e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
+                    txbMaSP.Focus();
+                }
 
-            if (e.KeyCode == Keys.Escape)
+                if (e.KeyCode == Keys.Escape)
+                {
+                    e.SuppressKeyPress = true; // Ngăn không cho phím Escape tạo ký tự mới trong TextBox
+                    txbSoXe.Focus();
+                }
+            }
+            else
             {
-                e.SuppressKeyPress = true; // Ngăn không cho phím Escape tạo ký tự mới trong TextBox
-                txbSoXe.Focus();
+                if (e.KeyCode == Keys.Enter)
+                {
+                    e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
+                    txbTLXeRa.Focus();
+                }
             }
         }
 
@@ -573,17 +605,20 @@ namespace CanKT
 
         private void txbLenhXuat_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
+            if (txbTLXeVao.Enabled == false)
             {
-                e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
-                txbMaSP.Focus();
-            }
+                if (e.KeyCode == Keys.Enter)
+                {
+                    e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
+                    txbMaSP.Focus();
+                }
 
-            if (e.KeyCode == Keys.Escape)
-            {
-                e.SuppressKeyPress = true; // Ngăn không cho phím Escape tạo ký tự mới trong TextBox
-                txbTLXeRa.Focus();
-            }
+                if (e.KeyCode == Keys.Escape)
+                {
+                    e.SuppressKeyPress = true; // Ngăn không cho phím Escape tạo ký tự mới trong TextBox
+                    txbMaKH.Focus();
+                }
+            }               
         }
 
         private void txbMaSP_KeyDown(object sender, KeyEventArgs e)
@@ -651,7 +686,19 @@ namespace CanKT
             if (e.KeyCode == Keys.Enter)
             {
                 e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
-                themData();
+
+                string maphieu = txbMaPhieu.Text;
+
+                //neu chua co ma phieu thi se them, neu co roi thi se cap nhat
+                var phieu = db.PhieuThus.FirstOrDefault(u => u.maDon == maphieu);
+                if (phieu != null)
+                {
+                    btnSua.PerformClick();
+                }
+                else
+                {
+                    themData();
+                }
             }           
 
             if (e.KeyCode == Keys.Escape)
@@ -816,19 +863,19 @@ namespace CanKT
             string soxe = txbSoXe.Text;
 
             int trongluongxevao = int.Parse(txbTLXeVao.Text.Replace(",", ""));
-            int trongluongxera = int.Parse(txbTLXeRa.Text.Replace(",", ""));
+            //int trongluongxera = int.Parse(txbTLXeRa.Text.Replace(",", ""));
 
-            string lenhxuat = txbLenhXuat.Text;
+            //string lenhxuat = txbLenhXuat.Text;
             string makh = txbMaKH.Text;
             string masp = txbMaSP.Text;
-            int soluongtan = int.Parse(txbSoLuongTan.Text.Replace(",", ""));
-            int soluongm3 = int.Parse(txbSoLuongM3.Text.Replace(",", ""));
+            //int soluongtan = int.Parse(txbSoLuongTan.Text.Replace(",", ""));
+            //int soluongm3 = int.Parse(txbSoLuongM3.Text.Replace(",", ""));
             decimal dongia = decimal.Parse(txbDonGia.Text);
             dongia = Math.Round(dongia / 1000) * 1000;
-            decimal thanhtien = decimal.Parse(txbTienHang.Text);
-            thanhtien = Math.Round(thanhtien / 1000) * 1000;
-            decimal thanhtoan = decimal.Parse(txbThanhToan.Text);
-            thanhtoan = Math.Round(thanhtoan / 1000) * 1000;
+            //decimal thanhtien = decimal.Parse(txbTienHang.Text);
+            //thanhtien = Math.Round(thanhtien / 1000) * 1000;
+            //decimal thanhtoan = decimal.Parse(txbThanhToan.Text);
+            //thanhtoan = Math.Round(thanhtoan / 1000) * 1000;
             string makho = txbMaKho.Text;
             string mamayxay = txbMaMayXay.Text;
             string mamayxuc = txbMaXeXuc.Text;
@@ -839,19 +886,18 @@ namespace CanKT
                 maDon = maphieu,
                 bienSoXe = soxe,
                 trongLuongXeVao = trongluongxevao,
-                trongLuongXeRa = trongluongxera,
-                lenhXuat = lenhxuat,
+                //trongLuongXeRa = trongluongxera,
+                //lenhXuat = lenhxuat,
                 maKH = makh,
                 maSP = masp,
-                soLuongTan = soluongtan,
-                soLuongM3 = soluongm3,
+                //soLuongTan = soluongtan,
+                //soLuongM3 = soluongm3,
                 donGia = dongia,
-                thanhTien = thanhtien,
-                tienThanhToan = thanhtoan,
+                //thanhTien = thanhtien,
+                //tienThanhToan = thanhtoan,
                 maKho = makho,
                 maMayXay = mamayxay,
                 maMayXuc = mamayxuc,
-
             };
 
             // Thêm đối tượng vào cơ sở dữ liệu bằng Entity Framework
@@ -889,7 +935,7 @@ namespace CanKT
         private void btnSua_Click(object sender, EventArgs e)
         {
             // Lấy dữ liệu từ các textbox
-            string maDon = txbMaPhieu.Text;
+            string madon = txbMaPhieu.Text;
 
             string soxe = txbSoXe.Text;
 
@@ -907,48 +953,78 @@ namespace CanKT
             thanhtien = Math.Round(thanhtien / 1000) * 1000;
             decimal thanhtoan = decimal.Parse(txbThanhToan.Text);
             thanhtoan = Math.Round(thanhtoan / 1000) * 1000;
+            
             string makho = txbMaKho.Text;
             string mamayxay = txbMaMayXay.Text;
             string mamayxuc = txbMaXeXuc.Text;
 
+            int trangthai = 1;
+
             // Truy vấn dữ liệu tương ứng từ cơ sở dữ liệu bằng mã sản phẩm
             using (var db = new CanDBContext())
             {
-                var phieuthu = db.PhieuThus.FirstOrDefault(p => p.maDon == maDon); // Thay thế "Products" bằng tên bảng của bạn
+                var phieuthu = db.PhieuThus.FirstOrDefault(p => p.maDon == madon);
                 if (phieuthu != null)
                 {
-                    // Cập nhật các thuộc tính của đối tượng dữ liệu
-                    phieuthu.bienSoXe = soxe;
-                    phieuthu.trongLuongXeVao = trongluongxevao;
-                    phieuthu.trongLuongXeRa = trongluongxera;
-                    phieuthu.lenhXuat = lenhxuat;
-                    phieuthu.maKH = makh;
-                    phieuthu.maSP = masp;
-                    phieuthu.soLuongTan = soluongtan;
-                    phieuthu.soLuongM3 = soluongm3;
-                    phieuthu.donGia = dongia;
-                    phieuthu.thanhTien = thanhtien;
-                    phieuthu.tienThanhToan = thanhtoan;
-                    phieuthu.maKho = makho;
-                    phieuthu.maMayXay = mamayxay;
-                    phieuthu.maMayXuc = mamayxuc;
+                    if (quyenuser == "Admin")
+                    {
+                        // Cập nhật các thuộc tính của đối tượng dữ liệu
+                        phieuthu.bienSoXe = soxe;
+                        phieuthu.trongLuongXeVao = trongluongxevao;
+                        phieuthu.trongLuongXeRa = trongluongxera;
+                        phieuthu.lenhXuat = lenhxuat;
+                        phieuthu.maKH = makh;
+                        phieuthu.maSP = masp;
+                        phieuthu.soLuongTan = soluongtan;
+                        phieuthu.soLuongM3 = soluongm3;
+                        phieuthu.donGia = dongia;
+                        phieuthu.thanhTien = thanhtien;
+                        phieuthu.tienThanhToan = thanhtoan;
+                        phieuthu.maKho = makho;
+                        phieuthu.maMayXay = mamayxay;
+                        phieuthu.maMayXuc = mamayxuc;
+                        phieuthu.trangThai = trangthai;
+
+                        // Thông báo thành công
+                        MessageBox.Show("Cập nhật phiếu thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        if (phieuthu.trongLuongXeRa == null)
+                        {
+                            phieuthu.trongLuongXeRa = trongluongxera;
+                            phieuthu.lenhXuat = lenhxuat;
+                            phieuthu.soLuongTan = soluongtan;
+                            phieuthu.soLuongM3 = soluongm3;
+                            phieuthu.donGia = dongia;
+                            phieuthu.thanhTien = thanhtien;
+                            phieuthu.tienThanhToan = thanhtoan;
+                            phieuthu.maSP = masp;
+                            phieuthu.maKho = makho;
+                            phieuthu.maMayXay = mamayxay;
+                            phieuthu.maMayXuc = mamayxuc;
+
+                            // Thông báo thành công
+                            MessageBox.Show("Cập nhật phiếu thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Không có quyền sửa phiếu có sẵn!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        
+                    }
 
                     // Lưu thay đổi vào cơ sở dữ liệu
                     db.SaveChanges();
                 }
             }
 
-            // Thông báo thành công
-            MessageBox.Show("Cập nhật phiếu thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
             // Lấy mã phiếu tiếp theo từ cơ sở dữ liệu
             string nextMaPhieu = db.GetNextMaPhieu();
 
             // Gán mã phiếu vào textbox
             txbMaPhieu.Text = nextMaPhieu;
-
-            
-
+          
             // Xóa dữ liệu trong các textbox sau khi update thành công
             txbSoXe.Clear();
             txbTLXeVao.Text = "0";
@@ -960,7 +1036,7 @@ namespace CanKT
             txbMaMayXay.Clear();
             txbMaXeXuc.Clear();
 
-            //khong update lai dgv
+            //khong load lai dgv
             LoadDataIntoDataGridView();
 
         }
@@ -978,14 +1054,25 @@ namespace CanKT
                 if (XoaDuLieu(maphieu))
                 {
                     // Nếu xóa thành công, cập nhật lại hiển thị trên DataGridView
-                    MessageBox.Show("Xóa phiếu thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Đã hủy phiếu thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    // Xóa dữ liệu trong các textbox sau khi update thành công
+                    txbSoXe.Clear();
+                    txbTLXeVao.Text = "0";
+                    txbTLXeRa.Text = "0";
+                    txbLenhXuat.Clear();
+                    txbMaSP.Clear();
+                    txbSoLuongM3.Text = "0";
+                    txbMaKho.Clear();
+                    txbMaMayXay.Clear();
+                    txbMaXeXuc.Clear();
 
                     LoadDataIntoDataGridView();
                 }
                 else
                 {
                     // Nếu xóa không thành công, hiển thị thông báo lỗi
-                    MessageBox.Show("Lỗi khi xóa dữ liệu!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Lỗi khi hủy phiếu!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             else
@@ -1004,7 +1091,7 @@ namespace CanKT
                     if (XoaDuLieu(maphieu))
                     {
                         // Nếu xóa thành công, cập nhật lại hiển thị trên DataGridView
-                        MessageBox.Show("Xóa phiếu thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Đã hủy phiếu thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                         // Lấy mã phiếu tiếp theo từ cơ sở dữ liệu
                         string nextMaPhieu = db.GetNextMaPhieu();
@@ -1028,12 +1115,13 @@ namespace CanKT
                     else
                     {
                         // Nếu xóa không thành công, hiển thị thông báo lỗi
-                        MessageBox.Show("Lỗi khi xóa dữ liệu!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Lỗi khi hủy phiếu!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
         }
 
+        //ham xoa cua btnHuy
         private bool XoaDuLieu(string maphieu)
         {
             try
@@ -1044,7 +1132,8 @@ namespace CanKT
                     var entity = db.PhieuThus.Find(maphieu);
                     if (entity != null)
                     {
-                        db.PhieuThus.Remove(entity);
+                        //db.PhieuThus.Remove(entity);
+                        entity.trangThai = 0; //khong duoc xoa phieu, chi set trang thai = 0 (huy)
                         db.SaveChanges();
 
                         return true;
@@ -1229,12 +1318,227 @@ namespace CanKT
             }
         }
 
+        //Sap xep phieu theo ma phieu, so xe hoac ma khach
+        private void btnThuTu_Click(object sender, EventArgs e)
+        {
+            FrmThuTu frmThuTu = new FrmThuTu();
+            frmThuTu.ShowDialog();
+
+            string sortBy = frmThuTu.SortBy;
+            SortData(sortBy);
+        }
+
+        private void SortData(string sortBy)
+        {
+            switch (sortBy)
+            {
+                case "Mã Phiếu":
+                    dgvCan.Sort(dgvCan.Columns["Column1"], ListSortDirection.Ascending);
+                    break;
+                case "Mã Xe":
+                    dgvCan.Sort(dgvCan.Columns["Column2"], ListSortDirection.Ascending);
+                    break;
+                case "Mã Khách Hàng":
+                    dgvCan.Sort(dgvCan.Columns["Column3"], ListSortDirection.Ascending);
+                    break;
+                default:
+                    // Mặc định sắp xếp theo mã phiếu
+                    dgvCan.Sort(dgvCan.Columns["Column1"], ListSortDirection.Ascending);
+                    break;
+            }
+        }
+
+        private void btnXeVao_Click(object sender, EventArgs e)
+        {
+            //disable cac function cua btnXeRa
+            txbTLXeRa.Enabled = false;
+            txbLenhXuat.Enabled = false; //xin ngau nhieu, se sua sau
+            txbSoLuongTan.Enabled = false;
+            txbSoLuongM3.Enabled = false;
+            txbDonGia.Enabled = false;
+            txbTienHang.Enabled = false;
+            txbThanhToan.Enabled = false;
+
+            btnSua.Enabled = false;
+
+            txbSoXe.Enabled = true;
+            txbTLXeVao.Enabled = true;
+            txbMaKH.Enabled = true;
+            txbMaSP.Enabled = true;
+            txbMaKho.Enabled = true;
+            txbMaMayXay.Enabled = true;
+            txbMaXeXuc.Enabled = true;
+            txbSalan.Enabled = true;
+
+            this.ActiveControl = txbSoXe;
+        }
+
+        private void btnXeRa_Click(object sender, EventArgs e)
+        {
+            //disable cac function cua btnXeVao
+            txbSoXe.Enabled = false;
+            txbTLXeVao.Enabled = false;
+            txbMaKH.Enabled = false;
+
+            txbTLXeRa.Enabled = true;
+            txbLenhXuat.Enabled = true; //xin ngau nhieu, se sua sau
+            txbMaSP.Enabled = true;
+            txbSoLuongTan.Enabled = true;
+            txbSoLuongM3.Enabled = true;
+            txbDonGia.Enabled = true;
+            txbTienHang.Enabled = true;
+            txbThanhToan.Enabled = true;
+            txbMaKho.Enabled = true;
+            txbMaMayXay.Enabled = true;
+            txbMaXeXuc.Enabled = true;
+            txbSalan.Enabled = true;
+
+            btnSua.Enabled = true;
+
+            this.ActiveControl = txbMaSP;
+        }
+
         private void btnXong_Click(object sender, EventArgs e)
         {
             this.Close();
         }
+
         #endregion
 
-        
+
+        //goi y khi nhap trong cac txb
+        private void SetupAutoCompleteForTextBoxes()
+        {
+            // truy van data tu db
+            var datasoxe = db.Xes.Select(item => item.bienSoXe).Distinct().ToList();
+
+            // Tạo một AutoCompleteStringCollection và thêm các giá trị từ kết quả truy vấn vào collection cho txbSoXe
+            AutoCompleteStringCollection autoCompleteCollection1 = new AutoCompleteStringCollection();
+            foreach (var item in datasoxe)
+            {
+                autoCompleteCollection1.Add(item);
+            }
+
+            // Thiết lập AutoCompleteMode và AutoCompleteSource cho txbSoXe
+            txbSoXe.AutoCompleteMode = AutoCompleteMode.Suggest;
+            txbSoXe.AutoCompleteSource = AutoCompleteSource.CustomSource;
+            txbSoXe.AutoCompleteCustomSource = autoCompleteCollection1;
+
+            //sanpham
+            var datasp = db.SanPhams.Select(item => item.maThanhPham).Distinct().ToList();
+
+            AutoCompleteStringCollection autoCompleteCollection2 = new AutoCompleteStringCollection();
+            foreach (var item in datasp)
+            {
+                autoCompleteCollection2.Add(item);
+            }
+
+            txbMaSP.AutoCompleteMode = AutoCompleteMode.Suggest;
+            txbMaSP.AutoCompleteSource = AutoCompleteSource.CustomSource;
+            txbMaSP.AutoCompleteCustomSource = autoCompleteCollection2;
+
+            //kho
+            var datakho = db.Khoes.Select(item => item.maKho).Distinct().ToList();
+
+            AutoCompleteStringCollection autoCompleteCollection3 = new AutoCompleteStringCollection();
+            foreach (var item in datakho)
+            {
+                autoCompleteCollection3.Add(item);
+            }
+
+            txbMaKho.AutoCompleteMode = AutoCompleteMode.Suggest;
+            txbMaKho.AutoCompleteSource = AutoCompleteSource.CustomSource;
+            txbMaKho.AutoCompleteCustomSource = autoCompleteCollection3;
+
+            //may xay
+            var datamx = db.MayXays.Select(item => item.maMayXay).Distinct().ToList();
+
+            AutoCompleteStringCollection autoCompleteCollection4 = new AutoCompleteStringCollection();
+            foreach (var item in datamx)
+            {
+                autoCompleteCollection4.Add(item);
+            }
+
+            txbMaMayXay.AutoCompleteMode = AutoCompleteMode.Suggest;
+            txbMaMayXay.AutoCompleteSource = AutoCompleteSource.CustomSource;
+            txbMaMayXay.AutoCompleteCustomSource = autoCompleteCollection4;
+
+            //xe xuc
+            var dataxx = db.XeXucs.Select(item => item.maXeXuc).Distinct().ToList();
+
+            AutoCompleteStringCollection autoCompleteCollection5 = new AutoCompleteStringCollection();
+            foreach (var item in dataxx)
+            {
+                autoCompleteCollection5.Add(item);
+            }
+
+            txbMaXeXuc.AutoCompleteMode = AutoCompleteMode.Suggest;
+            txbMaXeXuc.AutoCompleteSource = AutoCompleteSource.CustomSource;
+            txbMaXeXuc.AutoCompleteCustomSource = autoCompleteCollection5;
+        }
+
+
+        //mo va load cong COM
+
+        private void serialPort1_Open()
+        {
+            int comLength, RefreshCount = 0;
+            string[] arrayCom;
+            string comName;
+            try
+            {
+                comLength = SerialPort.GetPortNames().Length;
+                arrayCom = new string[comLength];
+                arrayCom = SerialPort.GetPortNames();
+                comLength = SerialPort.GetPortNames().Length;
+                comName = arrayCom[RefreshCount].ToString();
+                //btnThuTu.Text = comName;
+                RefreshCount = RefreshCount + 1;
+                if (serialPort1.IsOpen)
+                {
+                    serialPort1.Close();
+                }
+                serialPort1.PortName = comName;
+                serialPort1.Open();
+                if (RefreshCount == comLength)
+                {
+                    RefreshCount = 0;
+                }
+                MessageBox.Show("Success!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Open COM Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        //lay du lieu tu can
+        private void serialPort1_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
+        {
+            string tDataFromComPort, Receive_Data, Show_Data, message = "";
+
+            try
+            {
+                tDataFromComPort = serialPort1.ReadLine();
+                if (tDataFromComPort != "")
+                {
+                    Receive_Data = tDataFromComPort.ToString();
+                    Show_Data = Receive_Data.Replace("+", "").Replace("kg", "").Replace("-", "").Replace("g", "").Replace(" ", "").Replace("\r", "").ToString();
+                    if (txbTLXeRa.InvokeRequired)
+                    {
+                        txbTLXeRa.Invoke(new MethodInvoker(delegate { txbTLXeRa.Text = Show_Data.Trim(); }));   //Lấy giá trị và hiển thị trọng lượng vào txb
+                    }
+                    else
+                    {
+                        txbTLXeRa.Text = Show_Data.Trim();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                message = ex.Message.ToString();
+            }
+        }
     }
 }

@@ -80,26 +80,27 @@ namespace CanKT
 
                     var user = db.NhanViens.FirstOrDefault(u => u.tenTaiKhoan == username);
 
-                    //if(db.TaiKhoans.Any(u => u.tenTaiKhoan == username && u.matKhau == password) != false)
-                    //{
-                    //    MessageBox.Show("Thanh cong!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    //}
-                    //else
-                    //{
-                    //    MessageBox.Show("Sai!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    //}
-
                     if (user != null) //ton tai tai khoan
                     {
                         if (user.matKhau == password)
                         {
                             //check quyen user
+                            string quyen = "";
+
+                            if (user.quyen == "Admin")
+                            {
+                                quyen = user.quyen;
+                            }
+                            else
+                            {
+                                quyen = user.quyen;
+                            }
                             
                             MessageBox.Show("Đăng nhập thành công", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                             string tentaikhoan = user.tenTaiKhoan;
 
-                            FrmMain frmMain = new FrmMain(tentaikhoan);
+                            FrmMain frmMain = new FrmMain(tentaikhoan, quyen);
                             this.Hide();
                             frmMain.ShowDialog();
                         }
