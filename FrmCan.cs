@@ -15,6 +15,10 @@ using CanKT.Models;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.IO;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
+using System.Diagnostics;
+using System.CodeDom.Compiler;
+using System.Net.NetworkInformation;
+using System.Threading.Tasks;
 
 namespace CanKT
 {
@@ -46,7 +50,7 @@ namespace CanKT
 
             LoadDataIntoDataGridView();
             SetupAutoCompleteForTextBoxes();
-            serialPort1_Open();
+            
         }
 
 
@@ -1362,6 +1366,7 @@ namespace CanKT
             btnSua.Enabled = false;
 
             txbSoXe.Enabled = true;
+            txbGhiChu.Enabled = true;
             txbTLXeVao.Enabled = true;
             txbMaKH.Enabled = true;
             txbMaSP.Enabled = true;
@@ -1371,12 +1376,15 @@ namespace CanKT
             txbSalan.Enabled = true;
 
             this.ActiveControl = txbSoXe;
+
+            serialPort1_Open();
         }
 
         private void btnXeRa_Click(object sender, EventArgs e)
         {
             //disable cac function cua btnXeVao
             txbSoXe.Enabled = false;
+            txbGhiChu.Enabled = false;
             txbTLXeVao.Enabled = false;
             txbMaKH.Enabled = false;
 
@@ -1396,6 +1404,9 @@ namespace CanKT
             btnSua.Enabled = true;
 
             this.ActiveControl = txbMaSP;
+
+            serialPort1_Open();
+            StartTimer();
         }
 
         private void btnXong_Click(object sender, EventArgs e)
@@ -1480,6 +1491,10 @@ namespace CanKT
 
         //mo va load cong COM
 
+        public SerialPort Port { get; private set; } = null;
+        private string dataReceived = string.Empty;
+
+
         private void serialPort1_Open()
         {
             int comLength, RefreshCount = 0;
@@ -1492,19 +1507,27 @@ namespace CanKT
                 arrayCom = SerialPort.GetPortNames();
                 comLength = SerialPort.GetPortNames().Length;
                 comName = arrayCom[RefreshCount].ToString();
-                //btnThuTu.Text = comName;
-                RefreshCount = RefreshCount + 1;
-                if (serialPort1.IsOpen)
-                {
-                    serialPort1.Close();
-                }
-                serialPort1.PortName = comName;
-                serialPort1.Open();
-                if (RefreshCount == comLength)
-                {
-                    RefreshCount = 0;
-                }
-                MessageBox.Show("Success!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                //create new instance
+                this.Port = new SerialPort();
+
+                //set properties
+                Port.BaudRate = 9600;
+                Port.DataBits = 8;
+                Port.Parity = Parity.None; //use 'None' when DataBits = 8; if DataBits = 7, use 'Even' or 'Odd'
+                Port.DtrEnable = true; //enable Data Terminal Ready
+                Port.Handshake = Handshake.None;
+                Port.PortName = comName;
+                Port.ReadTimeout = 200; //used when using ReadLine
+                Port.RtsEnable = true; //enable Request to send
+                Port.StopBits = StopBits.One;
+                Port.WriteTimeout = 50;
+
+                //MessageBox.Show("Success!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                Port.DataReceived += serialPort1_DataReceived;
+
+                Port.Open();
             }
             catch (Exception ex)
             {
@@ -1514,31 +1537,94 @@ namespace CanKT
 
 
         //lay du lieu tu can
+
+        private string lastWeightData = "";
+
         private void serialPort1_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
         {
-            string tDataFromComPort, Receive_Data, Show_Data, message = "";
+            dataReceived = Port.ReadExisting();
 
-            try
+            // Tìm và lọc số từ chuỗi
+            string[] parts = dataReceived.Split(new char[] { ' ', ')', '(' }, StringSplitOptions.RemoveEmptyEntries);
+
+
+            // Chuyển đổi chuỗi thành số nguyên
+            //int result = 0;
+            int maxLength = 12;
+            string firstTwelveDigits = "";
+
+            foreach (string part in parts)
             {
-                tDataFromComPort = serialPort1.ReadLine();
-                if (tDataFromComPort != "")
+                if (int.TryParse(part, out int num))
                 {
-                    Receive_Data = tDataFromComPort.ToString();
-                    Show_Data = Receive_Data.Replace("+", "").Replace("kg", "").Replace("-", "").Replace("g", "").Replace(" ", "").Replace("\r", "").ToString();
+                    // Lấy 12 số đầu tiên của số
+                    firstTwelveDigits = num.ToString().Substring(0, Math.Min(num.ToString().Length, maxLength));
+
+                }
+            }
+
+            lastWeightData = firstTwelveDigits;
+
+            //int result = int.Parse(firstTwelveDigits);
+
+            //Sau khi vòng lặp kết thúc, đóng cổng và hiển thị kết quả
+            //if (!string.IsNullOrEmpty(firstTwelveDigits))
+            //{
+            //    if (txbTLXeVao.Enabled == true)
+            //    {
+            //        if (txbTLXeVao.InvokeRequired)
+            //        {
+            //            txbTLXeVao.Invoke(new MethodInvoker(delegate { txbTLXeVao.AppendText(firstTwelveDigits + Environment.NewLine); }));
+            //        }
+            //    }
+            //    else
+            //    {
+            //        if (txbTLXeRa.InvokeRequired)
+            //        {
+            //            txbTLXeRa.Invoke(new MethodInvoker(delegate { txbTLXeRa.AppendText(firstTwelveDigits + Environment.NewLine); }));
+            //        }
+            //    }
+            //}
+            //Port.Close();
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            // Đặt dữ liệu cuối cùng vào TextBox
+            if (!string.IsNullOrEmpty(lastWeightData))
+            {
+                if (txbTLXeVao.Enabled == true)
+                {
+                    //txbTLXeVao.AppendText(lastWeightData + Environment.NewLine);
+                    if (txbTLXeVao.InvokeRequired)
+                    {
+                        txbTLXeVao.Invoke(new MethodInvoker(delegate { txbTLXeVao.AppendText(lastWeightData + Environment.NewLine); }));
+                    }
+                }
+                else
+                {
+                    //txbTLXeRa.AppendText(lastWeightData + Environment.NewLine);
                     if (txbTLXeRa.InvokeRequired)
                     {
-                        txbTLXeRa.Invoke(new MethodInvoker(delegate { txbTLXeRa.Text = Show_Data.Trim(); }));   //Lấy giá trị và hiển thị trọng lượng vào txb
-                    }
-                    else
-                    {
-                        txbTLXeRa.Text = Show_Data.Trim();
+                        txbTLXeRa.Invoke(new MethodInvoker(delegate { txbTLXeRa.AppendText(lastWeightData + Environment.NewLine); }));
                     }
                 }
             }
-            catch (Exception ex)
-            {
-                message = ex.Message.ToString();
-            }
+
+            // Dừng timer
+            timer1.Stop();
+
+            // Đóng cổng
+            Port.Close();
+        }
+
+        private void StartTimer()
+        {
+            // Đặt thời gian chờ
+            timer1.Interval = 5000; // 5 giây
+
+            // Bắt đầu timer
+            timer1.Start();
         }
     }
 }
