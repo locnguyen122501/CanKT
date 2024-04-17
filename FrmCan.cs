@@ -30,6 +30,9 @@ namespace CanKT
 
         string quyenuser = "";
 
+        int tlbanthan, tlchophep = 0;
+        DateTime handangkiem;
+
         public FrmCan(string tentaikhoan, string quyen)
         {
             InitializeComponent();
@@ -197,8 +200,36 @@ namespace CanKT
         {
             string soXe = txbSoXe.Text;
             string maKH = GetMaKHFromMaXe(soXe);
+            string ghiChu = GetThongSoFromMaXe(soXe);
 
+            txbGhiChu.Text = ghiChu.ToString();
             txbMaKH.Text = maKH.ToString();
+        }
+
+        private string GetThongSoFromMaXe(string soXe)
+        {
+            // Thực hiện truy vấn tới cơ sở dữ liệu của bạn để lấy tên khách hàng từ mã khách hàng
+            // Sau đó trả về tên khách hàng tương ứng
+
+            string tlbanthan, tlchophep = "";
+            DateTime handangkiem;
+            string ghichu = "";
+            
+
+            using (var db = new CanDBContext())
+            {
+                var xe = db.Xes.FirstOrDefault(x => x.bienSoXe == soXe);
+
+                if (xe != null)
+                {
+                    tlbanthan = xe.trongLuongBanThan.ToString();
+                    tlchophep = xe.trongLuongChoPhep.ToString();
+                    handangkiem = DateTime.Parse(xe.ngayKetDangKiem.ToString());
+
+                    ghichu = tlbanthan + " - " + tlchophep + " - " + handangkiem;
+                }
+            }
+            return ghichu;
         }
 
         private string GetMaKHFromMaXe(string soXe)
@@ -1366,7 +1397,6 @@ namespace CanKT
             btnSua.Enabled = false;
 
             txbSoXe.Enabled = true;
-            txbGhiChu.Enabled = true;
             txbTLXeVao.Enabled = true;
             txbMaKH.Enabled = true;
             txbMaSP.Enabled = true;
@@ -1406,7 +1436,7 @@ namespace CanKT
             this.ActiveControl = txbMaSP;
 
             serialPort1_Open();
-            StartTimer();
+            //StartTimer();
         }
 
         private void btnXong_Click(object sender, EventArgs e)
@@ -1540,6 +1570,8 @@ namespace CanKT
 
         private string lastWeightData = "";
 
+
+
         private void serialPort1_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
         {
             dataReceived = Port.ReadExisting();
@@ -1550,7 +1582,7 @@ namespace CanKT
 
             // Chuyển đổi chuỗi thành số nguyên
             //int result = 0;
-            int maxLength = 12;
+            //int maxLength = 12;
             string firstTwelveDigits = "";
 
             foreach (string part in parts)
@@ -1558,38 +1590,69 @@ namespace CanKT
                 if (int.TryParse(part, out int num))
                 {
                     // Lấy 12 số đầu tiên của số
-                    firstTwelveDigits = num.ToString().Substring(0, Math.Min(num.ToString().Length, maxLength));
+                    //firstTwelveDigits = num.ToString().Substring(0, Math.Min(num.ToString().Length, maxLength));
+                    firstTwelveDigits = num.ToString().Substring(0);
 
+                    if (txbTLXeRa.InvokeRequired)
+                    {
+                        txbTLXeVao.Invoke(new MethodInvoker(delegate { txbTLXeRa.Clear(); }));
+                    }
+
+                    if (txbTLXeRa.InvokeRequired)
+                    {
+                        txbTLXeRa.Invoke(new MethodInvoker(delegate { txbTLXeRa.AppendText(firstTwelveDigits + Environment.NewLine); }));
+                    }
+
+                    lastWeightData = txbTLXeRa.ToString();
                 }
             }
 
-            lastWeightData = firstTwelveDigits;
 
-            //int result = int.Parse(firstTwelveDigits);
 
-            //Sau khi vòng lặp kết thúc, đóng cổng và hiển thị kết quả
-            //if (!string.IsNullOrEmpty(firstTwelveDigits))
-            //{
-            //    if (txbTLXeVao.Enabled == true)
+            //    if (txbTLXeRa.InvokeRequired)
             //    {
-            //        if (txbTLXeVao.InvokeRequired)
-            //        {
-            //            txbTLXeVao.Invoke(new MethodInvoker(delegate { txbTLXeVao.AppendText(firstTwelveDigits + Environment.NewLine); }));
-            //        }
+            //        txbTLXeRa.Invoke(new MethodInvoker(delegate { txbTLXeRa.AppendText(lastWeightData + Environment.NewLine); }));
             //    }
-            //    else
-            //    {
-            //        if (txbTLXeRa.InvokeRequired)
-            //        {
-            //            txbTLXeRa.Invoke(new MethodInvoker(delegate { txbTLXeRa.AppendText(firstTwelveDigits + Environment.NewLine); }));
-            //        }
-            //    }
+
+            //    //lastWeightData = firstTwelveDigits;
+
+
+            //    //int result = int.Parse(firstTwelveDigits);
+
+            //    //Sau khi vòng lặp kết thúc, đóng cổng và hiển thị kết quả
+            //    //if (!string.IsNullOrEmpty(firstTwelveDigits))
+            //    //{
+            //    //    if (txbTLXeVao.Enabled == true)
+            //    //    {
+            //    //        if (txbTLXeVao.InvokeRequired)
+            //    //        {
+            //    //            txbTLXeVao.Invoke(new MethodInvoker(delegate { txbTLXeVao.AppendText(firstTwelveDigits + Environment.NewLine); }));
+            //    //        }
+            //    //    }
+            //    //    else
+            //    //    {
+            //    //        if (txbTLXeRa.InvokeRequired)
+            //    //        {
+            //    //            txbTLXeRa.Invoke(new MethodInvoker(delegate { txbTLXeRa.AppendText(firstTwelveDigits + Environment.NewLine); }));
+            //    //        }
+            //    //    }
+            //    //}
+            //    //Port.Close();
             //}
-            //Port.Close();
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
+            // Dừng timer
+            timer1.Stop();
+
+
+
+            if (txbTLXeRa.InvokeRequired)
+            {
+                txbTLXeRa.Invoke(new MethodInvoker(delegate { txbTLXeRa.AppendText(lastWeightData + Environment.NewLine); }));
+            }
+
             // Đặt dữ liệu cuối cùng vào TextBox
             if (!string.IsNullOrEmpty(lastWeightData))
             {
@@ -1611,12 +1674,11 @@ namespace CanKT
                 }
             }
 
-            // Dừng timer
-            timer1.Stop();
-
             // Đóng cổng
             Port.Close();
         }
+
+
 
         private void StartTimer()
         {
@@ -1626,5 +1688,6 @@ namespace CanKT
             // Bắt đầu timer
             timer1.Start();
         }
+
     }
 }
