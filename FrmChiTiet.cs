@@ -50,25 +50,27 @@ namespace CanKT
                 decimal tlxera = Convert.ToDecimal(item.trongLuongXeRa);
                 row.Cells["Column5"].Value = tlxera.ToString("N0");
 
-                row.Cells["Column6"].Value = item.maSP;
+                row.Cells["Column6"].Value = item.lenhXuat;
+
+                row.Cells["Column7"].Value = item.maSP;
 
                 //dinh dang tien
                 decimal donGia = Convert.ToDecimal(item.donGia); //chuyen kieu du lieu money sang decimal
-                row.Cells["Column7"].Value = donGia.ToString("N0");
+                row.Cells["Column8"].Value = donGia.ToString("N0");
 
                 decimal tan = Convert.ToDecimal(item.soLuongTan);
-                row.Cells["Column8"].Value = tan.ToString("N0");
+                row.Cells["Column9"].Value = tan.ToString("N0");
 
                 decimal m3 = Convert.ToDecimal(item.soLuongM3);
-                row.Cells["Column9"].Value = m3.ToString("N0");
+                row.Cells["Column10"].Value = m3.ToString("N0");
 
                 decimal thanhTien = Convert.ToDecimal(item.thanhTien); //chuyen kieu du lieu money sang decimal               
-                row.Cells["Column10"].Value = thanhTien.ToString("N0");
+                row.Cells["Column11"].Value = thanhTien.ToString("N0");
 
                 if (item.trangThai == 0)
                 {
                     string trangthai = "Đã hủy";
-                    row.Cells["Column11"].Value = trangthai.ToString();
+                    row.Cells["Column12"].Value = trangthai.ToString();
                 }
             }
         }

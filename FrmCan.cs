@@ -15,6 +15,10 @@ using CanKT.Models;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.IO;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
+using System.Diagnostics;
+using System.CodeDom.Compiler;
+using System.Net.NetworkInformation;
+using System.Threading.Tasks;
 
 namespace CanKT
 {
@@ -25,6 +29,9 @@ namespace CanKT
         int prevMP = 0;
 
         string quyenuser = "";
+
+        string tlbanthan, tlchophep = "";
+        DateTime handangkiem;
 
         public FrmCan(string tentaikhoan, string quyen)
         {
@@ -46,7 +53,7 @@ namespace CanKT
 
             LoadDataIntoDataGridView();
             SetupAutoCompleteForTextBoxes();
-            serialPort1_Open();
+            
         }
 
 
@@ -89,7 +96,6 @@ namespace CanKT
 
                 decimal tlxevao = Convert.ToDecimal(item.trongLuongXeVao);
                 row.Cells["Column4"].Value = tlxevao.ToString("N0");
-                //row.Cells["Column4"].Value = tlxevao.ToString();
 
                 decimal tlxera = Convert.ToDecimal(item.trongLuongXeRa);
                 row.Cells["Column5"].Value = tlxera.ToString("N0");
@@ -130,7 +136,6 @@ namespace CanKT
                 txbDonGia.Text = selectedRow.Cells["Column7"].Value.ToString();
                 txbSoLuongTan.Text = selectedRow.Cells["Column8"].Value.ToString();
                 txbSoLuongM3.Text = selectedRow.Cells["Column9"].Value.ToString();
-                //txbTienHang.Text = selectedRow.Cells["Column10"].Value.ToString();
                 txbTienHang.Text = string.Format("{0:N0}", (selectedRow.Cells["Column10"].Value));
             }
         }
@@ -193,8 +198,34 @@ namespace CanKT
         {
             string soXe = txbSoXe.Text;
             string maKH = GetMaKHFromMaXe(soXe);
+            string ghiChu = GetThongSoFromMaXe(soXe);
 
+            txbGhiChu.Text = ghiChu.ToString();
             txbMaKH.Text = maKH.ToString();
+        }
+
+        private string GetThongSoFromMaXe(string soXe)
+        {
+            // Thực hiện truy vấn tới cơ sở dữ liệu của bạn để lấy tên khách hàng từ mã khách hàng
+            // Sau đó trả về tên khách hàng tương ứng
+
+            string ghichu = "";
+            
+
+            using (var db = new CanDBContext())
+            {
+                var xe = db.Xes.FirstOrDefault(x => x.bienSoXe == soXe);
+
+                if (xe != null)
+                {
+                    tlbanthan = xe.trongLuongBanThan.ToString();
+                    tlchophep = xe.trongLuongChoPhep.ToString();
+                    handangkiem = DateTime.Parse(xe.ngayKetDangKiem.ToString());
+
+                    ghichu = tlbanthan + " - " + tlchophep + " - " + handangkiem;
+                }
+            }
+            return ghichu;
         }
 
         private string GetMaKHFromMaXe(string soXe)
@@ -286,7 +317,8 @@ namespace CanKT
                 decimal tien = value1 + (value1 * (decimal)0.0999998833852334);
                 // Tính tích của hai giá trị và gán kết quả vào txbthanhtoan
 
-                txbThanhToan.Text = tien.ToString("N0").TrimEnd('0').TrimEnd(',');               
+                //txbThanhToan.Text = tien.ToString("N0").TrimEnd('0').TrimEnd(',');
+                txbThanhToan.Text = tien.ToString("N0");
             }
             else
             {
@@ -557,7 +589,7 @@ namespace CanKT
             if (e.KeyCode == Keys.Enter)
             {
                 e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
-                txbTLXeVao.Focus();
+                txbMaSP.Focus();
             }
         }
 
@@ -610,7 +642,21 @@ namespace CanKT
                 if (e.KeyCode == Keys.Enter)
                 {
                     e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
-                    txbMaSP.Focus();
+
+                    string temp = txbLenhXuat.Text;
+
+                    var lenhxuat = db.NhapXuats.FirstOrDefault(l => l.maNhapXuat == temp);
+
+                    if (lenhxuat != null)
+                    {
+                        MessageBox.Show("Lệnh xuất này đã bị trùng!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        txbLenhXuat.Clear();
+                        txbLenhXuat.Focus();
+                    }
+                    else
+                    {
+                        txbMaSP.Focus();
+                    }
                 }
 
                 if (e.KeyCode == Keys.Escape)
@@ -619,6 +665,11 @@ namespace CanKT
                     txbMaKH.Focus();
                 }
             }               
+        }
+
+        private void txbLenhXuat_TextChanged(object sender, EventArgs e)
+        {
+            
         }
 
         private void txbMaSP_KeyDown(object sender, KeyEventArgs e)
@@ -1003,6 +1054,7 @@ namespace CanKT
                             phieuthu.maKho = makho;
                             phieuthu.maMayXay = mamayxay;
                             phieuthu.maMayXuc = mamayxuc;
+                            phieuthu.trangThai = trangthai;
 
                             // Thông báo thành công
                             MessageBox.Show("Cập nhật phiếu thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -1011,7 +1063,7 @@ namespace CanKT
                         {
                             MessageBox.Show("Không có quyền sửa phiếu có sẵn!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
-                        
+
                     }
 
                     // Lưu thay đổi vào cơ sở dữ liệu
@@ -1352,7 +1404,7 @@ namespace CanKT
         {
             //disable cac function cua btnXeRa
             txbTLXeRa.Enabled = false;
-            txbLenhXuat.Enabled = false; //xin ngau nhieu, se sua sau
+            txbLenhXuat.Enabled = false;
             txbSoLuongTan.Enabled = false;
             txbSoLuongM3.Enabled = false;
             txbDonGia.Enabled = false;
@@ -1371,17 +1423,20 @@ namespace CanKT
             txbSalan.Enabled = true;
 
             this.ActiveControl = txbSoXe;
+
+            serialPort1_Open();
         }
 
         private void btnXeRa_Click(object sender, EventArgs e)
         {
             //disable cac function cua btnXeVao
             txbSoXe.Enabled = false;
+            txbGhiChu.Enabled = false;
             txbTLXeVao.Enabled = false;
             txbMaKH.Enabled = false;
 
             txbTLXeRa.Enabled = true;
-            txbLenhXuat.Enabled = true; //xin ngau nhieu, se sua sau
+            txbLenhXuat.Enabled = true; 
             txbMaSP.Enabled = true;
             txbSoLuongTan.Enabled = true;
             txbSoLuongM3.Enabled = true;
@@ -1395,7 +1450,9 @@ namespace CanKT
 
             btnSua.Enabled = true;
 
-            this.ActiveControl = txbMaSP;
+            this.ActiveControl = txbLenhXuat;
+
+            serialPort1_Open();
         }
 
         private void btnXong_Click(object sender, EventArgs e)
@@ -1480,6 +1537,10 @@ namespace CanKT
 
         //mo va load cong COM
 
+        public SerialPort Port { get; private set; } = null;
+        private string dataReceived = string.Empty;
+
+
         private void serialPort1_Open()
         {
             int comLength, RefreshCount = 0;
@@ -1492,19 +1553,27 @@ namespace CanKT
                 arrayCom = SerialPort.GetPortNames();
                 comLength = SerialPort.GetPortNames().Length;
                 comName = arrayCom[RefreshCount].ToString();
-                //btnThuTu.Text = comName;
-                RefreshCount = RefreshCount + 1;
-                if (serialPort1.IsOpen)
-                {
-                    serialPort1.Close();
-                }
-                serialPort1.PortName = comName;
-                serialPort1.Open();
-                if (RefreshCount == comLength)
-                {
-                    RefreshCount = 0;
-                }
-                MessageBox.Show("Success!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                //create new instance
+                this.Port = new SerialPort();
+
+                //set properties
+                Port.BaudRate = 9600;
+                Port.DataBits = 8;
+                Port.Parity = Parity.None; //use 'None' when DataBits = 8; if DataBits = 7, use 'Even' or 'Odd'
+                Port.DtrEnable = true; //enable Data Terminal Ready
+                Port.Handshake = Handshake.None;
+                Port.PortName = comName;
+                Port.ReadTimeout = 200; //used when using ReadLine
+                Port.RtsEnable = true; //enable Request to send
+                Port.StopBits = StopBits.One;
+                Port.WriteTimeout = 50;
+
+                //MessageBox.Show("Success!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                Port.DataReceived += serialPort1_DataReceived;
+
+                Port.Open();
             }
             catch (Exception ex)
             {
@@ -1514,31 +1583,88 @@ namespace CanKT
 
 
         //lay du lieu tu can
+
+        private string weightDataVao = "";
+        private string weightDataRa = "";
+
         private void serialPort1_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
         {
-            string tDataFromComPort, Receive_Data, Show_Data, message = "";
+            dataReceived = Port.ReadExisting();
 
-            try
+            // Tìm và lọc số từ chuỗi
+            string[] parts = dataReceived.Split(new char[] { ' ', ')', '(' }, StringSplitOptions.RemoveEmptyEntries);
+
+            // Chuyển đổi chuỗi thành số nguyên
+            String firstTwelveDigits = "";
+            int t = 0;
+
+            for (int i = 3500; t < i; t++)
             {
-                tDataFromComPort = serialPort1.ReadLine();
-                if (tDataFromComPort != "")
+                foreach (string part in parts)
                 {
-                    Receive_Data = tDataFromComPort.ToString();
-                    Show_Data = Receive_Data.Replace("+", "").Replace("kg", "").Replace("-", "").Replace("g", "").Replace(" ", "").Replace("\r", "").ToString();
-                    if (txbTLXeRa.InvokeRequired)
+                    if (int.TryParse(part, out int num))
                     {
-                        txbTLXeRa.Invoke(new MethodInvoker(delegate { txbTLXeRa.Text = Show_Data.Trim(); }));   //Lấy giá trị và hiển thị trọng lượng vào txb
-                    }
-                    else
-                    {
-                        txbTLXeRa.Text = Show_Data.Trim();
+                        // Lấy 12 số đầu tiên của số                       
+
+                        if (num.ToString().Substring(0).Length > 3 && num.ToString().Substring(0).Length < 6)
+                        {
+                            firstTwelveDigits = num.ToString("N0").Substring(0);
+                        }
+
+                        if (txbTLXeVao.Enabled == true)
+                        {
+                            if (txbTLXeVao.InvokeRequired)
+                            {
+                                weightDataVao = firstTwelveDigits.ToString();
+
+                                txbTLXeVao.Invoke(new MethodInvoker(delegate { txbTLXeVao.Clear(); }));
+                                txbTLXeVao.Invoke(new MethodInvoker(delegate { txbTLXeVao.AppendText(weightDataVao + Environment.NewLine); }));  
+                            }
+                        }
+                        else
+                        {
+                            if (txbTLXeRa.InvokeRequired)
+                            {
+                                weightDataRa = firstTwelveDigits.ToString();
+
+                                txbTLXeRa.Invoke(new MethodInvoker(delegate { txbTLXeRa.Clear(); }));
+                                txbTLXeRa.Invoke(new MethodInvoker(delegate { txbTLXeRa.AppendText(weightDataRa + Environment.NewLine); }));                     
+                            }
+                        }
                     }
                 }
             }
-            catch (Exception ex)
+
+            string dv = weightDataVao.Replace(",", "");
+            string dr = weightDataVao.Replace(",", "");
+
+            if (int.Parse(dv) < int.Parse(tlbanthan) || int.Parse(tlchophep) < int.Parse(dr))
             {
-                message = ex.Message.ToString();
+                if (txbTLXeVao.Enabled == true)
+                {
+                    MessageBox.Show(dv + " < " + tlbanthan, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+                else
+                {
+                    MessageBox.Show(tlchophep + " < " + dr, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }                
+                txbTLXeVao.Invoke(new MethodInvoker(delegate { txbTLXeVao.Clear(); }));
             }
+            else
+            {
+                if (txbTLXeVao.Enabled == true)
+                {
+                    txbTLXeVao.Invoke(new MethodInvoker(delegate { txbTLXeVao.Clear(); }));
+                    txbTLXeVao.Invoke(new MethodInvoker(delegate { txbTLXeVao.AppendText(weightDataVao + Environment.NewLine); }));
+                }
+                else
+                {
+                    txbTLXeRa.Invoke(new MethodInvoker(delegate { txbTLXeRa.Clear(); }));
+                    txbTLXeRa.Invoke(new MethodInvoker(delegate { txbTLXeRa.AppendText(weightDataRa + Environment.NewLine); }));
+                }
+            }            
+
+            Port.Close();
         }
     }
 }
