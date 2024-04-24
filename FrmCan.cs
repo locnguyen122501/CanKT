@@ -584,8 +584,24 @@ namespace CanKT
             if (e.KeyCode == Keys.Enter)
             {
                 e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
-                txbMaSP.Focus();
-                serialPort1_Open();
+
+                txbSoXe_TextChanged(sender, e);
+
+                //neu xe chua dang ky thi se dang ky
+                string bienso = txbSoXe.Text;
+
+                var xe = db.Xes.FirstOrDefault(x => x.bienSoXe == bienso);
+
+                if (xe != null)
+                {
+                    txbMaSP.Focus();
+                    serialPort1_Open();
+                }
+                else
+                {
+                    FrmDangKyXe frmDangKyXe = new FrmDangKyXe(bienso);
+                    frmDangKyXe.ShowDialog();
+                }
             }
         }
 
@@ -641,11 +657,6 @@ namespace CanKT
                 e.SuppressKeyPress = true; // Ngăn không cho phím Escape tạo ký tự mới trong TextBox
                 txbMaKH.Focus();
             }
-        }
-
-        private void txbLenhXuat_TextChanged(object sender, EventArgs e)
-        {
-            
         }
 
         private void txbMaSP_KeyDown(object sender, KeyEventArgs e)

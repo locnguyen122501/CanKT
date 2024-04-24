@@ -59,6 +59,12 @@
     <Compile Include="FrmChiTiet.Designer.cs">
       <DependentUpon>FrmChiTiet.cs</DependentUpon>
     </Compile>
+    <Compile Include="FrmDangKyXe.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmDangKyXe.Designer.cs">
+      <DependentUpon>FrmDangKyXe.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -111,6 +117,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FrmChiTiet.resx">
       <DependentUpon>FrmChiTiet.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmDangKyXe.resx">
+      <DependentUpon>FrmDangKyXe.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmMain.resx">
       <DependentUpon>FrmMain.cs</DependentUpon>
