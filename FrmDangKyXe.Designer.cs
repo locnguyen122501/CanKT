@@ -98,6 +98,7 @@
             this.txbTLChoPhep.Name = "txbTLChoPhep";
             this.txbTLChoPhep.Size = new System.Drawing.Size(170, 31);
             this.txbTLChoPhep.TabIndex = 7;
+            this.txbTLChoPhep.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txbTLChoPhep_KeyDown);
             this.txbTLChoPhep.Leave += new System.EventHandler(this.txbTLChoPhep_Leave);
             // 
             // lblTLChoPhep
@@ -113,11 +114,13 @@
             // dtpKetDangKiem
             // 
             this.dtpKetDangKiem.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dtpKetDangKiem.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtpKetDangKiem.CustomFormat = "dd/MM/yyyy";
+            this.dtpKetDangKiem.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtpKetDangKiem.Location = new System.Drawing.Point(187, 142);
             this.dtpKetDangKiem.Name = "dtpKetDangKiem";
             this.dtpKetDangKiem.Size = new System.Drawing.Size(98, 20);
             this.dtpKetDangKiem.TabIndex = 8;
+            this.dtpKetDangKiem.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dtpKetDangKiem_KeyDown);
             // 
             // lblLoaiXe
             // 
@@ -142,6 +145,7 @@
             // cbbLoaiXe
             // 
             this.cbbLoaiXe.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbbLoaiXe.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
             this.cbbLoaiXe.FormattingEnabled = true;
             this.cbbLoaiXe.Items.AddRange(new object[] {
             "Xe tải",
@@ -151,6 +155,7 @@
             this.cbbLoaiXe.Name = "cbbLoaiXe";
             this.cbbLoaiXe.Size = new System.Drawing.Size(129, 33);
             this.cbbLoaiXe.TabIndex = 11;
+            this.cbbLoaiXe.Enter += new System.EventHandler(this.cbbLoaiXe_Enter);
             this.cbbLoaiXe.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cbbLoaiXe_KeyDown);
             // 
             // grbThongTinKH
@@ -186,6 +191,7 @@
             this.txbMaKH.Name = "txbMaKH";
             this.txbMaKH.Size = new System.Drawing.Size(170, 31);
             this.txbMaKH.TabIndex = 7;
+            this.txbMaKH.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txbMaKH_KeyDown);
             this.txbMaKH.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txbMaKH_KeyPress);
             // 
             // lblMaKH
@@ -216,6 +222,7 @@
             this.txbTenKH.Name = "txbTenKH";
             this.txbTenKH.Size = new System.Drawing.Size(170, 31);
             this.txbTenKH.TabIndex = 9;
+            this.txbTenKH.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txbTenKH_KeyDown);
             this.txbTenKH.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txbTenKH_KeyPress);
             // 
             // grbThongTinXe

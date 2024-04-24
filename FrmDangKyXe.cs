@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -27,6 +28,7 @@ namespace CanKT
         {
             txbSoXe.Text = biensoxe.ToString();
             this.ActiveControl = cbbLoaiXe;
+            cbbLoaiXe.SelectedIndex = 0;
         }
 
         #region KeyDown_Code
@@ -36,6 +38,17 @@ namespace CanKT
             {
                 e.SuppressKeyPress = true;
                 cbbLoaiXe.Focus();
+            }
+        }
+
+
+        //khi focus vao cbb thi droplist se tu duoc do xuong de chon
+        private void cbbLoaiXe_Enter(object sender, EventArgs e)
+        {
+            ComboBox comboBox = sender as ComboBox;
+            if (comboBox != null)
+            {
+                comboBox.DroppedDown = true;
             }
         }
 
@@ -93,8 +106,25 @@ namespace CanKT
         {
             if (e.KeyCode == Keys.Enter)
             {
-                e.SuppressKeyPress = true;
-                txbMaKH.Focus();
+                DateTimePicker dtp = sender as DateTimePicker;
+                if (dtp != null)
+                {
+                    // Lấy giá trị ngày tháng năm từ TextBox
+                    string[] formats = { "dd/MM/yyyy", "dd-MM-yyyy", "dd.MM.yyyy" }; // Các định dạng ngày tháng năm mà bạn muốn chấp nhận
+                    DateTime selectedDate;
+                    if (DateTime.TryParseExact(dtp.Text, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out selectedDate))
+                    {
+                        dtp.Value = selectedDate; // Cập nhật giá trị của DateTimePicker từ giá trị người dùng nhập vào
+
+                        e.SuppressKeyPress = true;
+                        txbMaKH.Focus();
+                    }
+                    else
+                    {
+                        // Xử lý khi người dùng nhập vào một ngày không hợp lệ
+                        MessageBox.Show("Ngày không hợp lệ. Vui lòng nhập lại!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
             }
 
             if (e.KeyCode == Keys.Escape)

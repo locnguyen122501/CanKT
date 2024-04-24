@@ -43,7 +43,7 @@ namespace CanKT
 
             if (quyenuser == "Admin")
             {
-                lblWelcome.Text = "Quản lý " + tentaikhoan;
+                lblWelcome.Text = "Admin " + tentaikhoan;
                 btnHuy.Enabled = true;
             }
             else
