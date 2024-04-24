@@ -97,6 +97,11 @@ namespace CanKT
             OpenChildForm(new FrmSanPham());
         }
 
+        private void kháchHàngToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenChildForm(new FrmKhachHang());
+        }
+
         private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (!isExiting)
