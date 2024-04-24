@@ -37,6 +37,13 @@ namespace CanKT
             //set quyen nhu tren
         }
 
+        private void FrmMain_Resize(object sender, EventArgs e)
+        {
+            // Đảm bảo rằng form không vượt ra ngoài biên màn hình làm che mất taskbar
+            Rectangle workingArea = Screen.GetWorkingArea(this);
+            this.MaximumSize = new Size(workingArea.Width, workingArea.Height);
+        }
+
         private void OpenChildForm(Form childForm)
         {
             if (currentFormChild != null)
@@ -56,35 +63,6 @@ namespace CanKT
         private void cânXeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenChildForm(new FrmCan(tentk, quyen));
-        }
-
-        private void đăngXuấtToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var result = MessageBox.Show("Bạn có thực sự muốn đăng xuất không?", "Thông báo", MessageBoxButtons.YesNo);
-            if (result == DialogResult.Yes)
-            {
-                FrmDangNhap frmDangNhap = new FrmDangNhap();
-                this.Hide();
-                frmDangNhap.ShowDialog();
-            }
-        }
-
-        #region Exit_Function
-        private bool isExiting = false;
-
-        private void thoátToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            isExiting = true;
-            var result = MessageBox.Show("Bạn có thực sự muốn thoát không?", "Thông báo", MessageBoxButtons.YesNo);
-            if (result == DialogResult.Yes)
-            {
-                ExitApplication();
-            }
-        }
-
-        private void ExitApplication()
-        {
-            Application.Exit();
         }
 
         private void phiếuNhậpxuấtToolStripMenuItem_Click(object sender, EventArgs e)
@@ -121,6 +99,35 @@ namespace CanKT
         {
             OpenChildForm(new FrmXe());
         }
+
+        private void đăngXuấtToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var result = MessageBox.Show("Bạn có thực sự muốn đăng xuất không?", "Thông báo", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
+            {
+                FrmDangNhap frmDangNhap = new FrmDangNhap();
+                this.Hide();
+                frmDangNhap.ShowDialog();
+            }
+        }
+
+        #region Exit_Function
+        private bool isExiting = false;
+
+        private void thoátToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            isExiting = true;
+            var result = MessageBox.Show("Bạn có thực sự muốn thoát không?", "Thông báo", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
+            {
+                ExitApplication();
+            }
+        }
+
+        private void ExitApplication()
+        {
+            Application.Exit();
+        }              
 
         private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
