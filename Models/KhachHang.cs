@@ -34,7 +34,8 @@ namespace CanKT.Models
         [StringLength(50)]
         public string diaChi { get; set; }
 
-        public int? sdt { get; set; }
+        [StringLength(50)]
+        public string sdt { get; set; }
 
         [StringLength(50)]
         public string email { get; set; }

@@ -37,6 +37,13 @@ namespace CanKT
             //set quyen nhu tren
         }
 
+        private void FrmMain_Resize(object sender, EventArgs e)
+        {
+            // Đảm bảo rằng form không vượt ra ngoài biên màn hình làm che mất taskbar
+            Rectangle workingArea = Screen.GetWorkingArea(this);
+            this.MaximumSize = new Size(workingArea.Width, workingArea.Height);
+        }
+
         private void OpenChildForm(Form childForm)
         {
             if (currentFormChild != null)
@@ -56,6 +63,41 @@ namespace CanKT
         private void cânXeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenChildForm(new FrmCan(tentk, quyen));
+        }
+
+        private void phiếuNhậpxuấtToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenChildForm(new FrmChiTiet());
+        }
+
+        private void sảnPhẩmToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenChildForm(new FrmSanPham());
+        }
+
+        private void kháchHàngToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenChildForm(new FrmKhachHang());
+        }
+
+        private void khoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenChildForm(new FrmKho());
+        }
+
+        private void máyXayToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenChildForm(new FrmMayXay());
+        }
+
+        private void xeXúcToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenChildForm(new FrmXeXuc());
+        }
+
+        private void xeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenChildForm(new FrmXe());
         }
 
         private void đăngXuấtToolStripMenuItem_Click(object sender, EventArgs e)
@@ -85,17 +127,7 @@ namespace CanKT
         private void ExitApplication()
         {
             Application.Exit();
-        }
-
-        private void phiếuNhậpxuấtToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OpenChildForm(new FrmChiTiet());
-        }
-
-        private void sảnPhẩmToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OpenChildForm(new FrmSanPham());
-        }
+        }              
 
         private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
