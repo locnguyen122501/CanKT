@@ -73,6 +73,10 @@ namespace CanKT.Models
                 .IsUnicode(false);
 
             modelBuilder.Entity<KhachHang>()
+                .Property(e => e.sdt)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<KhachHang>()
                 .Property(e => e.email)
                 .IsUnicode(false);
 
@@ -115,6 +119,14 @@ namespace CanKT.Models
 
             modelBuilder.Entity<NhanVien>()
                 .Property(e => e.quyen)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<NhanVien>()
+                .Property(e => e.maSoThue)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<NhanVien>()
+                .Property(e => e.sdt)
                 .IsUnicode(false);
 
             modelBuilder.Entity<NhanVien>()

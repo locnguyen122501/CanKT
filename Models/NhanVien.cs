@@ -31,13 +31,14 @@ namespace CanKT.Models
         [StringLength(50)]
         public string quyen { get; set; }
 
-        [MaxLength(50)]
-        public byte[] maSoThue { get; set; }
+        [StringLength(50)]
+        public string maSoThue { get; set; }
 
         [StringLength(50)]
         public string diaChi { get; set; }
 
-        public int? sdt { get; set; }
+        [StringLength(50)]
+        public string sdt { get; set; }
 
         [StringLength(50)]
         public string email { get; set; }

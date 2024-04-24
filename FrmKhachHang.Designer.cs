@@ -37,7 +37,7 @@
             this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column9 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column12 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvKH)).BeginInit();
             this.SuspendLayout();
             // 
@@ -60,12 +60,12 @@
             this.Column6,
             this.Column7,
             this.Column8,
-            this.Column9});
+            this.Column12});
             this.dgvKH.Location = new System.Drawing.Point(-8, -2);
             this.dgvKH.MultiSelect = false;
             this.dgvKH.Name = "dgvKH";
             this.dgvKH.Size = new System.Drawing.Size(1232, 550);
-            this.dgvKH.TabIndex = 3;
+            this.dgvKH.TabIndex = 2;
             // 
             // Column1
             // 
@@ -87,7 +87,6 @@
             this.Column3.HeaderText = "Loại";
             this.Column3.Name = "Column3";
             this.Column3.ReadOnly = true;
-            this.Column3.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // Column4
             // 
@@ -109,25 +108,30 @@
             // 
             this.Column6.HeaderText = "SĐT";
             this.Column6.Name = "Column6";
+            this.Column6.ReadOnly = true;
             this.Column6.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // Column7
             // 
+            this.Column7.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.Column7.HeaderText = "Email";
             this.Column7.Name = "Column7";
+            this.Column7.ReadOnly = true;
             this.Column7.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // Column8
             // 
-            this.Column8.HeaderText = "GhiChu";
+            this.Column8.HeaderText = "Ghi chú";
             this.Column8.Name = "Column8";
+            this.Column8.ReadOnly = true;
             this.Column8.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
-            // Column9
+            // Column12
             // 
-            this.Column9.HeaderText = "Trạng thái";
-            this.Column9.Name = "Column9";
-            this.Column9.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Column12.HeaderText = "Trạng thái";
+            this.Column12.Name = "Column12";
+            this.Column12.ReadOnly = true;
+            this.Column12.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // FrmKhachHang
             // 
@@ -160,6 +164,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column6;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column7;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column8;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column9;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column12;
     }
 }
