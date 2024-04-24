@@ -27,7 +27,7 @@ namespace CanKT
 
         private void LoadDataIntoDataGridView()
         {
-            dgvCan.Rows.Clear();
+            dgvSanPham.Rows.Clear();
 
             // Truy vấn dữ liệu từ DbSet trong DbContext
             var data = (from sp in db.SanPhams
@@ -49,8 +49,8 @@ namespace CanKT
 
             foreach (var item in data)
             {
-                int rowIndex = dgvCan.Rows.Add(); //thêm một hàng mới vào dgv
-                DataGridViewRow row = dgvCan.Rows[rowIndex]; //lấy hàng vừa thêm từ database
+                int rowIndex = dgvSanPham.Rows.Add(); //thêm một hàng mới vào dgv
+                DataGridViewRow row = dgvSanPham.Rows[rowIndex]; //lấy hàng vừa thêm từ database
 
                 //gán dữ liệu vào từng cell tương ứng trong hàng
                 row.Cells["Column1"].Value = item.maThanhPham;
@@ -78,7 +78,7 @@ namespace CanKT
 
                 if (item.trangThai == 0)
                 {
-                    string trangthai = "Đã hủy";
+                    string trangthai = "Không còn sử dụng";
                     row.Cells["Column7"].Value = trangthai.ToString();
                 }
             }
