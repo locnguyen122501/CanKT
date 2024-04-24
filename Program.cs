@@ -15,7 +15,8 @@ namespace CanKT
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FrmMain("user","user"));
+            Application.Run(new FrmMain("Loc","Admin"));
+            //Application.Run(new FrmDangKyXe("60LD7489"));
         }
     }
 }

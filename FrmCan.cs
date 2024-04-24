@@ -43,7 +43,7 @@ namespace CanKT
 
             if (quyenuser == "Admin")
             {
-                lblWelcome.Text = "Quản lý " + tentaikhoan;
+                lblWelcome.Text = "Admin " + tentaikhoan;
                 btnHuy.Enabled = true;
             }
             else
@@ -52,10 +52,8 @@ namespace CanKT
             }
 
             LoadDataIntoDataGridView();
-            SetupAutoCompleteForTextBoxes();
-            
+            SetupAutoCompleteForTextBoxes();            
         }
-
 
         private void FrmCan_Load(object sender, EventArgs e)
         {
@@ -357,9 +355,7 @@ namespace CanKT
             string giaSP = GetGiaFromMaSP(maSP);
 
             txbTenSP.Text = tenSP.ToString();
-            txbDonGia.Text = giaSP.ToString();
-
-            
+            txbDonGia.Text = giaSP.ToString();          
         }
 
         private string GetTenSPFromMaSP(string maSP)
@@ -581,7 +577,6 @@ namespace CanKT
         }
         #endregion
 
-
         //an Enter de sang txb tiep theo, Escape de ve txb truoc
         #region KeyDown_Code
         private void txbSoXe_KeyDown(object sender, KeyEventArgs e)
@@ -589,33 +584,39 @@ namespace CanKT
             if (e.KeyCode == Keys.Enter)
             {
                 e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
-                txbMaSP.Focus();
+
+                txbSoXe_TextChanged(sender, e);
+
+                //neu xe chua dang ky thi se dang ky
+                string bienso = txbSoXe.Text;
+
+                var xe = db.Xes.FirstOrDefault(x => x.bienSoXe == bienso);
+
+                if (xe != null)
+                {
+                    txbMaSP.Focus();
+                    serialPort1_Open();
+                }
+                else
+                {
+                    FrmDangKyXe frmDangKyXe = new FrmDangKyXe(bienso);
+                    frmDangKyXe.ShowDialog();
+                }
             }
         }
 
         private void txbTLXeVao_KeyDown(object sender, KeyEventArgs e)
         {
-            if (txbTLXeVao.Enabled == true)
+            if (e.KeyCode == Keys.Enter)
             {
-                if (e.KeyCode == Keys.Enter)
-                {
-                    e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
-                    txbMaSP.Focus();
-                }
-
-                if (e.KeyCode == Keys.Escape)
-                {
-                    e.SuppressKeyPress = true; // Ngăn không cho phím Escape tạo ký tự mới trong TextBox
-                    txbSoXe.Focus();
-                }
+                e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
+                txbMaSP.Focus();
             }
-            else
+
+            if (e.KeyCode == Keys.Escape)
             {
-                if (e.KeyCode == Keys.Enter)
-                {
-                    e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
-                    txbTLXeRa.Focus();
-                }
+                e.SuppressKeyPress = true; // Ngăn không cho phím Escape tạo ký tự mới trong TextBox
+                txbSoXe.Focus();
             }
         }
 
@@ -626,50 +627,36 @@ namespace CanKT
                 e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
                 txbLenhXuat.Focus();
             }
-
-            if (e.KeyCode == Keys.Escape)
-            {
-                e.SuppressKeyPress = true; // Ngăn không cho phím Escape tạo ký tự mới trong TextBox
-                txbTLXeVao.Focus();
-            }
         }
 
 
         private void txbLenhXuat_KeyDown(object sender, KeyEventArgs e)
         {
-            if (txbTLXeVao.Enabled == false)
+            if (e.KeyCode == Keys.Enter)
             {
-                if (e.KeyCode == Keys.Enter)
+                e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
+
+                string temp = txbLenhXuat.Text;
+
+                var lenhxuat = db.NhapXuats.FirstOrDefault(l => l.maNhapXuat == temp);
+
+                if (lenhxuat != null)
                 {
-                    e.SuppressKeyPress = true; // Ngăn không cho phím Enter tạo ký tự mới trong TextBox
-
-                    string temp = txbLenhXuat.Text;
-
-                    var lenhxuat = db.NhapXuats.FirstOrDefault(l => l.maNhapXuat == temp);
-
-                    if (lenhxuat != null)
-                    {
-                        MessageBox.Show("Lệnh xuất này đã bị trùng!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        txbLenhXuat.Clear();
-                        txbLenhXuat.Focus();
-                    }
-                    else
-                    {
-                        txbMaSP.Focus();
-                    }
+                    MessageBox.Show("Lệnh xuất này đã bị trùng!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txbLenhXuat.Clear();
+                    txbLenhXuat.Focus();
                 }
-
-                if (e.KeyCode == Keys.Escape)
+                else
                 {
-                    e.SuppressKeyPress = true; // Ngăn không cho phím Escape tạo ký tự mới trong TextBox
-                    txbMaKH.Focus();
+                    txbMaSP.Focus();
                 }
-            }               
-        }
+            }
 
-        private void txbLenhXuat_TextChanged(object sender, EventArgs e)
-        {
-            
+            if (e.KeyCode == Keys.Escape)
+            {
+                e.SuppressKeyPress = true; // Ngăn không cho phím Escape tạo ký tự mới trong TextBox
+                txbMaKH.Focus();
+            }
         }
 
         private void txbMaSP_KeyDown(object sender, KeyEventArgs e)
@@ -914,19 +901,13 @@ namespace CanKT
             string soxe = txbSoXe.Text;
 
             int trongluongxevao = int.Parse(txbTLXeVao.Text.Replace(",", ""));
-            //int trongluongxera = int.Parse(txbTLXeRa.Text.Replace(",", ""));
 
-            //string lenhxuat = txbLenhXuat.Text;
             string makh = txbMaKH.Text;
             string masp = txbMaSP.Text;
-            //int soluongtan = int.Parse(txbSoLuongTan.Text.Replace(",", ""));
-            //int soluongm3 = int.Parse(txbSoLuongM3.Text.Replace(",", ""));
+
             decimal dongia = decimal.Parse(txbDonGia.Text);
             dongia = Math.Round(dongia / 1000) * 1000;
-            //decimal thanhtien = decimal.Parse(txbTienHang.Text);
-            //thanhtien = Math.Round(thanhtien / 1000) * 1000;
-            //decimal thanhtoan = decimal.Parse(txbThanhToan.Text);
-            //thanhtoan = Math.Round(thanhtoan / 1000) * 1000;
+
             string makho = txbMaKho.Text;
             string mamayxay = txbMaMayXay.Text;
             string mamayxuc = txbMaXeXuc.Text;
@@ -937,15 +918,9 @@ namespace CanKT
                 maDon = maphieu,
                 bienSoXe = soxe,
                 trongLuongXeVao = trongluongxevao,
-                //trongLuongXeRa = trongluongxera,
-                //lenhXuat = lenhxuat,
                 maKH = makh,
                 maSP = masp,
-                //soLuongTan = soluongtan,
-                //soLuongM3 = soluongm3,
                 donGia = dongia,
-                //thanhTien = thanhtien,
-                //tienThanhToan = thanhtoan,
                 maKho = makho,
                 maMayXay = mamayxay,
                 maMayXuc = mamayxuc,
@@ -979,7 +954,6 @@ namespace CanKT
             txbMaPhieu.Text = nextMaPhieu;
 
             LoadDataIntoDataGridView();
-
         }
 
         //update db
@@ -1024,6 +998,23 @@ namespace CanKT
                         phieuthu.trongLuongXeVao = trongluongxevao;
                         phieuthu.trongLuongXeRa = trongluongxera;
                         phieuthu.lenhXuat = lenhxuat;
+
+                        #region Tạo mã nhập xuất
+                        // Tạo đối tượng mới từ dữ liệu đã nhận được
+                        NhapXuat xuat = new NhapXuat
+                        {
+                            maNhapXuat = lenhxuat,
+                            trangThai = 1,
+                        };
+
+                        // Thêm đối tượng vào db
+                        using (var dbx = new CanDBContext())
+                        {
+                            dbx.NhapXuats.Add(xuat);
+                            dbx.SaveChanges();
+                        }
+                        #endregion
+
                         phieuthu.maKH = makh;
                         phieuthu.maSP = masp;
                         phieuthu.soLuongTan = soluongtan;
@@ -1045,6 +1036,23 @@ namespace CanKT
                         {
                             phieuthu.trongLuongXeRa = trongluongxera;
                             phieuthu.lenhXuat = lenhxuat;
+
+                            #region Tạo mã nhập xuất
+                            // Tạo đối tượng mới từ dữ liệu đã nhận được
+                            NhapXuat xuat = new NhapXuat
+                            {
+                                maNhapXuat = lenhxuat,
+                                trangThai = 1,
+                            };
+
+                            // Thêm đối tượng vào db
+                            using (var dbx = new CanDBContext())
+                            {
+                                dbx.NhapXuats.Add(xuat);
+                                dbx.SaveChanges();
+                            }
+                            #endregion
+
                             phieuthu.soLuongTan = soluongtan;
                             phieuthu.soLuongM3 = soluongm3;
                             phieuthu.donGia = dongia;
@@ -1184,9 +1192,38 @@ namespace CanKT
                     var entity = db.PhieuThus.Find(maphieu);
                     if (entity != null)
                     {
-                        //db.PhieuThus.Remove(entity);
+                        if (entity.trangThai == 0)
+                        {
+                            return false;
+                        }
+
                         entity.trangThai = 0; //khong duoc xoa phieu, chi set trang thai = 0 (huy)
                         db.SaveChanges();
+
+                        #region Lay lenh xuat de huy trang thai cua lenh xuat
+                        string lenhXuat = "";
+
+                        using (var dbt = new CanDBContext())
+                        {
+                            var phieuThu = dbt.PhieuThus.FirstOrDefault(pt => pt.maDon == maphieu);
+
+                            if (phieuThu != null)
+                            {
+                                lenhXuat = phieuThu.lenhXuat;
+                            }
+                        }
+
+                        using (var dbx = new CanDBContext())
+                        {
+                            var phieuxuat = dbx.NhapXuats.FirstOrDefault(px => px.maNhapXuat == lenhXuat);
+
+                            if (phieuxuat != null)
+                            {
+                                phieuxuat.trangThai = 0;
+                            }
+                            dbx.SaveChanges();
+                        }
+                        #endregion
 
                         return true;
                     }
@@ -1303,7 +1340,6 @@ namespace CanKT
                 }
             }
         }
-
 
         //tuong tu => kiem tra phieu cu nhat
         //cung bo ham nay vao trong txbMaPhieu_TextChanged
@@ -1424,25 +1460,27 @@ namespace CanKT
 
             this.ActiveControl = txbSoXe;
 
-            serialPort1_Open();
+            //serialPort1_Open();
         }
 
         private void btnXeRa_Click(object sender, EventArgs e)
         {
             //disable cac function cua btnXeVao
             txbSoXe.Enabled = false;
-            txbGhiChu.Enabled = false;
             txbTLXeVao.Enabled = false;
             txbMaKH.Enabled = false;
 
             txbTLXeRa.Enabled = true;
             txbLenhXuat.Enabled = true; 
             txbMaSP.Enabled = true;
-            txbSoLuongTan.Enabled = true;
-            txbSoLuongM3.Enabled = true;
-            txbDonGia.Enabled = true;
-            txbTienHang.Enabled = true;
-            txbThanhToan.Enabled = true;
+            if (quyenuser == "Admin")
+            {
+                txbSoLuongTan.Enabled = true;
+                txbSoLuongM3.Enabled = true;
+                txbDonGia.Enabled = true;
+                txbTienHang.Enabled = true;
+                txbThanhToan.Enabled = true;
+            }               
             txbMaKho.Enabled = true;
             txbMaMayXay.Enabled = true;
             txbMaXeXuc.Enabled = true;
@@ -1461,7 +1499,6 @@ namespace CanKT
         }
 
         #endregion
-
 
         //goi y khi nhap trong cac txb
         private void SetupAutoCompleteForTextBoxes()
@@ -1534,12 +1571,9 @@ namespace CanKT
             txbMaXeXuc.AutoCompleteCustomSource = autoCompleteCollection5;
         }
 
-
         //mo va load cong COM
-
         public SerialPort Port { get; private set; } = null;
         private string dataReceived = string.Empty;
-
 
         private void serialPort1_Open()
         {
@@ -1581,9 +1615,7 @@ namespace CanKT
             }
         }
 
-
         //lay du lieu tu can
-
         private string weightDataVao = "";
         private string weightDataRa = "";
 
@@ -1595,74 +1627,241 @@ namespace CanKT
             string[] parts = dataReceived.Split(new char[] { ' ', ')', '(' }, StringSplitOptions.RemoveEmptyEntries);
 
             // Chuyển đổi chuỗi thành số nguyên
-            String firstTwelveDigits = "";
+            string firstTwelveDigits = "";
+            string mostFrequentValue = "0";
+            string secondMostFrequentValue = "0";
+            int maxFrequency = 0;
+            int secondMaxFrequency = 0;
             int t = 0;
 
-            for (int i = 3500; t < i; t++)
+            if (txbTLXeVao.Enabled == true)
             {
-                foreach (string part in parts)
+                for (int i = 2000; t < i; t++)
                 {
-                    if (int.TryParse(part, out int num))
+                    Dictionary<string, int> frequencyMap = new Dictionary<string, int>();
+
+                    foreach (string part in parts)
                     {
-                        // Lấy 12 số đầu tiên của số                       
-
-                        if (num.ToString().Substring(0).Length > 3 && num.ToString().Substring(0).Length < 6)
+                        if (int.TryParse(part, out int num))
                         {
-                            firstTwelveDigits = num.ToString("N0").Substring(0);
-                        }
+                            // Lọc các giá trị có độ dài từ 4-5                       
 
-                        if (txbTLXeVao.Enabled == true)
-                        {
-                            if (txbTLXeVao.InvokeRequired)
+                            if (num.ToString().Length > 3 && num.ToString().Length < 6)
                             {
-                                weightDataVao = firstTwelveDigits.ToString();
+                                string formattedNumber = num.ToString("N0").Substring(0);
 
-                                txbTLXeVao.Invoke(new MethodInvoker(delegate { txbTLXeVao.Clear(); }));
-                                txbTLXeVao.Invoke(new MethodInvoker(delegate { txbTLXeVao.AppendText(weightDataVao + Environment.NewLine); }));  
+                                // Thêm số vào Dictionary và tăng tần suất nếu nó đã tồn tại
+                                if (frequencyMap.ContainsKey(formattedNumber))
+                                {
+                                    frequencyMap[formattedNumber]++; //tăng tần suất
+                                }
+                                else
+                                {
+                                    frequencyMap.Add(formattedNumber, 1); //thêm vào 
+                                }
                             }
-                        }
-                        else
-                        {
-                            if (txbTLXeRa.InvokeRequired)
-                            {
-                                weightDataRa = firstTwelveDigits.ToString();
 
-                                txbTLXeRa.Invoke(new MethodInvoker(delegate { txbTLXeRa.Clear(); }));
-                                txbTLXeRa.Invoke(new MethodInvoker(delegate { txbTLXeRa.AppendText(weightDataRa + Environment.NewLine); }));                     
+                            // Tìm giá trị có tần suất xuất hiện cao nhất và tần suất xuất hiện thứ hai
+                            foreach (var entry in frequencyMap)
+                            {
+                                if (entry.Value > maxFrequency)
+                                {
+                                    secondMostFrequentValue = mostFrequentValue;
+                                    secondMaxFrequency = maxFrequency;
+                                    mostFrequentValue = entry.Key;
+                                    maxFrequency = entry.Value;
+                                }
+                                else if (entry.Value > secondMaxFrequency)
+                                {
+                                    secondMostFrequentValue = entry.Key;
+                                    secondMaxFrequency = entry.Value;
+                                }
+                            }
+
+                            int mostFrequentValueInt, secondMostFrequentValueInt;
+
+                            // Kiểm tra xem tần suất xuất hiện của số gần nhất và số xa hơn
+                            if (maxFrequency == secondMaxFrequency)
+                            {
+                                // So sánh độ dài của hai giá trị
+                                if (mostFrequentValue.Length > secondMostFrequentValue.Length)
+                                {
+                                    firstTwelveDigits = mostFrequentValue;
+                                }
+                                else
+                                {
+                                    firstTwelveDigits = secondMostFrequentValue;
+                                }
+                            }
+                            else
+                            {
+                                if (int.TryParse(mostFrequentValue, out mostFrequentValueInt))
+                                {
+                                    // Kiểm tra và chuyển đổi secondMostFrequentValue thành số nguyên
+                                    if (int.TryParse(secondMostFrequentValue, out secondMostFrequentValueInt))
+                                    {
+                                        //truong hop 12852 va 1285
+                                        if (mostFrequentValueInt / 10 == secondMostFrequentValueInt)
+                                        {
+                                            firstTwelveDigits = mostFrequentValue;
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (txbTLXeVao.Enabled == true)
+                            {
+                                if (txbTLXeVao.InvokeRequired)
+                                {
+                                    weightDataVao = firstTwelveDigits.ToString();
+
+                                    txbTLXeVao.Invoke(new MethodInvoker(delegate { txbTLXeVao.Clear(); }));
+                                    txbTLXeVao.Invoke(new MethodInvoker(delegate { txbTLXeVao.AppendText(weightDataVao + Environment.NewLine); }));
+                                }
+                            }
+                            else
+                            {
+                                if (txbTLXeRa.InvokeRequired)
+                                {
+                                    weightDataRa = firstTwelveDigits.ToString();
+
+                                    txbTLXeRa.Invoke(new MethodInvoker(delegate { txbTLXeRa.Clear(); }));
+                                    txbTLXeRa.Invoke(new MethodInvoker(delegate { txbTLXeRa.AppendText(weightDataRa + Environment.NewLine); }));
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            string dv = weightDataVao.Replace(",", "");
-            string dr = weightDataVao.Replace(",", "");
+                string dv = weightDataVao.Replace(",", "");
 
-            if (int.Parse(dv) < int.Parse(tlbanthan) || int.Parse(tlchophep) < int.Parse(dr))
-            {
-                if (txbTLXeVao.Enabled == true)
+                //khi ra tram can thi sua lai dieu kien ben duoi
+                //hien tai de dauvao > tlbanthan de tu test
+                if (int.Parse(dv) > int.Parse(tlbanthan))
                 {
                     MessageBox.Show(dv + " < " + tlbanthan, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txbTLXeVao.Invoke(new MethodInvoker(delegate { txbTLXeVao.Clear(); }));
                 }
                 else
                 {
-                    MessageBox.Show(tlchophep + " < " + dr, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }                
-                txbTLXeVao.Invoke(new MethodInvoker(delegate { txbTLXeVao.Clear(); }));
+                    txbTLXeVao.Invoke(new MethodInvoker(delegate { txbTLXeVao.Clear(); }));
+                    txbTLXeVao.Invoke(new MethodInvoker(delegate { txbTLXeVao.AppendText(weightDataVao + Environment.NewLine); }));
+                }
             }
             else
             {
-                if (txbTLXeVao.Enabled == true)
+                for (int i = 300; t < i; t++)
                 {
-                    txbTLXeVao.Invoke(new MethodInvoker(delegate { txbTLXeVao.Clear(); }));
-                    txbTLXeVao.Invoke(new MethodInvoker(delegate { txbTLXeVao.AppendText(weightDataVao + Environment.NewLine); }));
+                    Dictionary<string, int> frequencyMap = new Dictionary<string, int>();
+
+                    foreach (string part in parts)
+                    {
+                        if (int.TryParse(part, out int num))
+                        {
+                            // Lọc các giá trị có độ dài từ 4-5                       
+
+                            if (num.ToString().Length > 3 && num.ToString().Length < 6)
+                            {
+                                string formattedNumber = num.ToString("N0").Substring(0);
+
+                                // Thêm số vào Dictionary và tăng tần suất nếu nó đã tồn tại
+                                if (frequencyMap.ContainsKey(formattedNumber))
+                                {
+                                    frequencyMap[formattedNumber]++; //tăng tần suất
+                                }
+                                else
+                                {
+                                    frequencyMap.Add(formattedNumber, 1); //thêm vào 
+                                }
+
+                                //firstTwelveDigits = num.ToString("N0").Substring(0);
+                            }
+
+                            // Tìm giá trị có tần suất xuất hiện cao nhất và tần suất xuất hiện thứ hai
+                            foreach (var entry in frequencyMap)
+                            {
+                                if (entry.Value > maxFrequency)
+                                {
+                                    secondMostFrequentValue = mostFrequentValue;
+                                    secondMaxFrequency = maxFrequency;
+                                    mostFrequentValue = entry.Key;
+                                    maxFrequency = entry.Value;
+                                }
+                                else if (entry.Value > secondMaxFrequency)
+                                {
+                                    secondMostFrequentValue = entry.Key;
+                                    secondMaxFrequency = entry.Value;
+                                }
+                            }
+
+                            int mostFrequentValueInt, secondMostFrequentValueInt;
+
+                            // Kiểm tra xem tần suất xuất hiện của số gần nhất và số xa hơn
+                            if (maxFrequency == secondMaxFrequency)
+                            {
+                                // So sánh độ dài của hai giá trị
+                                if (mostFrequentValue.Length > secondMostFrequentValue.Length)
+                                {
+                                    firstTwelveDigits = mostFrequentValue;
+                                }
+                                else
+                                {
+                                    firstTwelveDigits = secondMostFrequentValue;
+                                }
+                            }
+                            else
+                            {
+                                if (int.TryParse(mostFrequentValue, out mostFrequentValueInt))
+                                {
+                                    // Kiểm tra và chuyển đổi secondMostFrequentValue thành số nguyên
+                                    if (int.TryParse(secondMostFrequentValue, out secondMostFrequentValueInt))
+                                    {
+                                        //truong hop 12852 va 1285
+                                        if (mostFrequentValueInt / 10 == secondMostFrequentValueInt)
+                                        {
+                                            firstTwelveDigits = mostFrequentValue;
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (txbTLXeVao.Enabled == true)
+                            {
+                                if (txbTLXeVao.InvokeRequired)
+                                {
+                                    weightDataVao = firstTwelveDigits.ToString();
+
+                                    txbTLXeVao.Invoke(new MethodInvoker(delegate { txbTLXeVao.Clear(); }));
+                                    txbTLXeVao.Invoke(new MethodInvoker(delegate { txbTLXeVao.AppendText(weightDataVao + Environment.NewLine); }));
+                                }
+                            }
+                            else
+                            {
+                                if (txbTLXeRa.InvokeRequired)
+                                {
+                                    weightDataRa = firstTwelveDigits.ToString();
+
+                                    txbTLXeRa.Invoke(new MethodInvoker(delegate { txbTLXeRa.Clear(); }));
+                                    txbTLXeRa.Invoke(new MethodInvoker(delegate { txbTLXeRa.AppendText(weightDataRa + Environment.NewLine); }));
+                                }
+                            }
+                        }
+                    }
+                }
+
+                string dr = weightDataRa.Replace(",", "");
+
+                if (int.Parse(tlchophep) < int.Parse(dr))
+                {
+                    MessageBox.Show(tlchophep + " < " + dr, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txbTLXeRa.Invoke(new MethodInvoker(delegate { txbTLXeRa.Clear(); }));
                 }
                 else
                 {
                     txbTLXeRa.Invoke(new MethodInvoker(delegate { txbTLXeRa.Clear(); }));
                     txbTLXeRa.Invoke(new MethodInvoker(delegate { txbTLXeRa.AppendText(weightDataRa + Environment.NewLine); }));
                 }
-            }            
+            }
 
             Port.Close();
         }
