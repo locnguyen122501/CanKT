@@ -85,7 +85,7 @@
             this.btnXeVao = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.btnXong = new System.Windows.Forms.Button();
-            this.button9 = new System.Windows.Forms.Button();
+            this.btnIn = new System.Windows.Forms.Button();
             this.btnThuTu = new System.Windows.Forms.Button();
             this.btnSua = new System.Windows.Forms.Button();
             this.btnHuy = new System.Windows.Forms.Button();
@@ -94,8 +94,8 @@
             this.btnPhieuTruoc = new System.Windows.Forms.Button();
             this.btnXeRa = new System.Windows.Forms.Button();
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCan)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -716,7 +716,7 @@
             // 
             this.groupBox2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.groupBox2.Controls.Add(this.btnXong);
-            this.groupBox2.Controls.Add(this.button9);
+            this.groupBox2.Controls.Add(this.btnIn);
             this.groupBox2.Controls.Add(this.btnThuTu);
             this.groupBox2.Controls.Add(this.btnSua);
             this.groupBox2.Controls.Add(this.btnHuy);
@@ -741,14 +741,15 @@
             this.btnXong.UseVisualStyleBackColor = true;
             this.btnXong.Click += new System.EventHandler(this.btnXong_Click);
             // 
-            // button9
+            // btnIn
             // 
-            this.button9.Location = new System.Drawing.Point(726, 12);
-            this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(84, 23);
-            this.button9.TabIndex = 12;
-            this.button9.Text = "In";
-            this.button9.UseVisualStyleBackColor = true;
+            this.btnIn.Location = new System.Drawing.Point(726, 12);
+            this.btnIn.Name = "btnIn";
+            this.btnIn.Size = new System.Drawing.Size(84, 23);
+            this.btnIn.TabIndex = 12;
+            this.btnIn.Text = "In";
+            this.btnIn.UseVisualStyleBackColor = true;
+            this.btnIn.Click += new System.EventHandler(this.btnIn_Click);
             // 
             // btnThuTu
             // 
@@ -820,6 +821,11 @@
             this.btnXeRa.UseVisualStyleBackColor = true;
             this.btnXeRa.Click += new System.EventHandler(this.btnXeRa_Click);
             // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
+            // 
             // pictureBox1
             // 
             this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -832,11 +838,6 @@
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 4;
             this.pictureBox1.TabStop = false;
-            // 
-            // contextMenuStrip1
-            // 
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
             // 
             // FrmCan
             // 
@@ -912,7 +913,7 @@
         private System.Windows.Forms.Label lblMaPhieu;
         private System.Windows.Forms.DataGridView dgvCan;
         private System.Windows.Forms.Button btnXeRa;
-        private System.Windows.Forms.Button button9;
+        private System.Windows.Forms.Button btnIn;
         private System.Windows.Forms.Button btnThuTu;
         private System.Windows.Forms.Button btnSua;
         private System.Windows.Forms.Button btnHuy;
