@@ -19,6 +19,7 @@ using System.Diagnostics;
 using System.CodeDom.Compiler;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
+using Microsoft.Reporting.WinForms;
 
 namespace CanKT
 {
@@ -134,7 +135,7 @@ namespace CanKT
                 txbDonGia.Text = selectedRow.Cells["Column7"].Value.ToString();
                 txbSoLuongTan.Text = selectedRow.Cells["Column8"].Value.ToString();
                 txbSoLuongM3.Text = selectedRow.Cells["Column9"].Value.ToString();
-                txbTienHang.Text = string.Format("{0:N0}", (selectedRow.Cells["Column10"].Value));
+                txbTienHang.Text = string.Format("{0:N0}", (selectedRow.Cells["Column10"].Value));                
             }
         }
 
@@ -1618,6 +1619,15 @@ namespace CanKT
         //lay du lieu tu can
         private string weightDataVao = "";
         private string weightDataRa = "";
+
+        private void btnIn_Click(object sender, EventArgs e)
+        {
+            // Gọi phương thức LoadData của form chứa reportViewer và truyền dữ liệu
+            FrmPrint frmPrint = new FrmPrint();
+            frmPrint.LoadData(txbMaKH.Text, txbSoXe.Text, txbMaKho.Text, txbMaMayXay.Text, txbMaXeXuc.Text, txbTLXeVao.Text,
+                txbTLXeRa.Text, txbSoLuongM3.Text, txbMaSP.Text, txbDonGia.Text, txbTienHang.Text, txbThanhToan.Text);
+            frmPrint.Show();
+        }
 
         private void serialPort1_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
         {
