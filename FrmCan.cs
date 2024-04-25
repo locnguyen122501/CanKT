@@ -19,12 +19,15 @@ using System.Diagnostics;
 using System.CodeDom.Compiler;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
+using Microsoft.Reporting.WinForms;
 
 namespace CanKT
 {
     public partial class FrmCan : Form
     {
         CanDBContext db = new CanDBContext();
+
+        CultureInfo cultureInfo = new CultureInfo("vi-VN");
 
         int prevMP = 0;
 
@@ -102,7 +105,7 @@ namespace CanKT
 
                 //dinh dang tien
                 decimal donGia = Convert.ToDecimal(item.donGia); //chuyen kieu du lieu money sang decimal
-                row.Cells["Column7"].Value = donGia.ToString("N0");
+                row.Cells["Column7"].Value = donGia.ToString("N0",cultureInfo);
 
                 decimal tan = Convert.ToDecimal(item.soLuongTan);
                 row.Cells["Column8"].Value = tan.ToString("N0");
@@ -111,7 +114,7 @@ namespace CanKT
                 row.Cells["Column9"].Value = m3.ToString("N0");
 
                 decimal thanhTien = Convert.ToDecimal(item.thanhTien); //chuyen kieu du lieu money sang decimal               
-                row.Cells["Column10"].Value = thanhTien.ToString("N0");
+                row.Cells["Column10"].Value = thanhTien.ToString("N0", cultureInfo);
             }
         }
        
@@ -132,6 +135,7 @@ namespace CanKT
                 txbTLXeRa.Text = selectedRow.Cells["Column5"].Value.ToString();
                 txbMaSP.Text = selectedRow.Cells["Column6"].Value.ToString();
                 txbDonGia.Text = selectedRow.Cells["Column7"].Value.ToString();
+                //txbDonGia.Text = string.Format("{0:N0}", (selectedRow.Cells["Column7"].Value));
                 txbSoLuongTan.Text = selectedRow.Cells["Column8"].Value.ToString();
                 txbSoLuongM3.Text = selectedRow.Cells["Column9"].Value.ToString();
                 txbTienHang.Text = string.Format("{0:N0}", (selectedRow.Cells["Column10"].Value));
@@ -291,9 +295,10 @@ namespace CanKT
             if (decimal.TryParse(txbDonGia.Text.Replace(",", ""), out decimal value1) && decimal.TryParse(txbSoLuongTan.Text.Replace(",", ""), out decimal value2))
             {
                 // Tính tích của hai giá trị và gán kết quả vào txbtienhang
-                tien = value1 * value2;               
+                tien = value1 * value2;
 
-                txbTienHang.Text = tien.ToString("N0").TrimEnd('0').TrimEnd(',');
+                //txbTienHang.Text = tien.ToString("N0", cultureInfo).TrimEnd('0').TrimEnd(',');
+                txbTienHang.Text = tien.ToString("#,0", cultureInfo);
             }
             else
             {
@@ -310,13 +315,12 @@ namespace CanKT
         private void TinhTienThanhToan()
         {
             // Kiểm tra xem giá trị của hai txb có thể được chuyển đổi thành số không
-            if (decimal.TryParse(txbTienHang.Text.Replace(",", ""), out decimal value1))
+            if (decimal.TryParse(txbTienHang.Text.Replace(".", ""), out decimal value1))
             {
                 decimal tien = value1 + (value1 * (decimal)0.0999998833852334);
                 // Tính tích của hai giá trị và gán kết quả vào txbthanhtoan
 
-                //txbThanhToan.Text = tien.ToString("N0").TrimEnd('0').TrimEnd(',');
-                txbThanhToan.Text = tien.ToString("N0");
+                txbThanhToan.Text = tien.ToString("#,0", cultureInfo);
             }
             else
             {
@@ -384,7 +388,7 @@ namespace CanKT
 
                 if (gia != null)
                 {
-                    giaSP = string.Format("{0:#,##0}", gia.donGia);
+                    giaSP = string.Format(cultureInfo,"{0:#,##0}", gia.donGia);
                 }
             }
             return giaSP;
@@ -560,7 +564,6 @@ namespace CanKT
             // Loại bỏ dấu phân tách hàng nghìn và chuyển đổi về kiểu số nguyên
 
             int trongluongxevao;
-
             if (int.TryParse(txbTLXeVao.Text.Replace(",", ""), out trongluongxevao))
             {
 
@@ -906,7 +909,6 @@ namespace CanKT
             string masp = txbMaSP.Text;
 
             decimal dongia = decimal.Parse(txbDonGia.Text);
-            dongia = Math.Round(dongia / 1000) * 1000;
 
             string makho = txbMaKho.Text;
             string mamayxay = txbMaMayXay.Text;
@@ -973,11 +975,8 @@ namespace CanKT
             int soluongtan = int.Parse(txbSoLuongTan.Text.Replace(",", ""));
             int soluongm3 = int.Parse(txbSoLuongM3.Text.Replace(",", ""));
             decimal dongia = decimal.Parse(txbDonGia.Text);
-            dongia = Math.Round(dongia / 1000) * 1000;
             decimal thanhtien = decimal.Parse(txbTienHang.Text);
-            thanhtien = Math.Round(thanhtien / 1000) * 1000;
             decimal thanhtoan = decimal.Parse(txbThanhToan.Text);
-            thanhtoan = Math.Round(thanhtoan / 1000) * 1000;
             
             string makho = txbMaKho.Text;
             string mamayxay = txbMaMayXay.Text;
@@ -1396,7 +1395,6 @@ namespace CanKT
                         txbMaKho.Text = phieu.maKho;
                         txbMaMayXay.Text = phieu.maMayXay;
                         txbMaXeXuc.Text = phieu.maMayXuc;
-
                     }
                     else
                     {
@@ -1460,7 +1458,7 @@ namespace CanKT
 
             this.ActiveControl = txbSoXe;
 
-            //serialPort1_Open();
+            serialPort1_Open();
         }
 
         private void btnXeRa_Click(object sender, EventArgs e)
@@ -1618,6 +1616,15 @@ namespace CanKT
         //lay du lieu tu can
         private string weightDataVao = "";
         private string weightDataRa = "";
+
+        private void btnIn_Click(object sender, EventArgs e)
+        {
+            // Gọi phương thức LoadData của form chứa reportViewer và truyền dữ liệu
+            FrmPrint frmPrint = new FrmPrint();
+            frmPrint.LoadData(txbMaKH.Text, txbSoXe.Text, txbMaKho.Text, txbMaMayXay.Text, txbMaXeXuc.Text, txbTLXeVao.Text,
+                txbTLXeRa.Text, txbSoLuongM3.Text, txbMaSP.Text, txbDonGia.Text, txbTienHang.Text, txbThanhToan.Text);
+            frmPrint.Show();
+        }
 
         private void serialPort1_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
         {
