@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -20,9 +21,22 @@ namespace CanKT
         // Tạo một phương thức public để nhận dữ liệu từ form chính
         public void LoadData(string khachHang, string soXe, string maKho, string maMayXay, string maXeXuc, string tlXeVao, string tlXeRa, string slM3, string maSP, string donGia, string tienHang, string tienThanhToan)
         {
-            decimal temp = decimal.Parse(tienHang) * (decimal) 0.1;
-            string thueGTGT = temp.ToString("N0");
+            CultureInfo cultureInfo = new CultureInfo("vi-VN");
 
+            //doi tan sang kg
+            decimal tlVaoKg = (decimal.Parse(tlXeVao) * 1000) / 1000;
+            string _tlXeVao = tlVaoKg.ToString("N0", cultureInfo);
+
+            decimal tlRaKg = (decimal.Parse(tlXeRa) * 1000) / 1000;
+            string _tlXeRa = tlRaKg.ToString("N0", cultureInfo);
+
+            string _tienHang = tienHang.Replace(".", ""); //tienHang dang o dang string nhung la 1.850.000 nen can remove "." ra
+
+            decimal temp = Math.Round(decimal.Parse(_tienHang) * (decimal) 0.1);
+            string thueGTGT = temp.ToString("N0", cultureInfo);
+
+            decimal hanghoa = (decimal.Parse(tlXeRa) - decimal.Parse(tlXeVao))/1000;
+            string tlHangHoa = hanghoa.ToString("N2", cultureInfo);
 
             // Khởi tạo mảng ReportParameter để truyền dữ liệu
             ReportParameter[] parameters = new ReportParameter[]
@@ -32,8 +46,9 @@ namespace CanKT
                 new ReportParameter("pKho", maKho),
                 new ReportParameter("pMayXay", maMayXay),
                 new ReportParameter("pXeXuc", maXeXuc),
-                new ReportParameter("pTLXeVao", tlXeVao),
-                new ReportParameter("pTLXeRa", tlXeRa),
+                new ReportParameter("pTLXeVao", _tlXeVao),
+                new ReportParameter("pTLXeRa", _tlXeRa),
+                new ReportParameter("pTLHangHoa", tlHangHoa),
                 new ReportParameter("pM3", slM3),
                 new ReportParameter("pSanPham", maSP),
                 new ReportParameter("pDonGia", donGia),
@@ -43,7 +58,7 @@ namespace CanKT
             };
 
             // Thiết lập các tham số cho report
-            reportViewer.LocalReport.ReportPath = @"C:\Users\User001\Desktop\Testing\CanKT\rptReport.rdlc"; // Thay đổi đường dẫn đến report RDLC của bạn
+            reportViewer.LocalReport.ReportPath = @"C:\Users\User001\Desktop\Testing\CanKT\rptReport.rdlc";
             reportViewer.LocalReport.SetParameters(parameters);
 
             // Refresh report để hiển thị dữ liệu mới
