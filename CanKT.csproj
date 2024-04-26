@@ -77,10 +77,10 @@
     <Compile Include="FormDanhMuc\FrmChiTiet.Designer.cs">
       <DependentUpon>FrmChiTiet.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmDangKyXe.cs">
+    <Compile Include="FormChucNang\FrmDangKyXe.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmDangKyXe.Designer.cs">
+    <Compile Include="FormChucNang\FrmDangKyXe.Designer.cs">
       <DependentUpon>FrmDangKyXe.cs</DependentUpon>
     </Compile>
     <Compile Include="FormDanhMuc\FrmKhachHang.cs">
@@ -107,10 +107,10 @@
     <Compile Include="FrmCan.Designer.cs">
       <DependentUpon>FrmCan.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmDangNhap.cs">
+    <Compile Include="FormChucNang\FrmDangNhap.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmDangNhap.Designer.cs">
+    <Compile Include="FormChucNang\FrmDangNhap.Designer.cs">
       <DependentUpon>FrmDangNhap.cs</DependentUpon>
     </Compile>
     <Compile Include="FormDanhMuc\FrmMayXay.cs">
@@ -125,22 +125,22 @@
     <Compile Include="FormDanhMuc\FrmSanPham.Designer.cs">
       <DependentUpon>FrmSanPham.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmPrint.cs">
+    <Compile Include="FormChucNang\FrmPrint.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmPrint.Designer.cs">
+    <Compile Include="FormChucNang\FrmPrint.Designer.cs">
       <DependentUpon>FrmPrint.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmThuTu.cs">
+    <Compile Include="FormChucNang\FrmThuTu.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmThuTu.Designer.cs">
+    <Compile Include="FormChucNang\FrmThuTu.Designer.cs">
       <DependentUpon>FrmThuTu.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmTimPhieu.cs">
+    <Compile Include="FormChucNang\FrmTimPhieu.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmTimPhieu.Designer.cs">
+    <Compile Include="FormChucNang\FrmTimPhieu.Designer.cs">
       <DependentUpon>FrmTimPhieu.cs</DependentUpon>
     </Compile>
     <Compile Include="FormDanhMuc\FrmXe.cs">
@@ -178,7 +178,7 @@
     <EmbeddedResource Include="FormDanhMuc\FrmChiTiet.resx">
       <DependentUpon>FrmChiTiet.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FrmDangKyXe.resx">
+    <EmbeddedResource Include="FormChucNang\FrmDangKyXe.resx">
       <DependentUpon>FrmDangKyXe.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormDanhMuc\FrmKhachHang.resx">
@@ -193,7 +193,7 @@
     <EmbeddedResource Include="FrmCan.resx">
       <DependentUpon>FrmCan.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FrmDangNhap.resx">
+    <EmbeddedResource Include="FormChucNang\FrmDangNhap.resx">
       <DependentUpon>FrmDangNhap.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormDanhMuc\FrmMayXay.resx">
@@ -202,13 +202,13 @@
     <EmbeddedResource Include="FormDanhMuc\FrmSanPham.resx">
       <DependentUpon>FrmSanPham.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FrmPrint.resx">
+    <EmbeddedResource Include="FormChucNang\FrmPrint.resx">
       <DependentUpon>FrmPrint.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FrmThuTu.resx">
+    <EmbeddedResource Include="FormChucNang\FrmThuTu.resx">
       <DependentUpon>FrmThuTu.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FrmTimPhieu.resx">
+    <EmbeddedResource Include="FormChucNang\FrmTimPhieu.resx">
       <DependentUpon>FrmTimPhieu.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormDanhMuc\FrmXe.resx">
