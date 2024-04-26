@@ -822,8 +822,6 @@ namespace CanKT
                 txbTLXeRa.Text = tlra.ToString("N0");
             }
         }
-
-
         #endregion
 
         //phim tat cho cac button chuc nang
@@ -908,7 +906,8 @@ namespace CanKT
             string makh = txbMaKH.Text;
             string masp = txbMaSP.Text;
 
-            decimal dongia = decimal.Parse(txbDonGia.Text);
+            //decimal dongia = decimal.Parse(txbDonGia.Text);
+            decimal dongia = (decimal) int.Parse(txbDonGia.Text.Replace(".", ""));
 
             string makho = txbMaKho.Text;
             string mamayxay = txbMaMayXay.Text;
@@ -974,9 +973,9 @@ namespace CanKT
             string masp = txbMaSP.Text;
             int soluongtan = int.Parse(txbSoLuongTan.Text.Replace(",", ""));
             int soluongm3 = int.Parse(txbSoLuongM3.Text.Replace(",", ""));
-            decimal dongia = decimal.Parse(txbDonGia.Text);
-            decimal thanhtien = decimal.Parse(txbTienHang.Text);
-            decimal thanhtoan = decimal.Parse(txbThanhToan.Text);
+            decimal dongia = (decimal) int.Parse(txbDonGia.Text.Replace(".", ""));
+            decimal thanhtien = (decimal) int.Parse(txbTienHang.Text.Replace(".", ""));
+            decimal thanhtoan = (decimal) int.Parse(txbThanhToan.Text.Replace(".", ""));
             
             string makho = txbMaKho.Text;
             string mamayxay = txbMaMayXay.Text;
@@ -996,23 +995,28 @@ namespace CanKT
                         phieuthu.bienSoXe = soxe;
                         phieuthu.trongLuongXeVao = trongluongxevao;
                         phieuthu.trongLuongXeRa = trongluongxera;
-                        phieuthu.lenhXuat = lenhxuat;
+                        
 
-                        #region Tạo mã nhập xuất
-                        // Tạo đối tượng mới từ dữ liệu đã nhận được
-                        NhapXuat xuat = new NhapXuat
+                        if (phieuthu.lenhXuat == null)
                         {
-                            maNhapXuat = lenhxuat,
-                            trangThai = 1,
-                        };
+                            phieuthu.lenhXuat = lenhxuat;
 
-                        // Thêm đối tượng vào db
-                        using (var dbx = new CanDBContext())
-                        {
-                            dbx.NhapXuats.Add(xuat);
-                            dbx.SaveChanges();
+                            #region Tạo mã nhập xuất
+                            // Tạo đối tượng mới từ dữ liệu đã nhận được
+                            NhapXuat xuat = new NhapXuat
+                            {
+                                maNhapXuat = lenhxuat,
+                                trangThai = 1,
+                            };
+
+                            // Thêm đối tượng vào db
+                            using (var dbx = new CanDBContext())
+                            {
+                                dbx.NhapXuats.Add(xuat);
+                                dbx.SaveChanges();
+                            }
+                            #endregion
                         }
-                        #endregion
 
                         phieuthu.maKH = makh;
                         phieuthu.maSP = masp;
@@ -1070,11 +1074,12 @@ namespace CanKT
                         {
                             MessageBox.Show("Không có quyền sửa phiếu có sẵn!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
-
                     }
 
                     // Lưu thay đổi vào cơ sở dữ liệu
                     db.SaveChanges();
+
+                    btnIn.PerformClick();
                 }
             }
 
@@ -1491,11 +1496,19 @@ namespace CanKT
             serialPort1_Open();
         }
 
+        private void btnIn_Click(object sender, EventArgs e)
+        {
+            // Gọi phương thức LoadData của form chứa reportViewer và truyền dữ liệu
+            FrmPrint frmPrint = new FrmPrint();
+            frmPrint.LoadData(txbMaKH.Text, txbSoXe.Text, txbMaKho.Text, txbMaMayXay.Text, txbMaXeXuc.Text, txbTLXeVao.Text,
+                txbTLXeRa.Text, txbSoLuongM3.Text, txbMaSP.Text, txbDonGia.Text, txbTienHang.Text, txbThanhToan.Text,
+                txbMaPhieu.Text, txbLenhXuat.Text);
+            frmPrint.Show();
+        }
         private void btnXong_Click(object sender, EventArgs e)
         {
             this.Close();
         }
-
         #endregion
 
         //goi y khi nhap trong cac txb
@@ -1613,18 +1626,9 @@ namespace CanKT
             }
         }
 
-        //lay du lieu tu can
         private string weightDataVao = "";
         private string weightDataRa = "";
-
-        private void btnIn_Click(object sender, EventArgs e)
-        {
-            // Gọi phương thức LoadData của form chứa reportViewer và truyền dữ liệu
-            FrmPrint frmPrint = new FrmPrint();
-            frmPrint.LoadData(txbMaKH.Text, txbSoXe.Text, txbMaKho.Text, txbMaMayXay.Text, txbMaXeXuc.Text, txbTLXeVao.Text,
-                txbTLXeRa.Text, txbSoLuongM3.Text, txbMaSP.Text, txbDonGia.Text, txbTienHang.Text, txbThanhToan.Text);
-            frmPrint.Show();
-        }
+        //lay du lieu tu can
 
         private void serialPort1_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
         {
