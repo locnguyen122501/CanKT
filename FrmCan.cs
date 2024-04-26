@@ -1498,12 +1498,26 @@ namespace CanKT
 
         private void btnIn_Click(object sender, EventArgs e)
         {
-            // Gọi phương thức LoadData của form chứa reportViewer và truyền dữ liệu
-            FrmPrint frmPrint = new FrmPrint();
-            frmPrint.LoadData(txbMaKH.Text, txbSoXe.Text, txbMaKho.Text, txbMaMayXay.Text, txbMaXeXuc.Text, txbTLXeVao.Text,
-                txbTLXeRa.Text, txbSoLuongM3.Text, txbMaSP.Text, txbDonGia.Text, txbTienHang.Text, txbThanhToan.Text,
-                txbMaPhieu.Text, txbLenhXuat.Text);
-            frmPrint.Show();
+            string maPhieu = txbMaPhieu.Text;
+
+            var Phieu = db.PhieuThus.FirstOrDefault(p => p.maDon == maPhieu);
+            if (Phieu != null)
+            {
+                int trangthai = (int) Phieu.trangThai;
+                if (trangthai == 1)
+                {
+                    // Gọi phương thức LoadData của form chứa reportViewer và truyền dữ liệu
+                    FrmPrint frmPrint = new FrmPrint();
+                    frmPrint.LoadData(txbMaKH.Text, txbSoXe.Text, txbMaKho.Text, txbMaMayXay.Text, txbMaXeXuc.Text, txbTLXeVao.Text,
+                        txbTLXeRa.Text, txbSoLuongM3.Text, txbMaSP.Text, txbDonGia.Text, txbTienHang.Text, txbThanhToan.Text,
+                        txbMaPhieu.Text, txbLenhXuat.Text);
+                    frmPrint.Show();
+                }
+                else
+                {
+                    MessageBox.Show("Phiếu này đã hủy", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
         }
         private void btnXong_Click(object sender, EventArgs e)
         {
