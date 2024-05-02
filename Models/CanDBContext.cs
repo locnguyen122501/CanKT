@@ -159,12 +159,28 @@ namespace CanKT.Models
                 .IsUnicode(false);
 
             modelBuilder.Entity<PhieuThu>()
+                .Property(e => e.trongLuongXeVao)
+                .HasPrecision(18, 3);
+
+            modelBuilder.Entity<PhieuThu>()
+                .Property(e => e.trongLuongXeRa)
+                .HasPrecision(18, 3);
+
+            modelBuilder.Entity<PhieuThu>()
                 .Property(e => e.lenhXuat)
                 .IsUnicode(false);
 
             modelBuilder.Entity<PhieuThu>()
                 .Property(e => e.maSP)
                 .IsUnicode(false);
+
+            modelBuilder.Entity<PhieuThu>()
+                .Property(e => e.soLuongTan)
+                .HasPrecision(18, 3);
+
+            modelBuilder.Entity<PhieuThu>()
+                .Property(e => e.soLuongM3)
+                .HasPrecision(18, 3);
 
             modelBuilder.Entity<PhieuThu>()
                 .Property(e => e.donGia)

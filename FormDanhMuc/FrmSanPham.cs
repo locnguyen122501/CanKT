@@ -22,7 +22,7 @@ namespace CanKT
 
         private void FrmSanPham_Load(object sender, EventArgs e)
         {
-
+            
         }
 
         private void LoadDataIntoDataGridView()

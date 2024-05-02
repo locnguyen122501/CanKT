@@ -19,9 +19,9 @@ namespace CanKT.Models
         [StringLength(50)]
         public string maKH { get; set; }
 
-        public int? trongLuongXeVao { get; set; }
+        public decimal? trongLuongXeVao { get; set; }
 
-        public int? trongLuongXeRa { get; set; }
+        public decimal? trongLuongXeRa { get; set; }
 
         [StringLength(50)]
         public string lenhXuat { get; set; }
@@ -29,9 +29,9 @@ namespace CanKT.Models
         [StringLength(50)]
         public string maSP { get; set; }
 
-        public int? soLuongTan { get; set; }
+        public decimal? soLuongTan { get; set; }
 
-        public int? soLuongM3 { get; set; }
+        public decimal? soLuongM3 { get; set; }
 
         [Column(TypeName = "money")]
         public decimal? donGia { get; set; }

@@ -76,6 +76,12 @@ namespace CanKT
             {
                 btnHuy.Enabled = false;
             }
+
+            if (dgvCan.Rows.Count > 0)
+            {
+                // Thiết lập chỉ số hàng đầu tiên được hiển thị là hàng cuối cùng
+                dgvCan.FirstDisplayedScrollingRowIndex = dgvCan.Rows.Count - 1;
+            }
         }
 
         private void LoadDataIntoDataGridView()
@@ -96,10 +102,11 @@ namespace CanKT
                 row.Cells["Column3"].Value = item.maKH;
 
                 decimal tlxevao = Convert.ToDecimal(item.trongLuongXeVao);
-                row.Cells["Column4"].Value = tlxevao.ToString("N0");
+                row.Cells["Column4"].Value = tlxevao.ToString(cultureInfo);
+
 
                 decimal tlxera = Convert.ToDecimal(item.trongLuongXeRa);
-                row.Cells["Column5"].Value = tlxera.ToString("N0");
+                row.Cells["Column5"].Value = tlxera.ToString(cultureInfo);
 
                 row.Cells["Column6"].Value = item.maSP;
 
@@ -108,10 +115,11 @@ namespace CanKT
                 row.Cells["Column7"].Value = donGia.ToString("N0",cultureInfo);
 
                 decimal tan = Convert.ToDecimal(item.soLuongTan);
-                row.Cells["Column8"].Value = tan.ToString("N0");
+                row.Cells["Column8"].Value = tan.ToString(cultureInfo);
+
 
                 decimal m3 = Convert.ToDecimal(item.soLuongM3);
-                row.Cells["Column9"].Value = m3.ToString("N0");
+                row.Cells["Column9"].Value = m3.ToString(cultureInfo);
 
                 decimal thanhTien = Convert.ToDecimal(item.thanhTien); //chuyen kieu du lieu money sang decimal               
                 row.Cells["Column10"].Value = thanhTien.ToString("N0", cultureInfo);
@@ -901,7 +909,7 @@ namespace CanKT
             string maphieu = txbMaPhieu.Text;
             string soxe = txbSoXe.Text;
 
-            int trongluongxevao = int.Parse(txbTLXeVao.Text.Replace(",", ""));
+            decimal trongluongxevao = Convert.ToDecimal(txbTLXeVao.Text.Replace(",", ""))/1000;
 
             string makh = txbMaKH.Text;
             string masp = txbMaSP.Text;
@@ -965,14 +973,14 @@ namespace CanKT
 
             string soxe = txbSoXe.Text;
 
-            int trongluongxevao = int.Parse(txbTLXeVao.Text.Replace(",", ""));
-            int trongluongxera = int.Parse(txbTLXeRa.Text.Replace(",", ""));
+            decimal trongluongxevao = Convert.ToDecimal(txbTLXeVao.Text.Replace(",", ""))/1000;
+            decimal trongluongxera = Convert.ToDecimal(txbTLXeRa.Text.Replace(",", ""))/1000;
 
             string lenhxuat = txbLenhXuat.Text;
             string makh = txbMaKH.Text;
             string masp = txbMaSP.Text;
-            int soluongtan = int.Parse(txbSoLuongTan.Text.Replace(",", ""));
-            int soluongm3 = int.Parse(txbSoLuongM3.Text.Replace(",", ""));
+            decimal soluongtan = Convert.ToDecimal(txbSoLuongTan.Text.Replace(",", ""))/1000;
+            decimal soluongm3 = Convert.ToDecimal(txbSoLuongM3.Text.Replace(",", ""))/1000;
             decimal dongia = (decimal) int.Parse(txbDonGia.Text.Replace(".", ""));
             decimal thanhtien = (decimal) int.Parse(txbTienHang.Text.Replace(".", ""));
             decimal thanhtoan = (decimal) int.Parse(txbThanhToan.Text.Replace(".", ""));
@@ -991,7 +999,7 @@ namespace CanKT
                 {
                     if (quyenuser == "Admin")
                     {
-                        // Cập nhật các thuộc tính của đối tượng dữ liệu
+                        // Cập nhật các thuộc tính của đối tượng dữ liệu                        
                         phieuthu.bienSoXe = soxe;
                         phieuthu.trongLuongXeVao = trongluongxevao;
                         phieuthu.trongLuongXeRa = trongluongxera;
@@ -1036,7 +1044,7 @@ namespace CanKT
                     else
                     {
                         if (phieuthu.trongLuongXeRa == null)
-                        {
+                        {                       
                             phieuthu.trongLuongXeRa = trongluongxera;
                             phieuthu.lenhXuat = lenhxuat;
 
@@ -1391,8 +1399,13 @@ namespace CanKT
                         // Hiển thị thông tin tương ứng lên các textbox
                         txbMaPhieu.Text = phieu.maDon;
                         txbSoXe.Text = phieu.bienSoXe;
-                        txbTLXeVao.Text = phieu.trongLuongXeVao.ToString();
-                        txbTLXeRa.Text = phieu.trongLuongXeRa.ToString();
+
+                        int tlxevao = (int) phieu.trongLuongXeVao;
+                        txbTLXeVao.Text = tlxevao.ToString("N0");
+
+                        int tlxera = (int) phieu.trongLuongXeRa;
+                        txbTLXeRa.Text = tlxera.ToString("N0");
+
                         txbLenhXuat.Text = phieu.lenhXuat;
                         txbMaSP.Text = phieu.maSP;
                         txbMaKho.Text = phieu.maKho;
@@ -1502,6 +1515,7 @@ namespace CanKT
             if (Phieu != null)
             {
                 int trangthai = (int) Phieu.trangThai;
+
                 if (trangthai == 1)
                 {
                     // Gọi phương thức LoadData của form chứa reportViewer và truyền dữ liệu
