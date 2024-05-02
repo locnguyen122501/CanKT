@@ -1078,7 +1078,6 @@ namespace CanKT
 
                     // Lưu thay đổi vào cơ sở dữ liệu
                     db.SaveChanges();
-
                     btnIn.PerformClick();
                 }
             }
@@ -1102,7 +1101,6 @@ namespace CanKT
 
             //khong load lai dgv
             LoadDataIntoDataGridView();
-
         }
 
         //XOA DATA
