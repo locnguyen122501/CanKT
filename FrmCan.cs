@@ -20,6 +20,8 @@ using System.CodeDom.Compiler;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using Microsoft.Reporting.WinForms;
+using CanKT.FormChucNang;
+using System.Data.Entity.Core.Objects;
 
 namespace CanKT
 {
@@ -53,6 +55,8 @@ namespace CanKT
             {
                 lblWelcome.Text = "Nhân viên " + tentaikhoan;
             }
+
+            lblDate.Text = DateTime.Today.ToString("dd/MM/yyyy");
 
             LoadDataIntoDataGridView();
             SetupAutoCompleteForTextBoxes();            
@@ -230,6 +234,7 @@ namespace CanKT
                 {
                     tlbanthan = xe.trongLuongBanThan.ToString();
                     tlchophep = xe.trongLuongChoPhep.ToString();
+
                     handangkiem = DateTime.Parse(xe.ngayKetDangKiem.ToString());
 
                     ghichu = tlbanthan + " - " + tlchophep + " - " + handangkiem;
@@ -921,18 +926,26 @@ namespace CanKT
             string mamayxay = txbMaMayXay.Text;
             string mamayxuc = txbMaXeXuc.Text;
 
+            DateTime giovao = DateTime.Now;
+
             // Tạo đối tượng mới từ dữ liệu đã nhận được
             PhieuThu phieuThu = new PhieuThu
             {
                 maDon = maphieu,
                 bienSoXe = soxe,
                 trongLuongXeVao = trongluongxevao,
+                trongLuongXeRa = 0,
                 maKH = makh,
                 maSP = masp,
                 donGia = dongia,
+                soLuongTan = 0,
+                soLuongM3 = 0,
+                thanhTien = 0,
+                tienThanhToan = 0,
                 maKho = makho,
                 maMayXay = mamayxay,
                 maMayXuc = mamayxuc,
+                thoiGianVao = giovao,
             };
 
             // Thêm đối tượng vào cơ sở dữ liệu bằng Entity Framework
@@ -965,6 +978,9 @@ namespace CanKT
             LoadDataIntoDataGridView();
         }
 
+
+        int flag = 0; //flag kiem tra cho btnIn
+
         //update db
         private void btnSua_Click(object sender, EventArgs e)
         {
@@ -989,6 +1005,8 @@ namespace CanKT
             string mamayxay = txbMaMayXay.Text;
             string mamayxuc = txbMaXeXuc.Text;
 
+            DateTime giora = DateTime.Now;
+
             int trangthai = 1;
 
             // Truy vấn dữ liệu tương ứng từ cơ sở dữ liệu bằng mã sản phẩm
@@ -999,6 +1017,8 @@ namespace CanKT
                 {
                     if (quyenuser == "Admin")
                     {
+                        flag = 1;
+
                         // Cập nhật các thuộc tính của đối tượng dữ liệu                        
                         phieuthu.bienSoXe = soxe;
                         phieuthu.trongLuongXeVao = trongluongxevao;
@@ -1036,6 +1056,7 @@ namespace CanKT
                         phieuthu.maKho = makho;
                         phieuthu.maMayXay = mamayxay;
                         phieuthu.maMayXuc = mamayxuc;
+                        //phieuthu.thoiGianRa = giora;
                         phieuthu.trangThai = trangthai;
 
                         // Thông báo thành công
@@ -1044,7 +1065,9 @@ namespace CanKT
                     else
                     {
                         if (phieuthu.trongLuongXeRa == null)
-                        {                       
+                        {
+                            flag = 1;
+
                             phieuthu.trongLuongXeRa = trongluongxera;
                             phieuthu.lenhXuat = lenhxuat;
 
@@ -1073,6 +1096,7 @@ namespace CanKT
                             phieuthu.maKho = makho;
                             phieuthu.maMayXay = mamayxay;
                             phieuthu.maMayXuc = mamayxuc;
+                            phieuthu.thoiGianRa = giora;
                             phieuthu.trangThai = trangthai;
 
                             // Thông báo thành công
@@ -1261,16 +1285,26 @@ namespace CanKT
                 {
                     txbMaPhieu.Text = phieuThu.maDon.ToString();
                     txbSoXe.Text = phieuThu.bienSoXe.ToString();
-                    txbTLXeVao.Text = string.Format("{0:N0}", phieuThu.trongLuongXeVao);
-                    txbTLXeRa.Text = string.Format("{0:N0}", phieuThu.trongLuongXeRa);
+                    //txbTLXeVao.Text = string.Format("{0:N0}", phieuThu.trongLuongXeVao);
+                    decimal tlxevao = (decimal) phieuThu.trongLuongXeVao;
+                    txbTLXeVao.Text = tlxevao.ToString(cultureInfo);
+
+                    decimal tlxera = (decimal)phieuThu.trongLuongXeRa;
+                    txbTLXeRa.Text = tlxera.ToString(cultureInfo);
+
                     txbLenhXuat.Text = phieuThu.lenhXuat;
                     txbMaKH.Text = phieuThu.maKH;
                     txbMaSP.Text = phieuThu.maSP;
-                    txbSoLuongTan.Text = string.Format("{0:N0}", phieuThu.soLuongTan);
-                    txbSoLuongM3.Text = string.Format("{0:N0}", phieuThu.soLuongM3);
-                    txbDonGia.Text = string.Format("{0:N0}", phieuThu.donGia);
-                    txbTienHang.Text = string.Format("{0:N0}", phieuThu.thanhTien);
-                    txbThanhToan.Text = string.Format("{0:N0}", phieuThu.tienThanhToan);
+
+                    decimal sltan = (decimal)phieuThu.soLuongTan;
+                    txbSoLuongTan.Text = sltan.ToString(cultureInfo);
+
+                    decimal slm3 = (decimal)phieuThu.soLuongM3;
+                    txbSoLuongM3.Text = slm3.ToString(cultureInfo);
+
+                    txbDonGia.Text = string.Format(cultureInfo,"{0:N0}", phieuThu.donGia);
+                    txbTienHang.Text = string.Format(cultureInfo, "{0:N0}", phieuThu.thanhTien);
+                    txbThanhToan.Text = string.Format(cultureInfo, "{0:N0}", phieuThu.tienThanhToan);
                     txbMaKho.Text = phieuThu.maKho;
                     txbMaMayXay.Text = phieuThu.maMayXay;
                     txbMaXeXuc.Text = phieuThu.maMayXuc;
@@ -1290,17 +1324,27 @@ namespace CanKT
                 if (phieuThu != null)
                 {
                     txbMaPhieu.Text = phieuThu.maDon.ToString();
-                    txbSoXe.Text = phieuThu.bienSoXe.ToString();                    
-                    txbTLXeVao.Text = string.Format("{0:N0}", phieuThu.trongLuongXeVao);
-                    txbTLXeRa.Text = string.Format("{0:N0}", phieuThu.trongLuongXeRa);
+                    txbSoXe.Text = phieuThu.bienSoXe.ToString();
+
+                    decimal tlxevao = (decimal)phieuThu.trongLuongXeVao;
+                    txbTLXeVao.Text = tlxevao.ToString(cultureInfo);
+
+                    decimal tlxera = (decimal)phieuThu.trongLuongXeRa;
+                    txbTLXeRa.Text = tlxera.ToString(cultureInfo);
+
                     txbLenhXuat.Text = phieuThu.lenhXuat;
                     txbMaKH.Text = phieuThu.maKH;
                     txbMaSP.Text = phieuThu.maSP;
-                    txbSoLuongTan.Text = string.Format("{0:N0}", phieuThu.soLuongTan);
-                    txbSoLuongM3.Text = string.Format("{0:N0}", phieuThu.soLuongM3);
-                    txbDonGia.Text = string.Format("{0:N0}", phieuThu.donGia);
-                    txbTienHang.Text = string.Format("{0:N0}", phieuThu.thanhTien);
-                    txbThanhToan.Text = string.Format("{0:N0}", phieuThu.tienThanhToan);
+
+                    decimal sltan = (decimal)phieuThu.soLuongTan;
+                    txbSoLuongTan.Text = sltan.ToString(cultureInfo);
+
+                    decimal slm3 = (decimal)phieuThu.soLuongM3;
+                    txbSoLuongM3.Text = slm3.ToString(cultureInfo);
+
+                    txbDonGia.Text = string.Format(cultureInfo, "{0:N0}", phieuThu.donGia);
+                    txbTienHang.Text = string.Format(cultureInfo, "{0:N0}", phieuThu.thanhTien);
+                    txbThanhToan.Text = string.Format(cultureInfo, "{0:N0}", phieuThu.tienThanhToan);
                     txbMaKho.Text = phieuThu.maKho;
                     txbMaMayXay.Text = phieuThu.maMayXay;
                     txbMaXeXuc.Text = phieuThu.maMayXuc;
@@ -1400,11 +1444,11 @@ namespace CanKT
                         txbMaPhieu.Text = phieu.maDon;
                         txbSoXe.Text = phieu.bienSoXe;
 
-                        int tlxevao = (int) phieu.trongLuongXeVao;
-                        txbTLXeVao.Text = tlxevao.ToString("N0");
+                        decimal tlxevao = (decimal)phieu.trongLuongXeVao;
+                        txbTLXeVao.Text = tlxevao.ToString(cultureInfo);
 
-                        int tlxera = (int) phieu.trongLuongXeRa;
-                        txbTLXeRa.Text = tlxera.ToString("N0");
+                        decimal tlxera = (decimal)phieu.trongLuongXeRa;
+                        txbTLXeRa.Text = tlxera.ToString(cultureInfo);
 
                         txbLenhXuat.Text = phieu.lenhXuat;
                         txbMaSP.Text = phieu.maSP;
@@ -1415,6 +1459,42 @@ namespace CanKT
                     else
                     {
                         MessageBox.Show("Không tìm thấy thông tin cho mã phiếu " + maPhieu, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                }
+            }
+        }
+
+        private void btnTimXe_Click(object sender, EventArgs e)
+        {
+            using (var dialog = new FrmTimXe())
+            {
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    string soXe = dialog.SoXe;
+                    DateTime ngayHienTai = DateTime.Today;
+                    // Truy xuất thông tin phiếu từ cơ sở dữ liệu
+                    var phieu = db.PhieuThus.OrderByDescending(p => p.maDon).FirstOrDefault(p => p.bienSoXe == soXe && DbFunctions.TruncateTime(p.thoiGianVao) == ngayHienTai);
+                    if (phieu != null)
+                    {
+                        // Hiển thị thông tin tương ứng lên các textbox
+                        txbMaPhieu.Text = phieu.maDon;
+                        txbSoXe.Text = phieu.bienSoXe;
+
+                        decimal tlxevao = (decimal)phieu.trongLuongXeVao;
+                        txbTLXeVao.Text = tlxevao.ToString(cultureInfo);
+
+                        decimal tlxera = (decimal)phieu.trongLuongXeRa;
+                        txbTLXeRa.Text = tlxera.ToString(cultureInfo);
+
+                        txbLenhXuat.Text = phieu.lenhXuat;
+                        txbMaSP.Text = phieu.maSP;
+                        txbMaKho.Text = phieu.maKho;
+                        txbMaMayXay.Text = phieu.maMayXay;
+                        txbMaXeXuc.Text = phieu.maMayXuc;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Không tìm thấy thông tin cho số xe " + soXe, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
                 }
             }
@@ -1502,6 +1582,11 @@ namespace CanKT
 
             btnSua.Enabled = true;
 
+            if (txbSoXe.Text == "" || txbTLXeVao.Text == "" || txbTLXeVao.Text == "0")
+            {
+                MessageBox.Show("Chưa có giá trị đầu vào!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+
             this.ActiveControl = txbLenhXuat;
 
             serialPort1_Open();
@@ -1511,23 +1596,37 @@ namespace CanKT
         {
             string maPhieu = txbMaPhieu.Text;
 
-            var Phieu = db.PhieuThus.FirstOrDefault(p => p.maDon == maPhieu);
-            if (Phieu != null)
+            if (flag == 1) // = 1 : phieu vua duoc luu => in phieu
             {
-                int trangthai = (int) Phieu.trangThai;
+                flag = 0; //reset lai flag
 
-                if (trangthai == 1)
+                // Gọi phương thức LoadData của form chứa reportViewer và truyền dữ liệu
+                FrmPrint frmPrint = new FrmPrint();
+                frmPrint.LoadData(txbMaKH.Text, txbSoXe.Text, txbMaKho.Text, txbMaMayXay.Text, txbMaXeXuc.Text, txbTLXeVao.Text,
+                    txbTLXeRa.Text, txbSoLuongM3.Text, txbMaSP.Text, txbDonGia.Text, txbTienHang.Text, txbThanhToan.Text,
+                    txbMaPhieu.Text, txbLenhXuat.Text);
+                frmPrint.Show();
+            }
+            else // = 0 : phieu cu => kiem tra trang thai
+            {
+                var Phieu = db.PhieuThus.FirstOrDefault(p => p.maDon == maPhieu);
+                if (Phieu != null)
                 {
-                    // Gọi phương thức LoadData của form chứa reportViewer và truyền dữ liệu
-                    FrmPrint frmPrint = new FrmPrint();
-                    frmPrint.LoadData(txbMaKH.Text, txbSoXe.Text, txbMaKho.Text, txbMaMayXay.Text, txbMaXeXuc.Text, txbTLXeVao.Text,
-                        txbTLXeRa.Text, txbSoLuongM3.Text, txbMaSP.Text, txbDonGia.Text, txbTienHang.Text, txbThanhToan.Text,
-                        txbMaPhieu.Text, txbLenhXuat.Text);
-                    frmPrint.Show();
-                }
-                else
-                {
-                    MessageBox.Show("Phiếu này đã hủy", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    int trangthai = (int)Phieu.trangThai;
+
+                    if (trangthai == 1)
+                    {
+                        // Gọi phương thức LoadData của form chứa reportViewer và truyền dữ liệu
+                        FrmPrint frmPrint = new FrmPrint();
+                        frmPrint.LoadData(txbMaKH.Text, txbSoXe.Text, txbMaKho.Text, txbMaMayXay.Text, txbMaXeXuc.Text, txbTLXeVao.Text,
+                            txbTLXeRa.Text, txbSoLuongM3.Text, txbMaSP.Text, txbDonGia.Text, txbTienHang.Text, txbThanhToan.Text,
+                            txbMaPhieu.Text, txbLenhXuat.Text);
+                        frmPrint.Show();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Phiếu này đã hủy", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
                 }
             }
         }
@@ -1654,8 +1753,8 @@ namespace CanKT
 
         private string weightDataVao = "";
         private string weightDataRa = "";
-        //lay du lieu tu can
 
+        //lay du lieu tu can
         private void serialPort1_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
         {
             dataReceived = Port.ReadExisting();

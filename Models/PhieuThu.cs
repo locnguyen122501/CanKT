@@ -51,6 +51,10 @@ namespace CanKT.Models
         [StringLength(50)]
         public string maMayXuc { get; set; }
 
+        public DateTime? thoiGianVao { get; set; }
+
+        public DateTime? thoiGianRa { get; set; }
+
         public int? trangThai { get; set; }
 
         public virtual KhachHang KhachHang { get; set; }

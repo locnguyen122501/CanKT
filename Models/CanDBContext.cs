@@ -269,12 +269,12 @@ namespace CanKT.Models
         {
             string nextMaPhieu = "1";
 
-            // Truy vấn mã phiếu mới nhất từ cơ sở dữ liệu
+            //Truy vấn mã phiếu mới nhất từ cơ sở dữ liệu
             var latestPhieu = PhieuThus.OrderByDescending(p => p.maDon).FirstOrDefault();
 
             if (latestPhieu != null)
             {
-                // Nếu đã có dữ liệu, tăng mã phiếu mới nhất lên 1 để tạo mã mới
+                //Nếu đã có dữ liệu, tăng mã phiếu mới nhất lên 1 để tạo mã mới
                 int currentMaPhieu = int.Parse(latestPhieu.maDon);
                 nextMaPhieu = (currentMaPhieu + 1).ToString();
             }
@@ -286,7 +286,7 @@ namespace CanKT.Models
         {
             string prevMaPhieu = "0";
 
-            // Truy vấn mã phiếu cũ nhất từ cơ sở dữ liệu
+            //Truy vấn mã phiếu cũ nhất từ cơ sở dữ liệu
             var oldestPhieu = PhieuThus.OrderBy(p => p.maDon).FirstOrDefault();
 
             if (oldestPhieu != null)
