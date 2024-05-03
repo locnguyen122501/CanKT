@@ -159,12 +159,28 @@ namespace CanKT.Models
                 .IsUnicode(false);
 
             modelBuilder.Entity<PhieuThu>()
+                .Property(e => e.trongLuongXeVao)
+                .HasPrecision(18, 3);
+
+            modelBuilder.Entity<PhieuThu>()
+                .Property(e => e.trongLuongXeRa)
+                .HasPrecision(18, 3);
+
+            modelBuilder.Entity<PhieuThu>()
                 .Property(e => e.lenhXuat)
                 .IsUnicode(false);
 
             modelBuilder.Entity<PhieuThu>()
                 .Property(e => e.maSP)
                 .IsUnicode(false);
+
+            modelBuilder.Entity<PhieuThu>()
+                .Property(e => e.soLuongTan)
+                .HasPrecision(18, 3);
+
+            modelBuilder.Entity<PhieuThu>()
+                .Property(e => e.soLuongM3)
+                .HasPrecision(18, 3);
 
             modelBuilder.Entity<PhieuThu>()
                 .Property(e => e.donGia)
@@ -253,12 +269,12 @@ namespace CanKT.Models
         {
             string nextMaPhieu = "1";
 
-            // Truy vấn mã phiếu mới nhất từ cơ sở dữ liệu
-            var latestPhieu = PhieuThus.OrderByDescending(p => p.maDon).FirstOrDefault();
+            //Truy vấn mã phiếu mới nhất từ cơ sở dữ liệu
+            var latestPhieu = PhieuThus.OrderByDescending(p => p.maDon).FirstOrDefault(p => !p.maDon.StartsWith("H"));
 
             if (latestPhieu != null)
             {
-                // Nếu đã có dữ liệu, tăng mã phiếu mới nhất lên 1 để tạo mã mới
+                //Nếu đã có dữ liệu, tăng mã phiếu mới nhất lên 1 để tạo mã mới
                 int currentMaPhieu = int.Parse(latestPhieu.maDon);
                 nextMaPhieu = (currentMaPhieu + 1).ToString();
             }
@@ -270,7 +286,7 @@ namespace CanKT.Models
         {
             string prevMaPhieu = "0";
 
-            // Truy vấn mã phiếu cũ nhất từ cơ sở dữ liệu
+            //Truy vấn mã phiếu cũ nhất từ cơ sở dữ liệu
             var oldestPhieu = PhieuThus.OrderBy(p => p.maDon).FirstOrDefault();
 
             if (oldestPhieu != null)
