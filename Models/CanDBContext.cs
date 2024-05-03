@@ -270,7 +270,7 @@ namespace CanKT.Models
             string nextMaPhieu = "1";
 
             //Truy vấn mã phiếu mới nhất từ cơ sở dữ liệu
-            var latestPhieu = PhieuThus.OrderByDescending(p => p.maDon).FirstOrDefault();
+            var latestPhieu = PhieuThus.OrderByDescending(p => p.maDon).FirstOrDefault(p => !p.maDon.StartsWith("H"));
 
             if (latestPhieu != null)
             {

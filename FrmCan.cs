@@ -65,8 +65,6 @@ namespace CanKT
         private void FrmCan_Load(object sender, EventArgs e)
         {
             // Lấy mã phiếu tiếp theo từ cơ sở dữ liệu và gán vào txb
-            string nextMaPhieu = db.GetNextMaPhieu();
-            txbMaPhieu.Text = nextMaPhieu;
 
             //vi khong co txb nen gan vao gia tri prevMP tao ben tren
             int prevMaPhieu = int.Parse(db.GetOldestMaPhieu());
@@ -872,12 +870,6 @@ namespace CanKT
                 txbMaMayXay.Clear();
                 txbMaXeXuc.Clear();
 
-                // Lấy mã phiếu tiếp theo từ cơ sở dữ liệu
-                string nextMaPhieu = db.GetNextMaPhieu();
-
-                // Gán mã phiếu vào textbox
-                txbMaPhieu.Text = nextMaPhieu;
-
                 this.ActiveControl = txbSoXe;
             }
 
@@ -911,7 +903,10 @@ namespace CanKT
         //them data vao db
         private void themData()
         {
-            string maphieu = txbMaPhieu.Text;
+            // string maphieu = txbMaPhieu.Text;
+
+            string maphieu = GenerateTemporaryMaPhieu();
+
             string soxe = txbSoXe.Text;
 
             decimal trongluongxevao = Convert.ToDecimal(txbTLXeVao.Text.Replace(",", ""))/1000;
@@ -969,12 +964,6 @@ namespace CanKT
             txbMaMayXay.Clear();
             txbMaXeXuc.Clear();
 
-            // Lấy mã phiếu tiếp theo từ cơ sở dữ liệu
-            string nextMaPhieu = db.GetNextMaPhieu();
-
-            // Gán mã phiếu vào textbox
-            txbMaPhieu.Text = nextMaPhieu;
-
             LoadDataIntoDataGridView();
         }
 
@@ -985,7 +974,9 @@ namespace CanKT
         private void btnSua_Click(object sender, EventArgs e)
         {
             // Lấy dữ liệu từ các textbox
-            string madon = txbMaPhieu.Text;
+            string newMaDon = GenerateOfficialMaPhieu();
+
+            string maphieu = txbMaPhieu.Text; //de lay phieu vao
 
             string soxe = txbSoXe.Text;
 
@@ -1012,18 +1003,27 @@ namespace CanKT
             // Truy vấn dữ liệu tương ứng từ cơ sở dữ liệu bằng mã sản phẩm
             using (var db = new CanDBContext())
             {
-                var phieuthu = db.PhieuThus.FirstOrDefault(p => p.maDon == madon);
+                var newObj = new PhieuThu
+                {
+                    maDon = newMaDon,
+                };
+
+                var phieuthu = db.PhieuThus.FirstOrDefault(p => p.maDon == maphieu);
+
                 if (phieuthu != null)
                 {
                     if (quyenuser == "Admin")
                     {
                         flag = 1;
 
-                        // Cập nhật các thuộc tính của đối tượng dữ liệu                        
+                        // Cập nhật các thuộc tính của đối tượng dữ liệu
+                        if (phieuthu.trongLuongXeRa == 0)
+                        {
+                            phieuthu.thoiGianRa = giora;
+                        }
                         phieuthu.bienSoXe = soxe;
                         phieuthu.trongLuongXeVao = trongluongxevao;
                         phieuthu.trongLuongXeRa = trongluongxera;
-                        
 
                         if (phieuthu.lenhXuat == null)
                         {
@@ -1056,15 +1056,48 @@ namespace CanKT
                         phieuthu.maKho = makho;
                         phieuthu.maMayXay = mamayxay;
                         phieuthu.maMayXuc = mamayxuc;
-                        //phieuthu.thoiGianRa = giora;
                         phieuthu.trangThai = trangthai;
+
+                        // Tạo đối tượng mới
+                        var newPhieuThu = new PhieuThu();
+
+                        // Copy các thuộc tính từ đối tượng cũ sang đối tượng mới
+                        newPhieuThu.bienSoXe = phieuthu.bienSoXe;
+                        newPhieuThu.trongLuongXeVao = phieuthu.trongLuongXeVao;
+                        newPhieuThu.trongLuongXeRa = phieuthu.trongLuongXeRa;
+                        newPhieuThu.lenhXuat = phieuthu.lenhXuat;
+                        newPhieuThu.maKH = phieuthu.maKH;
+                        newPhieuThu.maSP = phieuthu.maSP;
+                        newPhieuThu.soLuongTan = phieuthu.soLuongTan;
+                        newPhieuThu.soLuongM3 = phieuthu.soLuongM3;
+                        newPhieuThu.donGia = phieuthu.donGia;
+                        newPhieuThu.thanhTien = phieuthu.thanhTien;
+                        newPhieuThu.tienThanhToan = phieuthu.tienThanhToan;
+                        newPhieuThu.maKho = phieuthu.maKho;
+                        newPhieuThu.maMayXay = phieuthu.maMayXay;
+                        newPhieuThu.maMayXuc = phieuthu.maMayXuc;
+                        newPhieuThu.thoiGianVao = phieuthu.thoiGianVao;
+                        newPhieuThu.trangThai = phieuthu.trangThai;
+
+                        // Thêm các thuộc tính mới cho đối tượng mới
+                        newPhieuThu.maDon = newMaDon;
+                        newPhieuThu.thoiGianRa = giora;
+
+                        // Thêm đối tượng mới vào cơ sở dữ liệu
+                        db.PhieuThus.Add(newPhieuThu);
+
+                        // Xóa đối tượng cũ
+                        db.PhieuThus.Remove(phieuthu);
+
+                        // Lưu thay đổi vào cơ sở dữ liệu
+                        db.SaveChanges();
 
                         // Thông báo thành công
                         MessageBox.Show("Cập nhật phiếu thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     else
                     {
-                        if (phieuthu.trongLuongXeRa == null)
+                        if (phieuthu.trongLuongXeRa == 0)
                         {
                             flag = 1;
 
@@ -1099,6 +1132,40 @@ namespace CanKT
                             phieuthu.thoiGianRa = giora;
                             phieuthu.trangThai = trangthai;
 
+                            // Tạo đối tượng mới
+                            var newPhieuThu = new PhieuThu();
+
+                            // Copy các thuộc tính từ đối tượng cũ sang đối tượng mới
+                            newPhieuThu.bienSoXe = phieuthu.bienSoXe;
+                            newPhieuThu.trongLuongXeVao = phieuthu.trongLuongXeVao;
+                            newPhieuThu.trongLuongXeRa = phieuthu.trongLuongXeRa;
+                            newPhieuThu.lenhXuat = phieuthu.lenhXuat;
+                            newPhieuThu.maKH = phieuthu.maKH;
+                            newPhieuThu.maSP = phieuthu.maSP;
+                            newPhieuThu.soLuongTan = phieuthu.soLuongTan;
+                            newPhieuThu.soLuongM3 = phieuthu.soLuongM3;
+                            newPhieuThu.donGia = phieuthu.donGia;
+                            newPhieuThu.thanhTien = phieuthu.thanhTien;
+                            newPhieuThu.tienThanhToan = phieuthu.tienThanhToan;
+                            newPhieuThu.maKho = phieuthu.maKho;
+                            newPhieuThu.maMayXay = phieuthu.maMayXay;
+                            newPhieuThu.maMayXuc = phieuthu.maMayXuc;
+                            newPhieuThu.thoiGianVao = phieuthu.thoiGianVao;
+                            newPhieuThu.trangThai = phieuthu.trangThai;
+
+                            // Thêm các thuộc tính mới cho đối tượng mới
+                            newPhieuThu.maDon = newMaDon;
+                            newPhieuThu.thoiGianRa = giora;
+
+                            // Thêm đối tượng mới vào cơ sở dữ liệu
+                            db.PhieuThus.Add(newPhieuThu);
+
+                            // Xóa đối tượng cũ
+                            db.PhieuThus.Remove(phieuthu);
+
+                            // Lưu thay đổi vào cơ sở dữ liệu
+                            db.SaveChanges();
+
                             // Thông báo thành công
                             MessageBox.Show("Cập nhật phiếu thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
@@ -1113,12 +1180,6 @@ namespace CanKT
                     btnIn.PerformClick();
                 }
             }
-
-            // Lấy mã phiếu tiếp theo từ cơ sở dữ liệu
-            string nextMaPhieu = db.GetNextMaPhieu();
-
-            // Gán mã phiếu vào textbox
-            txbMaPhieu.Text = nextMaPhieu;
           
             // Xóa dữ liệu trong các textbox sau khi update thành công
             txbSoXe.Clear();
@@ -1187,11 +1248,6 @@ namespace CanKT
                         // Nếu xóa thành công, cập nhật lại hiển thị trên DataGridView
                         MessageBox.Show("Đã hủy phiếu thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                        // Lấy mã phiếu tiếp theo từ cơ sở dữ liệu
-                        string nextMaPhieu = db.GetNextMaPhieu();
-
-                        // Gán mã phiếu vào textbox
-                        txbMaPhieu.Text = nextMaPhieu;
 
                         // Xóa dữ liệu trong các textbox sau khi update thành công
                         txbSoXe.Clear();
@@ -1274,6 +1330,10 @@ namespace CanKT
 
         private void btnPhieuTruoc_Click(object sender, EventArgs e)
         {
+            if (txbMaPhieu.Text.StartsWith("H"))
+            {
+                return;
+            }
             int temp = int.Parse(txbMaPhieu.Text) - 1;
 
             string maphieu = temp.ToString();
@@ -1314,6 +1374,11 @@ namespace CanKT
 
         private void btnPhieuSau_Click(object sender, EventArgs e)
         {
+            if (txbMaPhieu.Text.StartsWith("H"))
+            {
+                return;
+            }
+
             int temp = int.Parse(txbMaPhieu.Text) + 1;
 
             string maphieu = temp.ToString();
@@ -1376,20 +1441,27 @@ namespace CanKT
             {
                 var phieuThu = db.PhieuThus.OrderByDescending(p => p.maDon).FirstOrDefault(kh => kh.maDon == maDon);
 
-                if (phieuThu == null)
+                if (phieuThu.maDon.StartsWith("H"))
                 {
-                    btnPhieuSau.Enabled = false;
+
                 }
                 else
                 {
-                    int temp = int.Parse(phieuThu.maDon.ToString());
-                    if(temp < nextMaPhieu)
+                    if (phieuThu == null)
                     {
-                        btnPhieuSau.Enabled = true;
+                        btnPhieuSau.Enabled = false;
                     }
                     else
                     {
-                        btnPhieuSau.Enabled = false;
+                        int temp = int.Parse(phieuThu.maDon.ToString());
+                        if (temp < nextMaPhieu)
+                        {
+                            btnPhieuSau.Enabled = true;
+                        }
+                        else
+                        {
+                            btnPhieuSau.Enabled = false;
+                        }
                     }
                 }
             }
@@ -1399,7 +1471,6 @@ namespace CanKT
         //cung bo ham nay vao trong txbMaPhieu_TextChanged
         private void kiemTraPhieuCuNhat(int prevMaPhieu)
         {
-
             // Truy vấn mã phiếu mới nhất từ cơ sở dữ liệu
             //var latestPhieu = PhieuThus.OrderByDescending(p => p.maDon).FirstOrDefault();
 
@@ -1410,21 +1481,29 @@ namespace CanKT
             {
                 var phieuThu = db.PhieuThus.OrderBy(p => p.maDon).FirstOrDefault(kh => kh.maDon == maDon);
 
-                if (phieuThu == null)
+                if (phieuThu.maDon.StartsWith("H"))
                 {
-                    btnPhieuTruoc.Enabled = false;
+
                 }
                 else
                 {
-                    int temp = int.Parse(phieuThu.maDon.ToString());
-                    if (temp > prevMaPhieu)
-                    {
-                        btnPhieuTruoc.Enabled = true;
-                    }
-                    else
+                    if (phieuThu == null)
                     {
                         btnPhieuTruoc.Enabled = false;
                     }
+                    else
+                    {
+                        int temp = int.Parse(phieuThu.maDon.ToString());
+                        if (temp > prevMaPhieu)
+                        {
+                            btnPhieuTruoc.Enabled = true;
+                        }
+                        else
+                        {
+                            btnPhieuTruoc.Enabled = false;
+                        }
+                    }
+
                 }
             }
         }
@@ -2001,5 +2080,70 @@ namespace CanKT
 
             Port.Close();
         }
+
+        public string GenerateTemporaryMaPhieu()
+        {
+            // Lấy mã phiếu tạm thời cuối cùng từ cơ sở dữ liệu
+            var lastTemporaryMaPhieu = db.PhieuThus.OrderByDescending(p => p.maDon).FirstOrDefault(p => p.maDon.StartsWith("H"));
+
+            if (lastTemporaryMaPhieu != null)
+            {
+                // Lấy số cuối cùng từ mã phiếu tạm thời
+                int lastNumber;
+                if (int.TryParse(lastTemporaryMaPhieu.maDon.Substring(1), out lastNumber))
+                {
+                    // Tăng số tiếp theo lên một
+                    int nextNumber = lastNumber + 1;
+
+                    // Tạo mã phiếu tạm thời mới
+                    string nextTemporaryMaPhieu = "H" + nextNumber.ToString();
+
+                    // Kiểm tra xem mã phiếu tạm thời mới đã tồn tại chưa
+                    while (db.PhieuThus.Any(p => p.maDon == nextTemporaryMaPhieu))
+                    {
+                        nextNumber++;
+                        nextTemporaryMaPhieu = "H" + nextNumber.ToString();
+                    }
+
+                    return nextTemporaryMaPhieu;
+                }
+            }
+
+            // Nếu không có mã phiếu tạm thời nào trong cơ sở dữ liệu, bạn có thể bắt đầu từ "H1"
+            return "H1";
+        }
+
+        public string GenerateOfficialMaPhieu()
+        {
+            // Lấy mã phiếu chính thức cuối cùng từ cơ sở dữ liệu
+            var lastOfficialMaPhieu = db.PhieuThus.OrderByDescending(p => p.maDon).FirstOrDefault(p => !p.maDon.StartsWith("H"));
+
+            if (lastOfficialMaPhieu != null)
+            {
+                // Lấy số cuối cùng từ mã phiếu chính thức
+                int lastNumber;
+                if (int.TryParse(lastOfficialMaPhieu.maDon, out lastNumber))
+                {
+                    // Tăng số tiếp theo lên một
+                    int nextNumber = lastNumber + 1;
+
+                    // Tạo mã phiếu chính thức mới
+                    string nextOfficialMaPhieu = nextNumber.ToString();
+
+                    // Kiểm tra xem mã phiếu chính thức mới đã tồn tại chưa
+                    while (db.PhieuThus.Any(p => p.maDon == nextOfficialMaPhieu))
+                    {
+                        nextNumber++;
+                        nextOfficialMaPhieu = nextNumber.ToString();
+                    }
+
+                    return nextOfficialMaPhieu;
+                }
+            }
+
+            // Nếu không có mã phiếu chính thức nào trong cơ sở dữ liệu, bạn có thể bắt đầu từ "1"
+            return "1";
+        }
+
     }
 }
