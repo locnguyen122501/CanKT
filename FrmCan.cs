@@ -978,6 +978,8 @@ namespace CanKT
 
             string maphieu = txbMaPhieu.Text; //de lay phieu vao
 
+            string backUpMaDon = maphieu;
+
             string soxe = txbSoXe.Text;
 
             decimal trongluongxevao = Convert.ToDecimal(txbTLXeVao.Text.Replace(",", ""))/1000;
@@ -1080,7 +1082,8 @@ namespace CanKT
                         newPhieuThu.trangThai = phieuthu.trangThai;
 
                         // Thêm các thuộc tính mới cho đối tượng mới
-                        newPhieuThu.maDon = newMaDon;
+                        //newPhieuThu.maDon = newMaDon
+                        newPhieuThu.maDon = backUpMaDon;
                         newPhieuThu.thoiGianRa = giora;
 
                         // Thêm đối tượng mới vào cơ sở dữ liệu
@@ -1176,7 +1179,7 @@ namespace CanKT
                     }
 
                     // Lưu thay đổi vào cơ sở dữ liệu
-                    db.SaveChanges();
+                    //db.SaveChanges();
                     btnIn.PerformClick();
                 }
             }
@@ -1192,7 +1195,6 @@ namespace CanKT
             txbMaMayXay.Clear();
             txbMaXeXuc.Clear();
 
-            //khong load lai dgv
             LoadDataIntoDataGridView();
         }
 
