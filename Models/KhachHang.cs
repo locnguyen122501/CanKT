@@ -12,6 +12,7 @@ namespace CanKT.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public KhachHang()
         {
+            HanMucCongNoes = new HashSet<HanMucCongNo>();
             PhieuThus = new HashSet<PhieuThu>();
             Xes = new HashSet<Xe>();
         }
@@ -44,6 +45,9 @@ namespace CanKT.Models
         public string ghiChu { get; set; }
 
         public int? trangThai { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<HanMucCongNo> HanMucCongNoes { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PhieuThu> PhieuThus { get; set; }

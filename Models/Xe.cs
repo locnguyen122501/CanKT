@@ -33,9 +33,9 @@ namespace CanKT.Models
         [StringLength(50)]
         public string tenTaiXe { get; set; }
 
-        public int? trongLuongBanThan { get; set; }
+        public decimal? trongLuongBanThan { get; set; }
 
-        public int? trongLuongChoPhep { get; set; }
+        public decimal? trongLuongChoPhep { get; set; }
 
         [Column(TypeName = "date")]
         public DateTime? ngayKetDangKiem { get; set; }

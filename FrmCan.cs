@@ -832,6 +832,19 @@ namespace CanKT
             {
                 txbTLXeRa.Text = tlra.ToString("N0");
             }
+
+            // kiem tra tai trong
+            
+            decimal temp1 = (decimal)int.Parse(txbTLXeRa.Text.Replace(",", ""));
+
+            var xe = db.Xes.FirstOrDefault(x => x.bienSoXe == txbSoXe.Text);
+
+            decimal temp2 = Convert.ToDecimal(xe.trongLuongChoPhep.ToString().Replace(".", ""));
+
+            if (xe != null && temp2 < temp1)
+            {
+                MessageBox.Show("Xe quá tải trọng!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
         #endregion
 
@@ -975,6 +988,7 @@ namespace CanKT
         {
             // Lấy dữ liệu từ các textbox
             string newMaDon = GenerateOfficialMaPhieu();
+            //maIn = newMaDon;
 
             string maphieu = txbMaPhieu.Text; //de lay phieu vao
 
@@ -1026,6 +1040,12 @@ namespace CanKT
                         phieuthu.bienSoXe = soxe;
                         phieuthu.trongLuongXeVao = trongluongxevao;
                         phieuthu.trongLuongXeRa = trongluongxera;
+
+                        var xe = db.Xes.FirstOrDefault(x => x.bienSoXe == soxe);
+                        if (xe != null && xe.trongLuongChoPhep < trongluongxera)
+                        {
+                            MessageBox.Show("Xe quá tải trọng!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
 
                         if (phieuthu.lenhXuat == null)
                         {
@@ -1097,15 +1117,18 @@ namespace CanKT
 
                         // Thông báo thành công
                         MessageBox.Show("Cập nhật phiếu thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        btnIn.PerformClick();
                     }
                     else
                     {
-                        if (phieuthu.trongLuongXeRa == 0)
+                        if (phieuthu.trongLuongXeRa == 0 && phieuthu.maDon.StartsWith("H"))
                         {
                             flag = 1;
 
                             phieuthu.trongLuongXeRa = trongluongxera;
                             phieuthu.lenhXuat = lenhxuat;
+
+                            
 
                             #region Tạo mã nhập xuất
                             // Tạo đối tượng mới từ dữ liệu đã nhận được
@@ -1168,23 +1191,24 @@ namespace CanKT
 
                             // Lưu thay đổi vào cơ sở dữ liệu
                             db.SaveChanges();
+                            XuLyCongNo(txbMaKH.Text, (decimal) newPhieuThu.soLuongTan, (decimal) newPhieuThu.soLuongM3, (decimal) newPhieuThu.tienThanhToan);
+                            
+                            txbMaPhieu.Text = newMaDon;
 
                             // Thông báo thành công
                             MessageBox.Show("Cập nhật phiếu thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            btnIn.PerformClick();
                         }
-                        else
+                        else                           
                         {
                             MessageBox.Show("Không có quyền sửa phiếu có sẵn!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                     }
-
-                    // Lưu thay đổi vào cơ sở dữ liệu
-                    //db.SaveChanges();
-                    btnIn.PerformClick();
                 }
             }
-          
+
             // Xóa dữ liệu trong các textbox sau khi update thành công
+            //txbMaPhieu.Clear();
             txbSoXe.Clear();
             txbTLXeVao.Text = "0";
             txbTLXeRa.Text = "0";
@@ -1193,9 +1217,49 @@ namespace CanKT
             txbSoLuongM3.Text = "0";
             txbMaKho.Clear();
             txbMaMayXay.Clear();
-            txbMaXeXuc.Clear();
+            txbMaXeXuc.Clear();   
 
             LoadDataIntoDataGridView();
+        }
+
+        private void XuLyCongNo(string makh, decimal sltan, decimal slm3, decimal thanhtien)
+        {
+            string macn = GetMaCNFromMaKH(makh);
+
+            using (var db = new CanDBContext())
+            {
+                var congno = db.HanMucCongNoes.FirstOrDefault(c => c.maCongNo == macn);
+
+                if (congno != null)
+                {
+                    congno.soLuongTanXuat = congno.soLuongTanXuat + sltan;
+                    congno.soLuongM3Xuat = congno.soLuongM3Xuat + slm3;
+                    congno.thanhTien = congno.thanhTien + thanhtien;
+                    congno.tienConLai = congno.tienConLai - congno.thanhTien;
+
+                    if (congno.tienConLai < 0)
+                    {
+                        MessageBox.Show("Đã quá tổng hạn mức công nợ trong ngày!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+                db.SaveChanges();
+            }
+        }
+
+        private string GetMaCNFromMaKH(string maKH)
+        {
+            string maCN = "";
+
+            using (var db = new CanDBContext())
+            {
+                var hmct = db.HanMucCongNoes.FirstOrDefault(h => h.maKH == maKH);
+
+                if (hmct != null)
+                {
+                    maCN = hmct.maCongNo;
+                }
+            }
+            return maCN;
         }
 
         //XOA DATA
@@ -1332,10 +1396,6 @@ namespace CanKT
 
         private void btnPhieuTruoc_Click(object sender, EventArgs e)
         {
-            if (txbMaPhieu.Text.StartsWith("H"))
-            {
-                return;
-            }
             int temp = int.Parse(txbMaPhieu.Text) - 1;
 
             string maphieu = temp.ToString();
@@ -1376,11 +1436,6 @@ namespace CanKT
 
         private void btnPhieuSau_Click(object sender, EventArgs e)
         {
-            if (txbMaPhieu.Text.StartsWith("H"))
-            {
-                return;
-            }
-
             int temp = int.Parse(txbMaPhieu.Text) + 1;
 
             string maphieu = temp.ToString();
@@ -1432,7 +1487,6 @@ namespace CanKT
         //de kiem tra xem phieu nay co phai la phieu moi nhat/khong ton tai khong 
         private void kiemTraPhieuMoiNhat()
         {
-
             // Truy vấn mã phiếu mới nhất từ cơ sở dữ liệu
             //var latestPhieu = PhieuThus.OrderByDescending(p => p.maDon).FirstOrDefault();
 
@@ -1451,7 +1505,7 @@ namespace CanKT
                 {
                     if (phieuThu == null)
                     {
-                        btnPhieuSau.Enabled = false;
+                        btnPhieuSau.Enabled = false;                        
                     }
                     else
                     {
@@ -1485,7 +1539,7 @@ namespace CanKT
 
                 if (phieuThu.maDon.StartsWith("H"))
                 {
-
+                    btnPhieuTruoc.Enabled = false;
                 }
                 else
                 {
@@ -1685,7 +1739,7 @@ namespace CanKT
                 FrmPrint frmPrint = new FrmPrint();
                 frmPrint.LoadData(txbMaKH.Text, txbSoXe.Text, txbMaKho.Text, txbMaMayXay.Text, txbMaXeXuc.Text, txbTLXeVao.Text,
                     txbTLXeRa.Text, txbSoLuongM3.Text, txbMaSP.Text, txbDonGia.Text, txbTienHang.Text, txbThanhToan.Text,
-                    txbMaPhieu.Text, txbLenhXuat.Text);
+                    maPhieu, txbLenhXuat.Text);
                 frmPrint.Show();
             }
             else // = 0 : phieu cu => kiem tra trang thai
@@ -1701,7 +1755,7 @@ namespace CanKT
                         FrmPrint frmPrint = new FrmPrint();
                         frmPrint.LoadData(txbMaKH.Text, txbSoXe.Text, txbMaKho.Text, txbMaMayXay.Text, txbMaXeXuc.Text, txbTLXeVao.Text,
                             txbTLXeRa.Text, txbSoLuongM3.Text, txbMaSP.Text, txbDonGia.Text, txbTienHang.Text, txbThanhToan.Text,
-                            txbMaPhieu.Text, txbLenhXuat.Text);
+                            maPhieu, txbLenhXuat.Text);
                         frmPrint.Show();
                     }
                     else

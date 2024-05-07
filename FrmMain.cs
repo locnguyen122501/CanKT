@@ -143,6 +143,12 @@ namespace CanKT
             frmPhanTichSL.ShowDialog();
         }
 
+        private void sốDưKháchHàngToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmSoDuKH frmSoDuKH = new FrmSoDuKH();
+            frmSoDuKH.ShowDialog();
+        }
+
         private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (!isExiting)

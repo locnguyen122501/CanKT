@@ -246,6 +246,25 @@ namespace CanKT
             }
             #endregion
 
+            #region Tạo và thêm mã công nợ cho khách hàng vào db
+            HanMucCongNo hmcn = new HanMucCongNo
+            {
+                maCongNo = makh,
+                maKH = makh,
+                soTienNop = 0,
+                soLuongTanXuat = 0,
+                soLuongM3Xuat = 0,
+                thanhTien = 0,
+                tienConLai = 0,
+            };
+
+            using (var db = new CanDBContext())
+            {
+                db.KhachHangs.Add(kh);
+                db.SaveChanges();
+            }
+            #endregion
+
             #region Tạo và thêm xe vào db
             Xe x = new Xe
             {
