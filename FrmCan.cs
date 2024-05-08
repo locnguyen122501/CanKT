@@ -1102,7 +1102,6 @@ namespace CanKT
                         newPhieuThu.trangThai = phieuthu.trangThai;
 
                         // Thêm các thuộc tính mới cho đối tượng mới
-                        //newPhieuThu.maDon = newMaDon
                         newPhieuThu.maDon = backUpMaDon;
                         newPhieuThu.thoiGianRa = giora;
 
