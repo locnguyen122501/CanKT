@@ -71,6 +71,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FormBaoCao\FrmPhanTichSL.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormBaoCao\FrmPhanTichSL.Designer.cs">
+      <DependentUpon>FrmPhanTichSL.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormBaoCao\FrmSoDuKH.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormBaoCao\FrmSoDuKH.Designer.cs">
+      <DependentUpon>FrmSoDuKH.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormChucNang\FrmDoiMatKhau.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormChucNang\FrmDoiMatKhau.Designer.cs">
+      <DependentUpon>FrmDoiMatKhau.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormChucNang\FrmTimXe.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormChucNang\FrmTimXe.Designer.cs">
+      <DependentUpon>FrmTimXe.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormDanhMuc\FrmChiTiet.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -159,6 +183,7 @@
     <Compile Include="Models\DonVi.cs" />
     <Compile Include="Models\DonViTinh.cs" />
     <Compile Include="Models\Gia.cs" />
+    <Compile Include="Models\HanMucCongNo.cs" />
     <Compile Include="Models\KhachHang.cs" />
     <Compile Include="Models\Kho.cs" />
     <Compile Include="Models\MaTienTe.cs" />
@@ -175,6 +200,18 @@
     <Compile Include="Models\XeXuc.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="FormBaoCao\FrmPhanTichSL.resx">
+      <DependentUpon>FrmPhanTichSL.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormBaoCao\FrmSoDuKH.resx">
+      <DependentUpon>FrmSoDuKH.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormChucNang\FrmDoiMatKhau.resx">
+      <DependentUpon>FrmDoiMatKhau.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormChucNang\FrmTimXe.resx">
+      <DependentUpon>FrmTimXe.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormDanhMuc\FrmChiTiet.resx">
       <DependentUpon>FrmChiTiet.cs</DependentUpon>
     </EmbeddedResource>
@@ -227,7 +264,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="rptReport.rdlc" />
+    <EmbeddedResource Include="FormChucNang\rptReport.rdlc" />
     <None Include="App.config" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -247,5 +284,6 @@
     <Content Include="Resources\BBCC_logo.png" />
     <None Include="Resources\camera_pic.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

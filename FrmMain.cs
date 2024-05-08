@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CanKT.FormBaoCao;
+using CanKT.FormChucNang;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -100,6 +102,12 @@ namespace CanKT
             OpenChildForm(new FrmXe());
         }
 
+        private void đổiMậtKhẩuToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmDoiMatKhau frmDoiMatKhau = new FrmDoiMatKhau(tentk);
+            frmDoiMatKhau.ShowDialog();
+        }
+
         private void đăngXuấtToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var result = MessageBox.Show("Bạn có thực sự muốn đăng xuất không?", "Thông báo", MessageBoxButtons.YesNo);
@@ -127,7 +135,19 @@ namespace CanKT
         private void ExitApplication()
         {
             Application.Exit();
-        }              
+        }
+
+        private void báoCáoPhânTíchSốLiệuToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmPhanTichSL frmPhanTichSL = new FrmPhanTichSL();
+            frmPhanTichSL.ShowDialog();
+        }
+
+        private void sốDưKháchHàngToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmSoDuKH frmSoDuKH = new FrmSoDuKH();
+            frmSoDuKH.ShowDialog();
+        }
 
         private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -147,7 +167,5 @@ namespace CanKT
             }
         }
         #endregion
-
-        //next
     }
 }

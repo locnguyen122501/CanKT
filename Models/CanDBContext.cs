@@ -15,6 +15,7 @@ namespace CanKT.Models
         public virtual DbSet<DonVi> DonVis { get; set; }
         public virtual DbSet<DonViTinh> DonViTinhs { get; set; }
         public virtual DbSet<Gia> Gias { get; set; }
+        public virtual DbSet<HanMucCongNo> HanMucCongNoes { get; set; }
         public virtual DbSet<KhachHang> KhachHangs { get; set; }
         public virtual DbSet<Kho> Khoes { get; set; }
         public virtual DbSet<MaTienTe> MaTienTes { get; set; }
@@ -64,6 +65,34 @@ namespace CanKT.Models
                 .Property(e => e.donGia)
                 .HasPrecision(19, 4);
 
+            modelBuilder.Entity<HanMucCongNo>()
+                .Property(e => e.maCongNo)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<HanMucCongNo>()
+                .Property(e => e.maKH)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<HanMucCongNo>()
+                .Property(e => e.soTienNop)
+                .HasPrecision(19, 4);
+
+            modelBuilder.Entity<HanMucCongNo>()
+                .Property(e => e.soLuongTanXuat)
+                .HasPrecision(18, 3);
+
+            modelBuilder.Entity<HanMucCongNo>()
+                .Property(e => e.soLuongM3Xuat)
+                .HasPrecision(18, 3);
+
+            modelBuilder.Entity<HanMucCongNo>()
+                .Property(e => e.thanhTien)
+                .HasPrecision(19, 4);
+
+            modelBuilder.Entity<HanMucCongNo>()
+                .Property(e => e.tienConLai)
+                .HasPrecision(19, 4);
+
             modelBuilder.Entity<KhachHang>()
                 .Property(e => e.maKH)
                 .IsUnicode(false);
@@ -79,6 +108,11 @@ namespace CanKT.Models
             modelBuilder.Entity<KhachHang>()
                 .Property(e => e.email)
                 .IsUnicode(false);
+
+            modelBuilder.Entity<KhachHang>()
+                .HasMany(e => e.HanMucCongNoes)
+                .WithRequired(e => e.KhachHang)
+                .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Kho>()
                 .Property(e => e.maDonVi)
@@ -159,12 +193,28 @@ namespace CanKT.Models
                 .IsUnicode(false);
 
             modelBuilder.Entity<PhieuThu>()
+                .Property(e => e.trongLuongXeVao)
+                .HasPrecision(18, 3);
+
+            modelBuilder.Entity<PhieuThu>()
+                .Property(e => e.trongLuongXeRa)
+                .HasPrecision(18, 3);
+
+            modelBuilder.Entity<PhieuThu>()
                 .Property(e => e.lenhXuat)
                 .IsUnicode(false);
 
             modelBuilder.Entity<PhieuThu>()
                 .Property(e => e.maSP)
                 .IsUnicode(false);
+
+            modelBuilder.Entity<PhieuThu>()
+                .Property(e => e.soLuongTan)
+                .HasPrecision(18, 3);
+
+            modelBuilder.Entity<PhieuThu>()
+                .Property(e => e.soLuongM3)
+                .HasPrecision(18, 3);
 
             modelBuilder.Entity<PhieuThu>()
                 .Property(e => e.donGia)
@@ -235,6 +285,14 @@ namespace CanKT.Models
                 .Property(e => e.maKH)
                 .IsUnicode(false);
 
+            modelBuilder.Entity<Xe>()
+                .Property(e => e.trongLuongBanThan)
+                .HasPrecision(18, 3);
+
+            modelBuilder.Entity<Xe>()
+                .Property(e => e.trongLuongChoPhep)
+                .HasPrecision(18, 3);
+
             modelBuilder.Entity<XeXuc>()
                 .Property(e => e.maDonVi)
                 .IsUnicode(false);
@@ -253,12 +311,12 @@ namespace CanKT.Models
         {
             string nextMaPhieu = "1";
 
-            // Truy vấn mã phiếu mới nhất từ cơ sở dữ liệu
-            var latestPhieu = PhieuThus.OrderByDescending(p => p.maDon).FirstOrDefault();
+            //Truy vấn mã phiếu mới nhất từ cơ sở dữ liệu
+            var latestPhieu = PhieuThus.OrderByDescending(p => p.maDon).FirstOrDefault(p => !p.maDon.StartsWith("H"));
 
             if (latestPhieu != null)
             {
-                // Nếu đã có dữ liệu, tăng mã phiếu mới nhất lên 1 để tạo mã mới
+                //Nếu đã có dữ liệu, tăng mã phiếu mới nhất lên 1 để tạo mã mới
                 int currentMaPhieu = int.Parse(latestPhieu.maDon);
                 nextMaPhieu = (currentMaPhieu + 1).ToString();
             }
@@ -270,7 +328,7 @@ namespace CanKT.Models
         {
             string prevMaPhieu = "0";
 
-            // Truy vấn mã phiếu cũ nhất từ cơ sở dữ liệu
+            //Truy vấn mã phiếu cũ nhất từ cơ sở dữ liệu
             var oldestPhieu = PhieuThus.OrderBy(p => p.maDon).FirstOrDefault();
 
             if (oldestPhieu != null)
