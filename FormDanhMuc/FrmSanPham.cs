@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -13,6 +14,7 @@ namespace CanKT
     public partial class FrmSanPham : Form
     {
         CanDBContext db = new CanDBContext();
+        CultureInfo cultureInfo = new CultureInfo("vi-VN");
         public FrmSanPham()
         {
             InitializeComponent();
@@ -71,7 +73,7 @@ namespace CanKT
                 if (gia != null)
                 {
                     decimal giasp = Convert.ToDecimal(gia.donGia);
-                    row.Cells["Column5"].Value = giasp.ToString("N0");
+                    row.Cells["Column5"].Value = giasp.ToString("N0", cultureInfo);
                 }
 
                 row.Cells["Column6"].Value = item.maNgoaiTe;
@@ -81,6 +83,19 @@ namespace CanKT
                     string trangthai = "Không còn sử dụng";
                     row.Cells["Column7"].Value = trangthai.ToString();
                 }
+            }
+        }
+
+        private void dgvSanPham_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // Kiểm tra xem người dùng đã click vào dòng nào chưa
+            if (e.RowIndex >= 0 && e.RowIndex < dgvSanPham.Rows.Count)
+            {
+                // Bỏ chọn tất cả các hàng trước đó
+                dgvSanPham.ClearSelection();
+
+                // Chọn hàng được click
+                dgvSanPham.Rows[e.RowIndex].Selected = true;
             }
         }
     }

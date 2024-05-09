@@ -56,6 +56,7 @@
             this.dgvMayXay.Name = "dgvMayXay";
             this.dgvMayXay.Size = new System.Drawing.Size(1232, 550);
             this.dgvMayXay.TabIndex = 4;
+            this.dgvMayXay.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvMayXay_CellClick);
             // 
             // Column1
             // 

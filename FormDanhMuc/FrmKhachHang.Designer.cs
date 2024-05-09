@@ -66,6 +66,7 @@
             this.dgvKH.Name = "dgvKH";
             this.dgvKH.Size = new System.Drawing.Size(1232, 550);
             this.dgvKH.TabIndex = 2;
+            this.dgvKH.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvKH_CellClick);
             // 
             // Column1
             // 

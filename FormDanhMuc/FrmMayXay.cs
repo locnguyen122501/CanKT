@@ -49,5 +49,18 @@ namespace CanKT
                 }
             }
         }
+
+        private void dgvMayXay_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // Kiểm tra xem người dùng đã click vào dòng nào chưa
+            if (e.RowIndex >= 0 && e.RowIndex < dgvMayXay.Rows.Count)
+            {
+                // Bỏ chọn tất cả các hàng trước đó
+                dgvMayXay.ClearSelection();
+
+                // Chọn hàng được click
+                dgvMayXay.Rows[e.RowIndex].Selected = true;
+            }
+        }
     }
 }
