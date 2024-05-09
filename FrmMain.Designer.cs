@@ -115,6 +115,7 @@
             this.sốDưKháchHàngToolStripMenuItem.Name = "sốDưKháchHàngToolStripMenuItem";
             this.sốDưKháchHàngToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.sốDưKháchHàngToolStripMenuItem.Text = "Số dư khách hàng";
+            this.sốDưKháchHàngToolStripMenuItem.Click += new System.EventHandler(this.sốDưKháchHàngToolStripMenuItem_Click);
             // 
             // danhMụcToolStripMenuItem
             // 

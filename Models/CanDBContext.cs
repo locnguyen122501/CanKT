@@ -15,6 +15,7 @@ namespace CanKT.Models
         public virtual DbSet<DonVi> DonVis { get; set; }
         public virtual DbSet<DonViTinh> DonViTinhs { get; set; }
         public virtual DbSet<Gia> Gias { get; set; }
+        public virtual DbSet<HanMucCongNo> HanMucCongNoes { get; set; }
         public virtual DbSet<KhachHang> KhachHangs { get; set; }
         public virtual DbSet<Kho> Khoes { get; set; }
         public virtual DbSet<MaTienTe> MaTienTes { get; set; }
@@ -64,6 +65,34 @@ namespace CanKT.Models
                 .Property(e => e.donGia)
                 .HasPrecision(19, 4);
 
+            modelBuilder.Entity<HanMucCongNo>()
+                .Property(e => e.maCongNo)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<HanMucCongNo>()
+                .Property(e => e.maKH)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<HanMucCongNo>()
+                .Property(e => e.soTienNop)
+                .HasPrecision(19, 4);
+
+            modelBuilder.Entity<HanMucCongNo>()
+                .Property(e => e.soLuongTanXuat)
+                .HasPrecision(18, 3);
+
+            modelBuilder.Entity<HanMucCongNo>()
+                .Property(e => e.soLuongM3Xuat)
+                .HasPrecision(18, 3);
+
+            modelBuilder.Entity<HanMucCongNo>()
+                .Property(e => e.thanhTien)
+                .HasPrecision(19, 4);
+
+            modelBuilder.Entity<HanMucCongNo>()
+                .Property(e => e.tienConLai)
+                .HasPrecision(19, 4);
+
             modelBuilder.Entity<KhachHang>()
                 .Property(e => e.maKH)
                 .IsUnicode(false);
@@ -79,6 +108,11 @@ namespace CanKT.Models
             modelBuilder.Entity<KhachHang>()
                 .Property(e => e.email)
                 .IsUnicode(false);
+
+            modelBuilder.Entity<KhachHang>()
+                .HasMany(e => e.HanMucCongNoes)
+                .WithRequired(e => e.KhachHang)
+                .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Kho>()
                 .Property(e => e.maDonVi)
@@ -250,6 +284,14 @@ namespace CanKT.Models
             modelBuilder.Entity<Xe>()
                 .Property(e => e.maKH)
                 .IsUnicode(false);
+
+            modelBuilder.Entity<Xe>()
+                .Property(e => e.trongLuongBanThan)
+                .HasPrecision(18, 3);
+
+            modelBuilder.Entity<Xe>()
+                .Property(e => e.trongLuongChoPhep)
+                .HasPrecision(18, 3);
 
             modelBuilder.Entity<XeXuc>()
                 .Property(e => e.maDonVi)
