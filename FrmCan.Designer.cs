@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dgvCan = new System.Windows.Forms.DataGridView();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -43,6 +43,7 @@
             this.Column9 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column10 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.lblDate = new System.Windows.Forms.Label();
             this.txbGhiChu = new System.Windows.Forms.TextBox();
             this.lblWelcome = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -86,6 +87,7 @@
             this.lblSoXe = new System.Windows.Forms.Label();
             this.btnXeVao = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.btnTimXe = new System.Windows.Forms.Button();
             this.btnXong = new System.Windows.Forms.Button();
             this.btnIn = new System.Windows.Forms.Button();
             this.btnThuTu = new System.Windows.Forms.Button();
@@ -97,8 +99,6 @@
             this.btnXeRa = new System.Windows.Forms.Button();
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.lblDate = new System.Windows.Forms.Label();
-            this.btnTimXe = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCan)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -159,8 +159,8 @@
             // Column4
             // 
             this.Column4.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle3.NullValue = null;
-            this.Column4.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle5.NullValue = null;
+            this.Column4.DefaultCellStyle = dataGridViewCellStyle5;
             this.Column4.HeaderText = "SL vào";
             this.Column4.Name = "Column4";
             this.Column4.ReadOnly = true;
@@ -169,8 +169,8 @@
             // Column5
             // 
             this.Column5.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle4.NullValue = null;
-            this.Column5.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle6.NullValue = null;
+            this.Column5.DefaultCellStyle = dataGridViewCellStyle6;
             this.Column5.HeaderText = "SL ra";
             this.Column5.Name = "Column5";
             this.Column5.ReadOnly = true;
@@ -265,6 +265,17 @@
             this.groupBox1.Size = new System.Drawing.Size(907, 339);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
+            // 
+            // lblDate
+            // 
+            this.lblDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDate.Location = new System.Drawing.Point(576, 25);
+            this.lblDate.Name = "lblDate";
+            this.lblDate.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.lblDate.Size = new System.Drawing.Size(123, 25);
+            this.lblDate.TabIndex = 45;
+            this.lblDate.Text = "label3";
+            this.lblDate.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // txbGhiChu
             // 
@@ -741,6 +752,16 @@
             this.groupBox2.TabIndex = 3;
             this.groupBox2.TabStop = false;
             // 
+            // btnTimXe
+            // 
+            this.btnTimXe.Location = new System.Drawing.Point(416, 12);
+            this.btnTimXe.Name = "btnTimXe";
+            this.btnTimXe.Size = new System.Drawing.Size(76, 23);
+            this.btnTimXe.TabIndex = 14;
+            this.btnTimXe.Text = "Xe";
+            this.btnTimXe.UseVisualStyleBackColor = true;
+            this.btnTimXe.Click += new System.EventHandler(this.btnTimXe_Click);
+            // 
             // btnXong
             // 
             this.btnXong.Location = new System.Drawing.Point(826, 12);
@@ -753,6 +774,7 @@
             // 
             // btnIn
             // 
+            this.btnIn.Enabled = false;
             this.btnIn.Location = new System.Drawing.Point(744, 12);
             this.btnIn.Name = "btnIn";
             this.btnIn.Size = new System.Drawing.Size(76, 23);
@@ -773,6 +795,7 @@
             // 
             // btnSua
             // 
+            this.btnSua.Enabled = false;
             this.btnSua.Location = new System.Drawing.Point(498, 12);
             this.btnSua.Name = "btnSua";
             this.btnSua.Size = new System.Drawing.Size(76, 23);
@@ -783,6 +806,7 @@
             // 
             // btnHuy
             // 
+            this.btnHuy.Enabled = false;
             this.btnHuy.Location = new System.Drawing.Point(580, 12);
             this.btnHuy.Name = "btnHuy";
             this.btnHuy.Size = new System.Drawing.Size(76, 23);
@@ -803,6 +827,7 @@
             // 
             // btnPhieuSau
             // 
+            this.btnPhieuSau.Enabled = false;
             this.btnPhieuSau.Location = new System.Drawing.Point(252, 12);
             this.btnPhieuSau.Name = "btnPhieuSau";
             this.btnPhieuSau.Size = new System.Drawing.Size(76, 23);
@@ -813,6 +838,7 @@
             // 
             // btnPhieuTruoc
             // 
+            this.btnPhieuTruoc.Enabled = false;
             this.btnPhieuTruoc.Location = new System.Drawing.Point(170, 12);
             this.btnPhieuTruoc.Name = "btnPhieuTruoc";
             this.btnPhieuTruoc.Size = new System.Drawing.Size(76, 23);
@@ -835,27 +861,6 @@
             // 
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
-            // 
-            // lblDate
-            // 
-            this.lblDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDate.Location = new System.Drawing.Point(576, 25);
-            this.lblDate.Name = "lblDate";
-            this.lblDate.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.lblDate.Size = new System.Drawing.Size(123, 25);
-            this.lblDate.TabIndex = 45;
-            this.lblDate.Text = "label3";
-            this.lblDate.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // btnTimXe
-            // 
-            this.btnTimXe.Location = new System.Drawing.Point(416, 12);
-            this.btnTimXe.Name = "btnTimXe";
-            this.btnTimXe.Size = new System.Drawing.Size(76, 23);
-            this.btnTimXe.TabIndex = 14;
-            this.btnTimXe.Text = "Xe";
-            this.btnTimXe.UseVisualStyleBackColor = true;
-            this.btnTimXe.Click += new System.EventHandler(this.btnTimXe_Click);
             // 
             // pictureBox1
             // 

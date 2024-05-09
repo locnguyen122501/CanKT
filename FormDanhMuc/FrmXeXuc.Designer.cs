@@ -58,6 +58,7 @@
             this.dgvXeXuc.Name = "dgvXeXuc";
             this.dgvXeXuc.Size = new System.Drawing.Size(1232, 550);
             this.dgvXeXuc.TabIndex = 4;
+            this.dgvXeXuc.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvXeXuc_CellClick);
             // 
             // Column1
             // 

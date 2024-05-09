@@ -49,7 +49,6 @@ namespace CanKT
             if (quyenuser == "Admin")
             {
                 lblWelcome.Text = "Admin " + tentaikhoan;
-                btnHuy.Enabled = true;
             }
             else
             {
@@ -69,15 +68,6 @@ namespace CanKT
             //vi khong co txb nen gan vao gia tri prevMP tao ben tren
             int prevMaPhieu = int.Parse(db.GetOldestMaPhieu());
             prevMP = prevMaPhieu;           
-
-            if (quyenuser == "Admin")
-            {
-                btnHuy.Enabled = true;
-            }
-            else
-            {
-                btnHuy.Enabled = false;
-            }
 
             if (dgvCan.Rows.Count > 0)
             {
@@ -106,7 +96,6 @@ namespace CanKT
                 decimal tlxevao = Convert.ToDecimal(item.trongLuongXeVao);
                 row.Cells["Column4"].Value = tlxevao.ToString(cultureInfo);
 
-
                 decimal tlxera = Convert.ToDecimal(item.trongLuongXeRa);
                 row.Cells["Column5"].Value = tlxera.ToString(cultureInfo);
 
@@ -118,7 +107,6 @@ namespace CanKT
 
                 decimal tan = Convert.ToDecimal(item.soLuongTan);
                 row.Cells["Column8"].Value = tan.ToString(cultureInfo);
-
 
                 decimal m3 = Convert.ToDecimal(item.soLuongM3);
                 row.Cells["Column9"].Value = m3.ToString(cultureInfo);
@@ -149,14 +137,39 @@ namespace CanKT
                 txbSoLuongTan.Text = selectedRow.Cells["Column8"].Value.ToString();
                 txbSoLuongM3.Text = selectedRow.Cells["Column9"].Value.ToString();
                 txbTienHang.Text = string.Format("{0:N0}", (selectedRow.Cells["Column10"].Value));
+
+                int trangthai = kiemTraTrangThaiPhieu();
+
+                if (trangthai == 1)
+                {
+                    btnSua.Enabled = true;
+                    btnIn.Enabled = true;
+
+                    if (quyenuser == "Admin")
+                    {
+                        btnHuy.Enabled = true;
+                    }
+                }
+                else
+                {
+                    btnSua.Enabled = false;
+                    btnHuy.Enabled = false;
+                    btnIn.Enabled = false;                   
+                }
             }
         }
 
         private void dgvCan_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             // Kiểm tra xem người dùng đã click vào dòng nào chưa
-            if (e.RowIndex >= 0)
+            if (e.RowIndex >= 0 && e.RowIndex < dgvCan.Rows.Count)
             {
+                // Bỏ chọn tất cả các hàng trước đó
+                dgvCan.ClearSelection();
+
+                // Chọn hàng được click
+                dgvCan.Rows[e.RowIndex].Selected = true;
+
                 // Lấy dòng được click
                 DataGridViewRow selectedRow = dgvCan.Rows[e.RowIndex];
 
@@ -172,6 +185,25 @@ namespace CanKT
                 txbSoLuongM3.Text = selectedRow.Cells["Column9"].Value.ToString();
                 txbTienHang.Text = string.Format("{0:N0}", (selectedRow.Cells["Column10"].Value));
 
+                int trangthai = kiemTraTrangThaiPhieu();
+
+                if (trangthai == 1)
+                {
+                    btnSua.Enabled = true;
+                    btnIn.Enabled = true;
+
+                    if (quyenuser == "Admin")
+                    {
+                        btnHuy.Enabled = true;
+                    }
+                }
+                else
+                {
+                    btnSua.Enabled = false;
+                    btnHuy.Enabled = false;
+                    btnIn.Enabled = false;                   
+                }
+
                 string lenhxuat = txbLenhXuat.Text;                
 
                 if (e.RowIndex >= 0)
@@ -183,6 +215,22 @@ namespace CanKT
             }
         }
         
+        private int kiemTraTrangThaiPhieu()
+        {
+            int trangthai = 0;
+
+            string maphieu = txbMaPhieu.Text;
+
+            var phieuthu = db.PhieuThus.FirstOrDefault(p => p.maDon == maphieu);
+
+            if (phieuthu != null)
+            {
+                trangthai = (int) phieuthu.trangThai;
+            }
+
+            return trangthai;
+        }
+
         private string GetLenhXuatFromPhieuThu(string maDon)
         {
             // Thực hiện truy vấn tới cơ sở dữ liệu của bạn để lấy lệnh xuất từ mã phiếu thu
@@ -1129,8 +1177,6 @@ namespace CanKT
                             phieuthu.trongLuongXeRa = trongluongxera;
                             phieuthu.lenhXuat = lenhxuat;
 
-                            
-
                             #region Tạo mã nhập xuất
                             // Tạo đối tượng mới từ dữ liệu đã nhận được
                             NhapXuat xuat = new NhapXuat
@@ -1434,6 +1480,25 @@ namespace CanKT
                     txbMaKho.Text = phieuThu.maKho;
                     txbMaMayXay.Text = phieuThu.maMayXay;
                     txbMaXeXuc.Text = phieuThu.maMayXuc;
+
+                    int trangthai = kiemTraTrangThaiPhieu();
+
+                    if (trangthai == 1)
+                    {
+                        btnSua.Enabled = true;
+                        btnIn.Enabled = true;
+
+                        if (quyenuser == "Admin")
+                        {
+                            btnHuy.Enabled = true;
+                        }
+                    }
+                    else
+                    {
+                        btnSua.Enabled = false;
+                        btnHuy.Enabled = false;
+                        btnIn.Enabled = false;
+                    }
                 }
             }
         }
@@ -1479,6 +1544,25 @@ namespace CanKT
                     txbMaKho.Text = phieuThu.maKho;
                     txbMaMayXay.Text = phieuThu.maMayXay;
                     txbMaXeXuc.Text = phieuThu.maMayXuc;
+
+                    int trangthai = kiemTraTrangThaiPhieu();
+
+                    if (trangthai == 1)
+                    {
+                        btnSua.Enabled = true;
+                        btnIn.Enabled = true;
+
+                        if (quyenuser == "Admin")
+                        {
+                            btnHuy.Enabled = true;
+                        }
+                    }
+                    else
+                    {
+                        btnSua.Enabled = false;
+                        btnHuy.Enabled = false;
+                        btnIn.Enabled = false;
+                    }
                 }
             }
         }
@@ -2209,6 +2293,5 @@ namespace CanKT
             // Nếu không có mã phiếu chính thức nào trong cơ sở dữ liệu, bạn có thể bắt đầu từ "1"
             return "1";
         }
-
     }
 }

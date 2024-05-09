@@ -62,6 +62,7 @@
             this.dgvSanPham.Name = "dgvSanPham";
             this.dgvSanPham.Size = new System.Drawing.Size(1232, 550);
             this.dgvSanPham.TabIndex = 2;
+            this.dgvSanPham.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSanPham_CellClick);
             // 
             // Column1
             // 

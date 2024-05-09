@@ -21,6 +21,7 @@ namespace CanKT.FormBaoCao
             InitializeComponent();
         }
 
+        //load data dua theo ma KH va ngay duoc chon tu dtp
         private void txbMaKH_TextChanged(object sender, EventArgs e)
         {
             string maKH = txbMaKH.Text;
@@ -48,6 +49,56 @@ namespace CanKT.FormBaoCao
                         txbTienNop.Text = tiennop.ToString("N0",cultureInfo);
 
                         decimal sltan = (decimal) hmcn.soLuongTanXuat;
+                        txbSLTan.Text = sltan.ToString(cultureInfo);
+
+                        decimal slm3 = (decimal)hmcn.soLuongM3Xuat;
+                        txbSLM3.Text = slm3.ToString(cultureInfo);
+
+                        decimal thanhtien = (decimal)hmcn.thanhTien;
+                        txbThanhTien.Text = thanhtien.ToString("N0", cultureInfo);
+
+                        decimal tienconlai = (decimal)hmcn.tienConLai;
+                        txbTienConLai.Text = tienconlai.ToString("N0", cultureInfo);
+                    }
+                }
+                else
+                {
+                    txbTienNop.Text = "0";
+                    txbSLTan.Text = "0";
+                    txbSLM3.Text = "0";
+                    txbThanhTien.Text = "0";
+                    txbTienConLai.Text = "0";
+                }
+            }
+        }
+
+        private void dtpNgay_ValueChanged(object sender, EventArgs e)
+        {
+            string maKH = txbMaKH.Text;
+            string tenKH = GetTenKHFromMaKH(maKH);
+
+            txbTenKH.Text = tenKH.ToString();
+
+            using (var db = new CanDBContext())
+            {
+                var hmcn = db.HanMucCongNoes.FirstOrDefault(h => h.maCongNo == maKH);
+
+                if (hmcn != null)
+                {
+                    if (hmcn.ngay != dtpNgay.Value.Date)
+                    {
+                        txbTienNop.Text = "0";
+                        txbSLTan.Text = "0";
+                        txbSLM3.Text = "0";
+                        txbThanhTien.Text = "0";
+                        txbTienConLai.Text = "0";
+                    }
+                    else
+                    {
+                        decimal tiennop = (decimal)hmcn.soTienNop;
+                        txbTienNop.Text = tiennop.ToString("N0", cultureInfo);
+
+                        decimal sltan = (decimal)hmcn.soLuongTanXuat;
                         txbSLTan.Text = sltan.ToString(cultureInfo);
 
                         decimal slm3 = (decimal)hmcn.soLuongM3Xuat;
