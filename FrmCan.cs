@@ -2283,6 +2283,5 @@ namespace CanKT
             // Nếu không có mã phiếu chính thức nào trong cơ sở dữ liệu, bạn có thể bắt đầu từ "1"
             return "1";
         }
-
     }
 }
