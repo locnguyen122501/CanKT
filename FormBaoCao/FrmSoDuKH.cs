@@ -230,7 +230,5 @@ namespace CanKT.FormBaoCao
         {
             this.Close();
         }
-
-        
     }
 }

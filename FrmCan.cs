@@ -76,7 +76,7 @@ namespace CanKT
             }
         }
 
-        public void LoadDataIntoDataGridView()
+        private void LoadDataIntoDataGridView()
         {
             dgvCan.Rows.Clear();
 
