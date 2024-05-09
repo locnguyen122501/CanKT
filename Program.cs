@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CanKT.FormChucNang;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -16,7 +17,7 @@ namespace CanKT
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FrmMain("Loc","Admin"));
-            //Application.Run(new FrmDangKyXe("60LD7489"));
+            //Application.Run(new FrmKhoaSo());
         }
     }
 }

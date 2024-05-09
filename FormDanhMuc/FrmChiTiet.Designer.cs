@@ -72,6 +72,7 @@
             this.dgvCan.Name = "dgvCan";
             this.dgvCan.Size = new System.Drawing.Size(1232, 550);
             this.dgvCan.TabIndex = 1;
+            this.dgvCan.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvCan_CellClick);
             // 
             // Column1
             // 

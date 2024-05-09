@@ -89,6 +89,12 @@
     <Compile Include="FormChucNang\FrmDoiMatKhau.Designer.cs">
       <DependentUpon>FrmDoiMatKhau.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormChucNang\FrmKhoaSo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormChucNang\FrmKhoaSo.Designer.cs">
+      <DependentUpon>FrmKhoaSo.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormChucNang\FrmTimXe.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -208,6 +214,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormChucNang\FrmDoiMatKhau.resx">
       <DependentUpon>FrmDoiMatKhau.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormChucNang\FrmKhoaSo.resx">
+      <DependentUpon>FrmKhoaSo.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormChucNang\FrmTimXe.resx">
       <DependentUpon>FrmTimXe.cs</DependentUpon>

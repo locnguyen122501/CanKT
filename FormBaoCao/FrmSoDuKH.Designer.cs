@@ -84,6 +84,7 @@
             this.dtpNgay.Name = "dtpNgay";
             this.dtpNgay.Size = new System.Drawing.Size(176, 20);
             this.dtpNgay.TabIndex = 5;
+            this.dtpNgay.ValueChanged += new System.EventHandler(this.dtpNgay_ValueChanged);
             // 
             // txbTienNop
             // 
