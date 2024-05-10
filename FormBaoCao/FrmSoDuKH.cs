@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Entity;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
@@ -19,6 +20,32 @@ namespace CanKT.FormBaoCao
         public FrmSoDuKH()
         {
             InitializeComponent();
+
+            updateNgayCN();
+        }
+
+        private void updateNgayCN()
+        {
+            DateTime ngayhomqua = DateTime.Now.AddDays(-1);
+
+            // Truy vấn tất cả các phiếu cn trong cơ sở dữ liệu có ngày la ngay hom qua
+            using (var db = new CanDBContext())
+            {
+                var congnos = db.HanMucCongNoes.Where(p => DbFunctions.TruncateTime(p.ngay) == ngayhomqua.Date);
+
+                //Reset va update lai ngay cn vao ngay moi
+                foreach (var cn in congnos)
+                {
+                    cn.ngay = DateTime.Now;
+                    cn.soTienNop = 0;
+                    cn.soLuongTanXuat = 0;
+                    cn.soLuongM3Xuat = 0;
+                    cn.thanhTien = 0;
+                }
+
+                // Lưu các thay đổi vào cơ sở dữ liệu
+                db.SaveChanges();
+            }
         }
 
         //load data dua theo ma KH va ngay duoc chon tu dtp

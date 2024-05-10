@@ -17,7 +17,6 @@ namespace CanKT
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FrmMain("Loc","Admin"));
-            //Application.Run(new FrmKhoaSo());
         }
     }
 }
