@@ -144,7 +144,7 @@
             // 
             this.lblKhongInTien.AutoSize = true;
             this.lblKhongInTien.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblKhongInTien.Location = new System.Drawing.Point(128, 187);
+            this.lblKhongInTien.Location = new System.Drawing.Point(124, 189);
             this.lblKhongInTien.Name = "lblKhongInTien";
             this.lblKhongInTien.Size = new System.Drawing.Size(101, 20);
             this.lblKhongInTien.TabIndex = 17;
@@ -152,12 +152,21 @@
             // 
             // cbbDK3
             // 
+            this.cbbDK3.Enabled = false;
             this.cbbDK3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbbDK3.FormattingEnabled = true;
+            this.cbbDK3.Items.AddRange(new object[] {
+            "Khách hàng",
+            "Số xe",
+            "Sản phẩm",
+            "Kho",
+            "Máy xay",
+            "Xe xúc"});
             this.cbbDK3.Location = new System.Drawing.Point(128, 156);
             this.cbbDK3.Name = "cbbDK3";
             this.cbbDK3.Size = new System.Drawing.Size(195, 28);
             this.cbbDK3.TabIndex = 16;
+            this.cbbDK3.SelectedIndexChanged += new System.EventHandler(this.cbbDK3_SelectedIndexChanged);
             // 
             // cbxDK3
             // 
@@ -167,15 +176,25 @@
             this.cbxDK3.Size = new System.Drawing.Size(15, 14);
             this.cbxDK3.TabIndex = 15;
             this.cbxDK3.UseVisualStyleBackColor = true;
+            this.cbxDK3.CheckedChanged += new System.EventHandler(this.cbxDK3_CheckedChanged);
             // 
             // cbbDK2
             // 
+            this.cbbDK2.Enabled = false;
             this.cbbDK2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbbDK2.FormattingEnabled = true;
+            this.cbbDK2.Items.AddRange(new object[] {
+            "Khách hàng",
+            "Số xe",
+            "Sản phẩm",
+            "Kho",
+            "Máy xay",
+            "Xe xúc"});
             this.cbbDK2.Location = new System.Drawing.Point(107, 122);
             this.cbbDK2.Name = "cbbDK2";
             this.cbbDK2.Size = new System.Drawing.Size(195, 28);
             this.cbbDK2.TabIndex = 14;
+            this.cbbDK2.SelectedIndexChanged += new System.EventHandler(this.cbbDK2_SelectedIndexChanged);
             // 
             // cbxDK2
             // 
@@ -185,15 +204,24 @@
             this.cbxDK2.Size = new System.Drawing.Size(15, 14);
             this.cbxDK2.TabIndex = 13;
             this.cbxDK2.UseVisualStyleBackColor = true;
+            this.cbxDK2.CheckedChanged += new System.EventHandler(this.cbxDK2_CheckedChanged);
             // 
             // cbbDK1
             // 
             this.cbbDK1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbbDK1.FormattingEnabled = true;
+            this.cbbDK1.Items.AddRange(new object[] {
+            "Khách hàng",
+            "Số xe",
+            "Sản phẩm",
+            "Kho",
+            "Máy xay",
+            "Xe xúc"});
             this.cbbDK1.Location = new System.Drawing.Point(86, 88);
             this.cbbDK1.Name = "cbbDK1";
             this.cbbDK1.Size = new System.Drawing.Size(195, 28);
             this.cbbDK1.TabIndex = 12;
+            this.cbbDK1.SelectedIndexChanged += new System.EventHandler(this.cbbDK1_SelectedIndexChanged);
             // 
             // lblLocTheo
             // 
@@ -233,6 +261,8 @@
             this.txbMaKH.Name = "txbMaKH";
             this.txbMaKH.Size = new System.Drawing.Size(84, 31);
             this.txbMaKH.TabIndex = 8;
+            this.txbMaKH.TextChanged += new System.EventHandler(this.txbMaKH_TextChanged);
+            this.txbMaKH.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txbMaKH_KeyPress);
             // 
             // lblMaKH
             // 
