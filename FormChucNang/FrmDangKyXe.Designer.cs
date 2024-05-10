@@ -115,10 +115,11 @@
             // 
             this.dtpKetDangKiem.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dtpKetDangKiem.CustomFormat = "dd/MM/yyyy";
+            this.dtpKetDangKiem.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dtpKetDangKiem.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpKetDangKiem.Location = new System.Drawing.Point(187, 142);
+            this.dtpKetDangKiem.Location = new System.Drawing.Point(187, 132);
             this.dtpKetDangKiem.Name = "dtpKetDangKiem";
-            this.dtpKetDangKiem.Size = new System.Drawing.Size(98, 20);
+            this.dtpKetDangKiem.Size = new System.Drawing.Size(170, 31);
             this.dtpKetDangKiem.TabIndex = 8;
             this.dtpKetDangKiem.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dtpKetDangKiem_KeyDown);
             // 
