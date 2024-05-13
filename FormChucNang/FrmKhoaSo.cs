@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace CanKT.FormChucNang
 {
@@ -15,12 +16,15 @@ namespace CanKT.FormChucNang
     {
         CanDBContext db = new CanDBContext();
 
+        string tentaikhoan = "";
+
         string quyentk = "";
 
-        public FrmKhoaSo(string quyen)
+        public FrmKhoaSo(string tentk, string quyen)
         {
             InitializeComponent();
 
+            tentaikhoan = tentk;
             quyentk = quyen;
         }       
 
@@ -38,10 +42,39 @@ namespace CanKT.FormChucNang
                 foreach (var phieu in phieuthus)
                 {
                     phieu.trangThai = 3;
+
+                    #region Update Changelog
+                    string chuoi = phieu.ghiChu;
+
+                    if (chuoi != null)
+                    {
+                        string[] logs = chuoi.Split(new string[] { "\n" }, StringSplitOptions.None);
+
+                        // Kiểm tra và lấy giá trị
+                        string log1 = logs.Length > 0 ? logs[0] : "";
+                        string log2 = logs.Length > 1 ? logs[1] : "";
+                        string log3 = logs.Length > 2 ? logs[2] : "";
+                        string log4 = logs.Length > 3 ? logs[3] : "";
+                        string log5 = logs.Length > 4 ? logs[4] : "";
+
+                        log5 = log4;
+                        log4 = log3;
+                        log3 = log2;
+                        log2 = log1;
+                        log1 = (DateTime.Now + " - Da khoa so " + tentaikhoan + "\n");
+                        phieu.ghiChu = log1 + log2 + "\n" + log3 + "\n" + log4 + "\n" + log5;
+                    }
+                    else
+                    {
+                        phieu.ghiChu = (DateTime.Now + " - Da khoa so " + " | " + tentaikhoan + "\n");
+                    }
+                    #endregion
                 }
 
                 // Lưu các thay đổi vào cơ sở dữ liệu
                 db.SaveChanges();
+
+                
 
                 MessageBox.Show("Đã khóa sổ thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -63,6 +96,33 @@ namespace CanKT.FormChucNang
                     foreach (var phieu in phieuthus)
                     {
                         phieu.trangThai = 1;
+
+                        #region Update Changelog
+                        string chuoi = phieu.ghiChu;
+
+                        if (chuoi != null)
+                        {
+                            string[] logs = chuoi.Split(new string[] { "\n" }, StringSplitOptions.None);
+
+                            // Kiểm tra và lấy giá trị
+                            string log1 = logs.Length > 0 ? logs[0] : "";
+                            string log2 = logs.Length > 1 ? logs[1] : "";
+                            string log3 = logs.Length > 2 ? logs[2] : "";
+                            string log4 = logs.Length > 3 ? logs[3] : "";
+                            string log5 = logs.Length > 4 ? logs[4] : "";
+
+                            log5 = log4;
+                            log4 = log3;
+                            log3 = log2;
+                            log2 = log1;
+                            log1 = (DateTime.Now + " - Da mo so " + " | " + tentaikhoan + "\n");
+                            phieu.ghiChu = log1 + log2 + "\n" + log3 + "\n" + log4 + "\n" + log5;
+                        }
+                        else
+                        {
+                            phieu.ghiChu = (DateTime.Now + " - Da mo so " + " | " + tentaikhoan + "\n");
+                        }
+                        #endregion
                     }
 
                     // Lưu các thay đổi vào cơ sở dữ liệu
@@ -80,6 +140,33 @@ namespace CanKT.FormChucNang
                         foreach (var phieu in phieuthus)
                         {
                             phieu.trangThai = 1;
+
+                            #region Update Changelog
+                            string chuoi = phieu.ghiChu;
+
+                            if (chuoi != null)
+                            {
+                                string[] logs = chuoi.Split(new string[] { "\n" }, StringSplitOptions.None);
+
+                                // Kiểm tra và lấy giá trị
+                                string log1 = logs.Length > 0 ? logs[0] : "";
+                                string log2 = logs.Length > 1 ? logs[1] : "";
+                                string log3 = logs.Length > 2 ? logs[2] : "";
+                                string log4 = logs.Length > 3 ? logs[3] : "";
+                                string log5 = logs.Length > 4 ? logs[4] : "";
+
+                                log5 = log4;
+                                log4 = log3;
+                                log3 = log2;
+                                log2 = log1;
+                                log1 = (DateTime.Now + " - Da mo so " + " | " + tentaikhoan + "\n");
+                                phieu.ghiChu = log1 + log2 + "\n" + log3 + "\n" + log4 + "\n" + log5;
+                            }
+                            else
+                            {
+                                phieu.ghiChu = (DateTime.Now + " - Da mo so " + " | " + tentaikhoan + "\n");
+                            }
+                            #endregion
                         }
 
                         // Lưu các thay đổi vào cơ sở dữ liệu
