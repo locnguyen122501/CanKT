@@ -22,6 +22,7 @@ using System.Threading.Tasks;
 using Microsoft.Reporting.WinForms;
 using CanKT.FormChucNang;
 using System.Data.Entity.Core.Objects;
+using System.Data.Entity.Core.Metadata.Edm;
 
 namespace CanKT
 {
@@ -35,6 +36,8 @@ namespace CanKT
 
         string quyenuser = "";
 
+        string tentk = "";
+
         string tlbanthan, tlchophep = "";
         DateTime handangkiem;
 
@@ -45,6 +48,7 @@ namespace CanKT
             this.KeyPreview = true;
 
             quyenuser = quyen;
+            tentk = tentaikhoan;
 
             if (quyenuser == "Admin")
             {
@@ -142,7 +146,7 @@ namespace CanKT
 
                 if (trangthai == 1)
                 {
-                    btnSua.Enabled = true;
+                    btnCapNhat.Enabled = true;
                     btnIn.Enabled = true;
 
                     if (quyenuser == "Admin")
@@ -152,7 +156,7 @@ namespace CanKT
                 }
                 else
                 {
-                    btnSua.Enabled = false;
+                    btnCapNhat.Enabled = false;
                     btnHuy.Enabled = false;
                     btnIn.Enabled = false;                   
                 }
@@ -189,7 +193,7 @@ namespace CanKT
 
                 if (trangthai == 1)
                 {
-                    btnSua.Enabled = true;
+                    btnCapNhat.Enabled = true;
                     btnIn.Enabled = true;
 
                     if (quyenuser == "Admin")
@@ -199,7 +203,7 @@ namespace CanKT
                 }
                 else
                 {
-                    btnSua.Enabled = false;
+                    btnCapNhat.Enabled = false;
                     btnHuy.Enabled = false;
                     btnIn.Enabled = false;                   
                 }
@@ -793,7 +797,7 @@ namespace CanKT
                 var phieu = db.PhieuThus.FirstOrDefault(u => u.maDon == maphieu);
                 if (phieu != null)
                 {
-                    btnSua.PerformClick();
+                    btnCapNhat.PerformClick();
                 }
                 else
                 {
@@ -937,7 +941,7 @@ namespace CanKT
             //kiem tra da nhan Ctrl+S chua de luu phieu
             if (e.Control && e.KeyCode == Keys.S)
             {
-                btnSua.PerformClick();
+                btnCapNhat.PerformClick();
             }
 
             //kiem tra da nhan Ctrl+D chua de xoa phieu
@@ -1079,13 +1083,151 @@ namespace CanKT
                 {
                     if (quyenuser == "Admin")
                     {
-                        flag = 1;
+                        flag = 1;                      
 
                         // Cập nhật các thuộc tính của đối tượng dữ liệu
                         if (phieuthu.trongLuongXeRa == 0)
                         {
                             phieuthu.thoiGianRa = giora;
                         }
+                        else
+                        {
+                            ////// Biến đếm số lần xuất hiện của chuỗi con
+                            //int count = 0;
+                            //int index = -1;
+                            //while ((index = chuoi.IndexOf("\n", index + 1)) != -1)
+                            //{
+                            //    count++;
+                            //}  
+                            #region Update Changelog
+                            string chuoi = phieuthu.ghiChu;
+
+                            if (chuoi != null)
+                            {
+                                string[] logs = chuoi.Split(new string[] { "\n" }, StringSplitOptions.None);
+
+                                // Kiểm tra và lấy giá trị
+                                string log1 = logs.Length > 0 ? logs[0] : "";
+                                string log2 = logs.Length > 1 ? logs[1] : "";
+                                string log3 = logs.Length > 2 ? logs[2] : "";
+                                string log4 = logs.Length > 3 ? logs[3] : "";
+                                string log5 = logs.Length > 4 ? logs[4] : "";
+
+                                switch (flag = 1)
+                                {
+                                    case int n when (phieuthu.trongLuongXeVao != trongluongxevao):
+                                        log5 = log4;
+                                        log4 = log3;
+                                        log3 = log2;
+                                        log2 = log1;
+                                        log1 = (DateTime.Now + " - Trong luong xe vao: " + phieuthu.trongLuongXeVao.ToString() + "->" + trongluongxevao
+                                            + " | " + tentk + "\n");
+                                        phieuthu.ghiChu = log1 + log2 + "\n" + log3 + "\n" + log4 + "\n" + log5;
+                                        break;
+                                    case int n when (phieuthu.trongLuongXeRa != trongluongxera):
+                                        log5 = log4;
+                                        log4 = log3;
+                                        log3 = log2;
+                                        log2 = log1;
+                                        log1 = (DateTime.Now + " - Trong luong xe ra: " + phieuthu.trongLuongXeRa + "->" + trongluongxera
+                                            + " | " + tentk + "\n");
+                                        phieuthu.ghiChu = log1 + log2 + "\n" + log3 + "\n" + log4 + "\n" + log5;
+                                        break;
+                                    case int n when (phieuthu.lenhXuat != lenhxuat):
+                                        log5 = log4;
+                                        log4 = log3;
+                                        log3 = log2;
+                                        log2 = log1;
+                                        log1 = (DateTime.Now + " - Lenh xuat: " + phieuthu.lenhXuat + "->" + lenhxuat
+                                            + " | " + tentk + "\n");
+                                        phieuthu.ghiChu = log1 + log2 + "\n" + log3 + "\n" + log4 + "\n" + log5;
+                                        break;
+                                    case int n when (phieuthu.maSP != masp):
+                                        log5 = log4;
+                                        log4 = log3;
+                                        log3 = log2;
+                                        log2 = log1;
+                                        log1 = (DateTime.Now + " - San pham: " + phieuthu.maSP + "->" + masp
+                                            + " | " + tentk + "\n");
+                                        phieuthu.ghiChu = log1 + log2 + "\n" + log3 + "\n" + log4 + "\n" + log5;
+                                        break;
+                                    case int n when (phieuthu.maKho != makho):
+                                        log5 = log4;
+                                        log4 = log3;
+                                        log3 = log2;
+                                        log2 = log1;
+                                        log1 = (DateTime.Now + " - Kho: " + phieuthu.maKho + "->" + makho
+                                            + " | " + tentk + "\n");
+                                        phieuthu.ghiChu = log1 + log2 + "\n" + log3 + "\n" + log4 + "\n" + log5;
+                                        break;
+                                    case int n when (phieuthu.maMayXay != mamayxay):
+                                        log5 = log4;
+                                        log4 = log3;
+                                        log3 = log2;
+                                        log2 = log1;
+                                        log1 = (DateTime.Now + " - Lenh xuat: " + phieuthu.maMayXay + "->" + mamayxay
+                                            + " | " + tentk + "\n");
+                                        phieuthu.ghiChu = log1 + log2 + "\n" + log3 + "\n" + log4 + "\n" + log5;
+                                        break;
+                                    case int n when (phieuthu.maMayXuc != mamayxuc):
+                                        log5 = log4;
+                                        log4 = log3;
+                                        log3 = log2;
+                                        log2 = log1;
+                                        log1 = (DateTime.Now + " - Lenh xuat: " + phieuthu.maMayXuc + "->" + mamayxuc
+                                            + " | " + tentk + "\n");
+                                        phieuthu.ghiChu = log1 + log2 + "\n" + log3 + "\n" + log4 + "\n" + log5;
+                                        break;
+
+                                    //case khong can thiet, nhung neu hien thi sai so lieu can thi admin se sua lai
+                                    //SoLuongTan
+                                    //SoLuongM3
+                                    //DonGia
+                                    //TienHang
+                                    //ThanhToan
+                                    default:
+                                        break;
+                                }
+                            }
+                            else
+                            {
+                                switch (flag = 1)
+                                {
+                                    case int n when (phieuthu.trongLuongXeVao != trongluongxevao):
+                                        phieuthu.ghiChu = (DateTime.Now + " - Trong luong xe vao: " + phieuthu.trongLuongXeVao.ToString() + "->" + trongluongxevao
+                                            + " | " + tentk + "\n");
+                                        break;
+                                    case int n when (phieuthu.trongLuongXeRa != trongluongxera):
+                                        phieuthu.ghiChu = (DateTime.Now + " - Trong luong xe ra: " + phieuthu.trongLuongXeRa + "->" + trongluongxera
+                                            + " | " + tentk + "\n");
+                                        break;
+                                    case int n when (phieuthu.lenhXuat != lenhxuat):
+                                        phieuthu.ghiChu = (DateTime.Now + " - Lenh xuat: " + phieuthu.lenhXuat + "->" + lenhxuat
+                                            + " | " + tentk + "\n");
+                                        break;
+                                    case int n when (phieuthu.maSP != masp):
+                                        phieuthu.ghiChu = (DateTime.Now + " - San pham: " + phieuthu.maSP + "->" + masp
+                                            + " | " + tentk + "\n");
+                                        break;
+                                    case int n when (phieuthu.maKho != makho):
+                                        phieuthu.ghiChu = (DateTime.Now + " - Kho: " + phieuthu.maKho + "->" + makho
+                                            + " | " + tentk + "\n");
+                                        break;
+                                    case int n when (phieuthu.maMayXay != mamayxay):
+                                        phieuthu.ghiChu = (DateTime.Now + " - Lenh xuat: " + phieuthu.maMayXay + "->" + mamayxay
+                                            + " | " + tentk + "\n");
+                                        break;
+                                    case int n when (phieuthu.maMayXuc != mamayxuc):
+                                        phieuthu.ghiChu = (DateTime.Now + " - Lenh xuat: " + phieuthu.maMayXuc + "->" + mamayxuc
+                                            + " | " + tentk + "\n");
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+                            #endregion
+                        }
+
                         phieuthu.bienSoXe = soxe;
                         phieuthu.trongLuongXeVao = trongluongxevao;
                         phieuthu.trongLuongXeRa = trongluongxera;
@@ -1148,12 +1290,12 @@ namespace CanKT
                         newPhieuThu.maMayXay = phieuthu.maMayXay;
                         newPhieuThu.maMayXuc = phieuthu.maMayXuc;
                         newPhieuThu.thoiGianVao = phieuthu.thoiGianVao;
+                        newPhieuThu.thoiGianRa = phieuthu.thoiGianRa;
                         newPhieuThu.trangThai = phieuthu.trangThai;
+                        newPhieuThu.ghiChu = phieuthu.ghiChu;
 
                         // Thêm các thuộc tính mới cho đối tượng mới
-                        newPhieuThu.maDon = backUpMaDon;
-                        
-                        newPhieuThu.thoiGianRa = giora;
+                        newPhieuThu.maDon = backUpMaDon;   
 
                         // Thêm đối tượng mới vào cơ sở dữ liệu
                         db.PhieuThus.Add(newPhieuThu);
@@ -1360,7 +1502,6 @@ namespace CanKT
                         // Nếu xóa thành công, cập nhật lại hiển thị trên DataGridView
                         MessageBox.Show("Đã hủy phiếu thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-
                         // Xóa dữ liệu trong các textbox sau khi update thành công
                         txbSoXe.Clear();
                         txbTLXeVao.Text = "0";
@@ -1400,6 +1541,34 @@ namespace CanKT
                         }
 
                         entity.trangThai = 0; //khong duoc xoa phieu, chi set trang thai = 0 (huy)
+
+                        #region Update Changelog
+                        string chuoi = entity.ghiChu;
+
+                        if (chuoi != null)
+                        {
+                            string[] logs = chuoi.Split(new string[] { "\n" }, StringSplitOptions.None);
+
+                            // Kiểm tra và lấy giá trị
+                            string log1 = logs.Length > 0 ? logs[0] : "";
+                            string log2 = logs.Length > 1 ? logs[1] : "";
+                            string log3 = logs.Length > 2 ? logs[2] : "";
+                            string log4 = logs.Length > 3 ? logs[3] : "";
+                            string log5 = logs.Length > 4 ? logs[4] : "";
+
+                            log5 = log4;
+                            log4 = log3;
+                            log3 = log2;
+                            log2 = log1;
+                            log1 = (DateTime.Now + " - Phieu da bi huy " + " | " + tentk + "\n");
+                            entity.ghiChu = log1 + log2 + "\n" + log3 + "\n" + log4 + "\n" + log5;
+                        }
+                        else
+                        {
+                            entity.ghiChu = (DateTime.Now + " - Phieu da bi huy " + tentk + "\n");
+                        }
+                        #endregion
+
                         db.SaveChanges();
 
                         #region Lay lenh xuat de huy trang thai cua lenh xuat
@@ -1485,7 +1654,7 @@ namespace CanKT
 
                     if (trangthai == 1)
                     {
-                        btnSua.Enabled = true;
+                        btnCapNhat.Enabled = true;
                         btnIn.Enabled = true;
 
                         if (quyenuser == "Admin")
@@ -1495,7 +1664,7 @@ namespace CanKT
                     }
                     else
                     {
-                        btnSua.Enabled = false;
+                        btnCapNhat.Enabled = false;
                         btnHuy.Enabled = false;
                         btnIn.Enabled = false;
                     }
@@ -1549,7 +1718,7 @@ namespace CanKT
 
                     if (trangthai == 1)
                     {
-                        btnSua.Enabled = true;
+                        btnCapNhat.Enabled = true;
                         btnIn.Enabled = true;
 
                         if (quyenuser == "Admin")
@@ -1559,7 +1728,7 @@ namespace CanKT
                     }
                     else
                     {
-                        btnSua.Enabled = false;
+                        btnCapNhat.Enabled = false;
                         btnHuy.Enabled = false;
                         btnIn.Enabled = false;
                     }
@@ -1769,7 +1938,7 @@ namespace CanKT
             txbTienHang.Enabled = false;
             txbThanhToan.Enabled = false;
 
-            btnSua.Enabled = false;
+            btnCapNhat.Enabled = false;
 
             txbSoXe.Enabled = true;
             txbTLXeVao.Enabled = true;
@@ -1797,18 +1966,18 @@ namespace CanKT
             txbMaSP.Enabled = true;
             if (quyenuser == "Admin")
             {
-                txbSoLuongTan.Enabled = true;
-                txbSoLuongM3.Enabled = true;
-                txbDonGia.Enabled = true;
-                txbTienHang.Enabled = true;
-                txbThanhToan.Enabled = true;
+                //txbSoLuongTan.Enabled = true;
+                //txbSoLuongM3.Enabled = true;
+                //txbDonGia.Enabled = true;
+                //txbTienHang.Enabled = true;
+                //txbThanhToan.Enabled = true;
             }               
             txbMaKho.Enabled = true;
             txbMaMayXay.Enabled = true;
             txbMaXeXuc.Enabled = true;
             txbSalan.Enabled = true;
 
-            btnSua.Enabled = true;
+            btnCapNhat.Enabled = true;
 
             if (txbSoXe.Text == "" || txbTLXeVao.Text == "" || txbTLXeVao.Text == "0")
             {

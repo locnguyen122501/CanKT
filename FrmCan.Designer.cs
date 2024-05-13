@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dgvCan = new System.Windows.Forms.DataGridView();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -91,7 +91,7 @@
             this.btnXong = new System.Windows.Forms.Button();
             this.btnIn = new System.Windows.Forms.Button();
             this.btnThuTu = new System.Windows.Forms.Button();
-            this.btnSua = new System.Windows.Forms.Button();
+            this.btnCapNhat = new System.Windows.Forms.Button();
             this.btnHuy = new System.Windows.Forms.Button();
             this.btnTimPhieu = new System.Windows.Forms.Button();
             this.btnPhieuSau = new System.Windows.Forms.Button();
@@ -159,8 +159,8 @@
             // Column4
             // 
             this.Column4.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle5.NullValue = null;
-            this.Column4.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle1.NullValue = null;
+            this.Column4.DefaultCellStyle = dataGridViewCellStyle1;
             this.Column4.HeaderText = "SL vào";
             this.Column4.Name = "Column4";
             this.Column4.ReadOnly = true;
@@ -169,8 +169,8 @@
             // Column5
             // 
             this.Column5.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle6.NullValue = null;
-            this.Column5.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle2.NullValue = null;
+            this.Column5.DefaultCellStyle = dataGridViewCellStyle2;
             this.Column5.HeaderText = "SL ra";
             this.Column5.Name = "Column5";
             this.Column5.ReadOnly = true;
@@ -739,7 +739,7 @@
             this.groupBox2.Controls.Add(this.btnXong);
             this.groupBox2.Controls.Add(this.btnIn);
             this.groupBox2.Controls.Add(this.btnThuTu);
-            this.groupBox2.Controls.Add(this.btnSua);
+            this.groupBox2.Controls.Add(this.btnCapNhat);
             this.groupBox2.Controls.Add(this.btnHuy);
             this.groupBox2.Controls.Add(this.btnTimPhieu);
             this.groupBox2.Controls.Add(this.btnPhieuSau);
@@ -793,16 +793,16 @@
             this.btnThuTu.UseVisualStyleBackColor = true;
             this.btnThuTu.Click += new System.EventHandler(this.btnThuTu_Click);
             // 
-            // btnSua
+            // btnCapNhat
             // 
-            this.btnSua.Enabled = false;
-            this.btnSua.Location = new System.Drawing.Point(498, 12);
-            this.btnSua.Name = "btnSua";
-            this.btnSua.Size = new System.Drawing.Size(76, 23);
-            this.btnSua.TabIndex = 10;
-            this.btnSua.Text = "Cập nhật";
-            this.btnSua.UseVisualStyleBackColor = true;
-            this.btnSua.Click += new System.EventHandler(this.btnSua_Click);
+            this.btnCapNhat.Enabled = false;
+            this.btnCapNhat.Location = new System.Drawing.Point(498, 12);
+            this.btnCapNhat.Name = "btnCapNhat";
+            this.btnCapNhat.Size = new System.Drawing.Size(76, 23);
+            this.btnCapNhat.TabIndex = 10;
+            this.btnCapNhat.Text = "Cập nhật";
+            this.btnCapNhat.UseVisualStyleBackColor = true;
+            this.btnCapNhat.Click += new System.EventHandler(this.btnSua_Click);
             // 
             // btnHuy
             // 
@@ -951,7 +951,7 @@
         private System.Windows.Forms.Button btnXeRa;
         private System.Windows.Forms.Button btnIn;
         private System.Windows.Forms.Button btnThuTu;
-        private System.Windows.Forms.Button btnSua;
+        private System.Windows.Forms.Button btnCapNhat;
         private System.Windows.Forms.Button btnHuy;
         private System.Windows.Forms.Button btnTimPhieu;
         private System.Windows.Forms.Button btnPhieuSau;

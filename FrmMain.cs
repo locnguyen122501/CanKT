@@ -1,5 +1,6 @@
 ﻿using CanKT.FormBaoCao;
 using CanKT.FormChucNang;
+using CanKT.FormDanhMuc;
 using CanKT.Models;
 using System;
 using System.Collections.Generic;
@@ -123,8 +124,13 @@ namespace CanKT
 
         private void kếtSổToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FrmKhoaSo frmKhoaSo = new FrmKhoaSo(quyen);
+            FrmKhoaSo frmKhoaSo = new FrmKhoaSo(tentk, quyen);
             frmKhoaSo.ShowDialog();
+        }
+
+        private void lịchSửThayĐổiToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenChildForm(new FrmChangelog());
         }
 
         private void đăngXuấtToolStripMenuItem_Click(object sender, EventArgs e)
@@ -154,7 +160,9 @@ namespace CanKT
         private void ExitApplication()
         {
             Application.Exit();
-        }   
+        }
+
+        
 
         private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
