@@ -105,6 +105,12 @@
     <Compile Include="FormChucNang\FrmTimXe.Designer.cs">
       <DependentUpon>FrmTimXe.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormDanhMuc\FrmChangelog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormDanhMuc\FrmChangelog.Designer.cs">
+      <DependentUpon>FrmChangelog.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormDanhMuc\FrmChiTiet.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -224,6 +230,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormChucNang\FrmTimXe.resx">
       <DependentUpon>FrmTimXe.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormDanhMuc\FrmChangelog.resx">
+      <DependentUpon>FrmChangelog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormDanhMuc\FrmChiTiet.resx">
       <DependentUpon>FrmChiTiet.cs</DependentUpon>

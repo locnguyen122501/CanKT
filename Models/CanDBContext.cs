@@ -240,6 +240,10 @@ namespace CanKT.Models
                 .Property(e => e.maMayXuc)
                 .IsUnicode(false);
 
+            modelBuilder.Entity<PhieuThu>()
+                .Property(e => e.ghiChu)
+                .IsUnicode(false);
+
             modelBuilder.Entity<SaLan>()
                 .Property(e => e.maDonVi)
                 .IsUnicode(false);
