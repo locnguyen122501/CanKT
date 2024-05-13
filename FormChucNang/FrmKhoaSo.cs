@@ -61,7 +61,7 @@ namespace CanKT.FormChucNang
                         log4 = log3;
                         log3 = log2;
                         log2 = log1;
-                        log1 = (DateTime.Now + " - Da khoa so " + tentaikhoan + "\n");
+                        log1 = (DateTime.Now + " - Da khoa so " + " | " + tentaikhoan + "\n");
                         phieu.ghiChu = log1 + log2 + "\n" + log3 + "\n" + log4 + "\n" + log5;
                     }
                     else
@@ -73,8 +73,6 @@ namespace CanKT.FormChucNang
 
                 // Lưu các thay đổi vào cơ sở dữ liệu
                 db.SaveChanges();
-
-                
 
                 MessageBox.Show("Đã khóa sổ thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
