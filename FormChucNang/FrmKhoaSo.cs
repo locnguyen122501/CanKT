@@ -74,8 +74,6 @@ namespace CanKT.FormChucNang
                 // Lưu các thay đổi vào cơ sở dữ liệu
                 db.SaveChanges();
 
-                
-
                 MessageBox.Show("Đã khóa sổ thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
