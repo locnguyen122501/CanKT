@@ -133,6 +133,11 @@ namespace CanKT
             OpenChildForm(new FrmChangelog());
         }
 
+        private void xuấtFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenChildForm(new FrmXuatFile());
+        }
+
         private void đăngXuấtToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var result = MessageBox.Show("Bạn có thực sự muốn đăng xuất không?", "Thông báo", MessageBoxButtons.YesNo);
@@ -161,8 +166,6 @@ namespace CanKT
         {
             Application.Exit();
         }
-
-        
 
         private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
