@@ -1006,6 +1006,7 @@ namespace CanKT
                 maMayXay = mamayxay,
                 maMayXuc = mamayxuc,
                 thoiGianVao = giovao,
+                trangThai = 2, //trang thai phieu tam
             };
 
             // Thêm đối tượng vào cơ sở dữ liệu bằng Entity Framework
@@ -1420,6 +1421,7 @@ namespace CanKT
 
                 if (congno != null)
                 {
+                    congno.ngay = DateTime.Now.Date;
                     congno.soLuongTanXuat = congno.soLuongTanXuat + sltan;
                     congno.soLuongM3Xuat = congno.soLuongM3Xuat + slm3;
                     congno.thanhTien = congno.thanhTien + thanhtien;
@@ -1969,6 +1971,7 @@ namespace CanKT
             txbSalan.Enabled = true;
 
             btnCapNhat.Enabled = true;
+            btnIn.Enabled = true;
 
             if (txbSoXe.Text == "" || txbTLXeVao.Text == "" || txbTLXeVao.Text == "0")
             {
