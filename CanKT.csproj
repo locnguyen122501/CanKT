@@ -305,7 +305,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="FormChucNang\rptReport.rdlc" />
+    <EmbeddedResource Include="Reports\rptDoanhSo.rdlc" />
+    <EmbeddedResource Include="Reports\rptReport.rdlc" />
     <None Include="App.config" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
