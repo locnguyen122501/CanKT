@@ -1862,6 +1862,7 @@ namespace CanKT
                         // Hiển thị thông tin tương ứng lên các textbox
                         txbMaPhieu.Text = phieu.maDon;
                         txbSoXe.Text = phieu.bienSoXe;
+                        txbMaSP.Text = phieu.maSP;
 
                         decimal tlxevao = (decimal)phieu.trongLuongXeVao;
                         txbTLXeVao.Text = tlxevao.ToString(cultureInfo);
@@ -1869,8 +1870,14 @@ namespace CanKT
                         decimal tlxera = (decimal)phieu.trongLuongXeRa;
                         txbTLXeRa.Text = tlxera.ToString(cultureInfo);
 
+                        decimal tltan = (decimal)phieu.soLuongTan;
+                        txbSoLuongTan.Text = tltan.ToString(cultureInfo);
+
+                        decimal tlm3 = (decimal)phieu.soLuongM3;
+                        //txbSoLuongM3.Text = tlm3.ToString(cultureInfo);
+
                         txbLenhXuat.Text = phieu.lenhXuat;
-                        txbMaSP.Text = phieu.maSP;
+                        
                         txbMaKho.Text = phieu.maKho;
                         txbMaMayXay.Text = phieu.maMayXay;
                         txbMaXeXuc.Text = phieu.maMayXuc;
