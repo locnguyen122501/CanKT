@@ -1,6 +1,6 @@
-﻿namespace CanKT
+﻿namespace CanKT.FormChucNang
 {
-    partial class FrmPrint
+    partial class FrmDoanhSo
     {
         /// <summary>
         /// Required designer variable.
@@ -38,20 +38,19 @@
             this.reportViewer.Name = "reportViewer";
             this.reportViewer.ServerReport.BearerToken = null;
             this.reportViewer.Size = new System.Drawing.Size(800, 450);
-            this.reportViewer.TabIndex = 0;
+            this.reportViewer.TabIndex = 1;
             // 
-            // FrmPrint
+            // FrmDoanhSo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.reportViewer);
-            this.Name = "FrmPrint";
-            this.ShowIcon = false;
+            this.Name = "FrmDoanhSo";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Print";
-            this.Load += new System.EventHandler(this.FrmPrint_Load);
+            this.Text = "FrmDoanhSo";
+            this.Load += new System.EventHandler(this.FrmDoanhSo_Load);
             this.ResumeLayout(false);
 
         }

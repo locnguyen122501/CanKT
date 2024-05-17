@@ -301,6 +301,7 @@
             this.btnTinh.TabIndex = 3;
             this.btnTinh.Text = "Tính";
             this.btnTinh.UseVisualStyleBackColor = true;
+            this.btnTinh.Click += new System.EventHandler(this.btnTinh_Click);
             // 
             // FrmPhanTichSL
             // 

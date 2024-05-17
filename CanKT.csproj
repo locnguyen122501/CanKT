@@ -97,6 +97,12 @@
     <Compile Include="FormBaoCao\FrmSoDuKH.Designer.cs">
       <DependentUpon>FrmSoDuKH.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormChucNang\FrmDoanhSo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormChucNang\FrmDoanhSo.Designer.cs">
+      <DependentUpon>FrmDoanhSo.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormChucNang\FrmDoiMatKhau.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -237,6 +243,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormBaoCao\FrmSoDuKH.resx">
       <DependentUpon>FrmSoDuKH.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormChucNang\FrmDoanhSo.resx">
+      <DependentUpon>FrmDoanhSo.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormChucNang\FrmDoiMatKhau.resx">
       <DependentUpon>FrmDoiMatKhau.cs</DependentUpon>
