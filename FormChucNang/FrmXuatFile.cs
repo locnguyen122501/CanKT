@@ -177,7 +177,5 @@ namespace CanKT.FormChucNang
             this.Close();
         }
         #endregion
-
-        
     }
 }

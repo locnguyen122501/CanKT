@@ -1033,7 +1033,6 @@ namespace CanKT
             LoadDataIntoDataGridView();
         }
 
-
         int flag = 0; //flag kiem tra cho btnIn
 
         //update db
@@ -1620,58 +1619,66 @@ namespace CanKT
             int temp = int.Parse(txbMaPhieu.Text) - 1;
 
             string maphieu = temp.ToString();
-            using (var db = new CanDBContext())
+
+            try
             {
-                var phieuThu = db.PhieuThus.FirstOrDefault(p => p.maDon == maphieu);
-
-                if (phieuThu != null)
+                using (var db = new CanDBContext())
                 {
-                    txbMaPhieu.Text = phieuThu.maDon.ToString();
-                    txbSoXe.Text = phieuThu.bienSoXe.ToString();
-                    //txbTLXeVao.Text = string.Format("{0:N0}", phieuThu.trongLuongXeVao);
-                    decimal tlxevao = (decimal) phieuThu.trongLuongXeVao;
-                    txbTLXeVao.Text = tlxevao.ToString(cultureInfo);
+                    var phieuThu = db.PhieuThus.FirstOrDefault(p => p.maDon == maphieu);
 
-                    decimal tlxera = (decimal)phieuThu.trongLuongXeRa;
-                    txbTLXeRa.Text = tlxera.ToString(cultureInfo);
-
-                    txbLenhXuat.Text = phieuThu.lenhXuat;
-                    txbMaKH.Text = phieuThu.maKH;
-                    txbMaSP.Text = phieuThu.maSP;
-
-                    decimal sltan = (decimal)phieuThu.soLuongTan;
-                    txbSoLuongTan.Text = sltan.ToString(cultureInfo);
-
-                    decimal slm3 = (decimal)phieuThu.soLuongM3;
-                    txbSoLuongM3.Text = slm3.ToString(cultureInfo);
-
-                    txbDonGia.Text = string.Format(cultureInfo,"{0:N0}", phieuThu.donGia);
-                    txbTienHang.Text = string.Format(cultureInfo, "{0:N0}", phieuThu.thanhTien);
-                    txbThanhToan.Text = string.Format(cultureInfo, "{0:N0}", phieuThu.tienThanhToan);
-                    txbMaKho.Text = phieuThu.maKho;
-                    txbMaMayXay.Text = phieuThu.maMayXay;
-                    txbMaXeXuc.Text = phieuThu.maMayXuc;
-
-                    int trangthai = kiemTraTrangThaiPhieu();
-
-                    if (trangthai == 1)
+                    if (phieuThu != null)
                     {
-                        btnCapNhat.Enabled = true;
-                        btnIn.Enabled = true;
+                        txbMaPhieu.Text = phieuThu.maDon.ToString();
+                        txbSoXe.Text = phieuThu.bienSoXe.ToString();
+                        //txbTLXeVao.Text = string.Format("{0:N0}", phieuThu.trongLuongXeVao);
+                        decimal tlxevao = (decimal)phieuThu.trongLuongXeVao;
+                        txbTLXeVao.Text = tlxevao.ToString(cultureInfo);
 
-                        if (quyenuser == "Admin")
+                        decimal tlxera = (decimal)phieuThu.trongLuongXeRa;
+                        txbTLXeRa.Text = tlxera.ToString(cultureInfo);
+
+                        txbLenhXuat.Text = phieuThu.lenhXuat;
+                        txbMaKH.Text = phieuThu.maKH;
+                        txbMaSP.Text = phieuThu.maSP;
+
+                        decimal sltan = (decimal)phieuThu.soLuongTan;
+                        txbSoLuongTan.Text = sltan.ToString(cultureInfo);
+
+                        decimal slm3 = (decimal)phieuThu.soLuongM3;
+                        txbSoLuongM3.Text = slm3.ToString(cultureInfo);
+
+                        txbDonGia.Text = string.Format(cultureInfo, "{0:N0}", phieuThu.donGia);
+                        txbTienHang.Text = string.Format(cultureInfo, "{0:N0}", phieuThu.thanhTien);
+                        txbThanhToan.Text = string.Format(cultureInfo, "{0:N0}", phieuThu.tienThanhToan);
+                        txbMaKho.Text = phieuThu.maKho;
+                        txbMaMayXay.Text = phieuThu.maMayXay;
+                        txbMaXeXuc.Text = phieuThu.maMayXuc;
+
+                        int trangthai = kiemTraTrangThaiPhieu();
+
+                        if (trangthai == 1)
                         {
-                            btnHuy.Enabled = true;
+                            btnCapNhat.Enabled = true;
+                            btnIn.Enabled = true;
+
+                            if (quyenuser == "Admin")
+                            {
+                                btnHuy.Enabled = true;
+                            }
                         }
-                    }
-                    else
-                    {
-                        btnCapNhat.Enabled = false;
-                        btnHuy.Enabled = false;
-                        btnIn.Enabled = false;
+                        else
+                        {
+                            btnCapNhat.Enabled = false;
+                            btnHuy.Enabled = false;
+                            btnIn.Enabled = false;
+                        }
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Đã có lỗi xảy ra: " + ex.ToString());
+            }    
         }
 
         private void btnPhieuSau_Click(object sender, EventArgs e)
@@ -1684,58 +1691,66 @@ namespace CanKT
             int temp = int.Parse(txbMaPhieu.Text) + 1;
 
             string maphieu = temp.ToString();
-            using (var db = new CanDBContext())
+
+            try
             {
-                var phieuThu = db.PhieuThus.FirstOrDefault(p => p.maDon == maphieu);
-
-                if (phieuThu != null)
+                using (var db = new CanDBContext())
                 {
-                    txbMaPhieu.Text = phieuThu.maDon.ToString();
-                    txbSoXe.Text = phieuThu.bienSoXe.ToString();
+                    var phieuThu = db.PhieuThus.FirstOrDefault(p => p.maDon == maphieu);
 
-                    decimal tlxevao = (decimal)phieuThu.trongLuongXeVao;
-                    txbTLXeVao.Text = tlxevao.ToString(cultureInfo);
-
-                    decimal tlxera = (decimal)phieuThu.trongLuongXeRa;
-                    txbTLXeRa.Text = tlxera.ToString(cultureInfo);
-
-                    txbLenhXuat.Text = phieuThu.lenhXuat;
-                    txbMaKH.Text = phieuThu.maKH;
-                    txbMaSP.Text = phieuThu.maSP;
-
-                    decimal sltan = (decimal)phieuThu.soLuongTan;
-                    txbSoLuongTan.Text = sltan.ToString(cultureInfo);
-
-                    decimal slm3 = (decimal)phieuThu.soLuongM3;
-                    txbSoLuongM3.Text = slm3.ToString(cultureInfo);
-
-                    txbDonGia.Text = string.Format(cultureInfo, "{0:N0}", phieuThu.donGia);
-                    txbTienHang.Text = string.Format(cultureInfo, "{0:N0}", phieuThu.thanhTien);
-                    txbThanhToan.Text = string.Format(cultureInfo, "{0:N0}", phieuThu.tienThanhToan);
-                    txbMaKho.Text = phieuThu.maKho;
-                    txbMaMayXay.Text = phieuThu.maMayXay;
-                    txbMaXeXuc.Text = phieuThu.maMayXuc;
-
-                    int trangthai = kiemTraTrangThaiPhieu();
-
-                    if (trangthai == 1)
+                    if (phieuThu != null)
                     {
-                        btnCapNhat.Enabled = true;
-                        btnIn.Enabled = true;
+                        txbMaPhieu.Text = phieuThu.maDon.ToString();
+                        txbSoXe.Text = phieuThu.bienSoXe.ToString();
 
-                        if (quyenuser == "Admin")
+                        decimal tlxevao = (decimal)phieuThu.trongLuongXeVao;
+                        txbTLXeVao.Text = tlxevao.ToString(cultureInfo);
+
+                        decimal tlxera = (decimal)phieuThu.trongLuongXeRa;
+                        txbTLXeRa.Text = tlxera.ToString(cultureInfo);
+
+                        txbLenhXuat.Text = phieuThu.lenhXuat;
+                        txbMaKH.Text = phieuThu.maKH;
+                        txbMaSP.Text = phieuThu.maSP;
+
+                        decimal sltan = (decimal)phieuThu.soLuongTan;
+                        txbSoLuongTan.Text = sltan.ToString(cultureInfo);
+
+                        decimal slm3 = (decimal)phieuThu.soLuongM3;
+                        txbSoLuongM3.Text = slm3.ToString(cultureInfo);
+
+                        txbDonGia.Text = string.Format(cultureInfo, "{0:N0}", phieuThu.donGia);
+                        txbTienHang.Text = string.Format(cultureInfo, "{0:N0}", phieuThu.thanhTien);
+                        txbThanhToan.Text = string.Format(cultureInfo, "{0:N0}", phieuThu.tienThanhToan);
+                        txbMaKho.Text = phieuThu.maKho;
+                        txbMaMayXay.Text = phieuThu.maMayXay;
+                        txbMaXeXuc.Text = phieuThu.maMayXuc;
+
+                        int trangthai = kiemTraTrangThaiPhieu();
+
+                        if (trangthai == 1)
                         {
-                            btnHuy.Enabled = true;
+                            btnCapNhat.Enabled = true;
+                            btnIn.Enabled = true;
+
+                            if (quyenuser == "Admin")
+                            {
+                                btnHuy.Enabled = true;
+                            }
                         }
-                    }
-                    else
-                    {
-                        btnCapNhat.Enabled = false;
-                        btnHuy.Enabled = false;
-                        btnIn.Enabled = false;
+                        else
+                        {
+                            btnCapNhat.Enabled = false;
+                            btnHuy.Enabled = false;
+                            btnIn.Enabled = false;
+                        }
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Đã có lỗi xảy ra: " + ex.ToString());
+            }   
         }
 
         /*dung 2 vong lap de kiem tra ma phieu 
@@ -1757,34 +1772,41 @@ namespace CanKT
             string maDon = txbMaPhieu.Text;
             int nextMaPhieu = int.Parse(db.GetNextMaPhieu()) - 1;
 
-            using (var db = new CanDBContext())
+            try
             {
-                var phieuThu = db.PhieuThus.OrderByDescending(p => p.maDon).FirstOrDefault(kh => kh.maDon == maDon);
-
-                if (phieuThu.maDon.StartsWith("H"))
+                using (var db = new CanDBContext())
                 {
+                    var phieuThu = db.PhieuThus.OrderByDescending(p => p.maDon).FirstOrDefault(kh => kh.maDon == maDon);
 
-                }
-                else
-                {
-                    if (phieuThu == null)
+                    if (phieuThu.maDon.StartsWith("H"))
                     {
-                        btnPhieuSau.Enabled = false;                        
+
                     }
                     else
                     {
-                        int temp = int.Parse(phieuThu.maDon.ToString());
-                        if (temp < nextMaPhieu)
+                        if (phieuThu == null)
                         {
-                            btnPhieuSau.Enabled = true;
+                            btnPhieuSau.Enabled = false;
                         }
                         else
                         {
-                            btnPhieuSau.Enabled = false;
+                            int temp = int.Parse(phieuThu.maDon.ToString());
+                            if (temp < nextMaPhieu)
+                            {
+                                btnPhieuSau.Enabled = true;
+                            }
+                            else
+                            {
+                                btnPhieuSau.Enabled = false;
+                            }
                         }
                     }
                 }
             }
+            catch (Exception e)
+            {
+                MessageBox.Show("Đã có lỗi xảy ra: " + e.ToString());
+            }   
         }
 
         //tuong tu => kiem tra phieu cu nhat
@@ -1797,34 +1819,40 @@ namespace CanKT
             string maDon = txbMaPhieu.Text;
             //int nextMaPhieu = int.Parse(db.GetNextMaPhieu()) - 1;
 
-            using (var db = new CanDBContext())
+            try
             {
-                var phieuThu = db.PhieuThus.OrderBy(p => p.maDon).FirstOrDefault(kh => kh.maDon == maDon);
-
-                if (phieuThu.maDon.StartsWith("H"))
+                using (var db = new CanDBContext())
                 {
+                    var phieuThu = db.PhieuThus.OrderBy(p => p.maDon).FirstOrDefault(kh => kh.maDon == maDon);
 
-                }
-                else
-                {
-                    if (phieuThu == null)
+                    if (phieuThu.maDon.StartsWith("H"))
                     {
                         btnPhieuTruoc.Enabled = false;
                     }
                     else
                     {
-                        int temp = int.Parse(phieuThu.maDon.ToString());
-                        if (temp > prevMaPhieu)
-                        {
-                            btnPhieuTruoc.Enabled = true;
-                        }
-                        else
+                        if (phieuThu == null)
                         {
                             btnPhieuTruoc.Enabled = false;
                         }
+                        else
+                        {
+                            int temp = int.Parse(phieuThu.maDon.ToString());
+                            if (temp > prevMaPhieu)
+                            {
+                                btnPhieuTruoc.Enabled = true;
+                            }
+                            else
+                            {
+                                btnPhieuTruoc.Enabled = false;
+                            }
+                        }
                     }
-
                 }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Đã có lỗi xảy ra: " + e.ToString());
             }
         }
 
@@ -1842,6 +1870,7 @@ namespace CanKT
                         // Hiển thị thông tin tương ứng lên các textbox
                         txbMaPhieu.Text = phieu.maDon;
                         txbSoXe.Text = phieu.bienSoXe;
+                        txbMaSP.Text = phieu.maSP;
 
                         decimal tlxevao = (decimal)phieu.trongLuongXeVao;
                         txbTLXeVao.Text = tlxevao.ToString(cultureInfo);
@@ -1849,8 +1878,14 @@ namespace CanKT
                         decimal tlxera = (decimal)phieu.trongLuongXeRa;
                         txbTLXeRa.Text = tlxera.ToString(cultureInfo);
 
+                        decimal tltan = (decimal)phieu.soLuongTan;
+                        txbSoLuongTan.Text = tltan.ToString(cultureInfo);
+
+                        decimal tlm3 = (decimal)phieu.soLuongM3;
+                        //txbSoLuongM3.Text = tlm3.ToString(cultureInfo);
+
                         txbLenhXuat.Text = phieu.lenhXuat;
-                        txbMaSP.Text = phieu.maSP;
+                        
                         txbMaKho.Text = phieu.maKho;
                         txbMaMayXay.Text = phieu.maMayXay;
                         txbMaXeXuc.Text = phieu.maMayXuc;
