@@ -85,6 +85,11 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CanDBDataSource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CanDBDataSource.xsd</DependentUpon>
+    </Compile>
     <Compile Include="FormBaoCao\FrmPhanTichSL.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -317,6 +322,17 @@
     <EmbeddedResource Include="Reports\rptDoanhSo.rdlc" />
     <EmbeddedResource Include="Reports\rptReport.rdlc" />
     <None Include="App.config" />
+    <None Include="CanDBDataSource.xsc">
+      <DependentUpon>CanDBDataSource.xsd</DependentUpon>
+    </None>
+    <None Include="CanDBDataSource.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>CanDBDataSource.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="CanDBDataSource.xss">
+      <DependentUpon>CanDBDataSource.xsd</DependentUpon>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
