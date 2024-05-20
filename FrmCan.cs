@@ -1040,6 +1040,7 @@ namespace CanKT
         {
             // Lấy dữ liệu từ các textbox
             string newMaDon = GenerateOfficialMaPhieu();
+
             //maIn = newMaDon;
 
             string maphieu = txbMaPhieu.Text; //de lay phieu vao
@@ -1394,7 +1395,6 @@ namespace CanKT
                     }
                 }
             }
-
             // Xóa dữ liệu trong các textbox sau khi update thành công
             //txbMaPhieu.Clear();
             txbSoXe.Clear();
@@ -1612,6 +1612,10 @@ namespace CanKT
 
         private void btnPhieuTruoc_Click(object sender, EventArgs e)
         {
+            if (txbMaPhieu.Text.StartsWith("H"))
+            {
+                return;
+            }
             int temp = int.Parse(txbMaPhieu.Text) - 1;
 
             string maphieu = temp.ToString();
@@ -1679,6 +1683,11 @@ namespace CanKT
 
         private void btnPhieuSau_Click(object sender, EventArgs e)
         {
+            if (txbMaPhieu.Text.StartsWith("H"))
+            {
+                return;
+            }
+
             int temp = int.Parse(txbMaPhieu.Text) + 1;
 
             string maphieu = temp.ToString();
@@ -1838,7 +1847,6 @@ namespace CanKT
                                 btnPhieuTruoc.Enabled = false;
                             }
                         }
-
                     }
                 }
             }
