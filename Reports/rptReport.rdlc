@@ -724,7 +724,9 @@
                 <TextRuns>
                   <TextRun>
                     <Value>=Parameters!pTLXeVao.Value</Value>
-                    <Style />
+                    <Style>
+                      <Format>dd/MM/yyyy</Format>
+                    </Style>
                   </TextRun>
                 </TextRuns>
                 <Style>

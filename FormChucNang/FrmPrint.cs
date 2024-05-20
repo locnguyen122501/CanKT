@@ -99,7 +99,7 @@ namespace CanKT
             };
 
             // Thiết lập các tham số cho report
-            reportViewer.LocalReport.ReportPath = @"C:\Users\User001\Desktop\Testing\CanKT\FormChucNang\rptReport.rdlc";
+            reportViewer.LocalReport.ReportPath = @"C:\Users\User001\Desktop\Testing\CanKT\Reports\rptReport.rdlc";
             reportViewer.LocalReport.SetParameters(parameters);
 
             // Refresh report để hiển thị dữ liệu mới
