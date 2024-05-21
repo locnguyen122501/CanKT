@@ -49,6 +49,7 @@
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.reportViewer);
             this.Name = "FrmDoanhSo";
+            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "FrmDoanhSo";
             this.Load += new System.EventHandler(this.FrmDoanhSo_Load);

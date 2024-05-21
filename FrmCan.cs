@@ -1838,7 +1838,6 @@ namespace CanKT
                                 btnPhieuTruoc.Enabled = false;
                             }
                         }
-
                     }
                 }
             }
