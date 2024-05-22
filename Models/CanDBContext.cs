@@ -30,6 +30,7 @@ namespace CanKT.Models
         public virtual DbSet<TramCan> TramCans { get; set; }
         public virtual DbSet<Xe> Xes { get; set; }
         public virtual DbSet<XeXuc> XeXucs { get; set; }
+        public virtual DbSet<ThongKe> ThongKes { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -309,6 +310,66 @@ namespace CanKT.Models
                 .HasMany(e => e.PhieuThus)
                 .WithOptional(e => e.XeXuc)
                 .HasForeignKey(e => e.maMayXuc);
+
+            modelBuilder.Entity<ThongKe>()
+                .Property(e => e.DK1)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<ThongKe>()
+                .Property(e => e.DK2)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<ThongKe>()
+                .Property(e => e.DK3)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<ThongKe>()
+                .Property(e => e.SLTanDK1)
+                .HasPrecision(18, 3);
+
+            modelBuilder.Entity<ThongKe>()
+                .Property(e => e.SLTanDK2)
+                .HasPrecision(18, 3);
+
+            modelBuilder.Entity<ThongKe>()
+                .Property(e => e.SLTanDK3)
+                .HasPrecision(18, 3);
+
+            modelBuilder.Entity<ThongKe>()
+                .Property(e => e.SLM3DK1)
+                .HasPrecision(18, 3);
+
+            modelBuilder.Entity<ThongKe>()
+                .Property(e => e.SLM3DK2)
+                .HasPrecision(18, 3);
+
+            modelBuilder.Entity<ThongKe>()
+                .Property(e => e.SLM3DK3)
+                .HasPrecision(18, 3);
+
+            modelBuilder.Entity<ThongKe>()
+                .Property(e => e.SoTienDK1)
+                .HasPrecision(19, 4);
+
+            modelBuilder.Entity<ThongKe>()
+                .Property(e => e.SoTienDK2)
+                .HasPrecision(19, 4);
+
+            modelBuilder.Entity<ThongKe>()
+                .Property(e => e.SoTienDK3)
+                .HasPrecision(19, 4);
+
+            modelBuilder.Entity<ThongKe>()
+                .Property(e => e.TongTan)
+                .HasPrecision(18, 3);
+
+            modelBuilder.Entity<ThongKe>()
+                .Property(e => e.TongM3)
+                .HasPrecision(18, 3);
+
+            modelBuilder.Entity<ThongKe>()
+                .Property(e => e.TongTien)
+                .HasPrecision(19, 4);
         }
 
         public string GetNextMaPhieu()

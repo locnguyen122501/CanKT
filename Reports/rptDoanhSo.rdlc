@@ -337,32 +337,10 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Parameters!pDK1.Value</Value>
+                                  <Value>=Fields!DK1.Value</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
-                            </Paragraph>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Parameters!pDK2.Value</Value>
-                                  <Style />
-                                </TextRun>
-                              </TextRuns>
-                              <ListStyle>Bulleted</ListStyle>
-                              <ListLevel>1</ListLevel>
-                              <Style />
-                            </Paragraph>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Parameters!pDK3.Value</Value>
-                                  <Style />
-                                </TextRun>
-                              </TextRuns>
-                              <ListStyle>Bulleted</ListStyle>
-                              <ListLevel>1</ListLevel>
                               <Style />
                             </Paragraph>
                           </Paragraphs>
@@ -388,32 +366,10 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Parameters!pSLTanDK1.Value</Value>
+                                  <Value>=Fields!SLTanDK1.Value</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
-                            </Paragraph>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Parameters!pSLTanDK2.Value</Value>
-                                  <Style />
-                                </TextRun>
-                              </TextRuns>
-                              <ListStyle>Bulleted</ListStyle>
-                              <ListLevel>1</ListLevel>
-                              <Style />
-                            </Paragraph>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Parameters!pSLTanDK3.Value</Value>
-                                  <Style />
-                                </TextRun>
-                              </TextRuns>
-                              <ListStyle>Bulleted</ListStyle>
-                              <ListLevel>1</ListLevel>
                               <Style />
                             </Paragraph>
                           </Paragraphs>
@@ -440,32 +396,10 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Parameters!pSLM3DK1.Value</Value>
+                                  <Value>=Fields!SLM3DK1.Value</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
-                            </Paragraph>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Parameters!pSLM3DK2.Value</Value>
-                                  <Style />
-                                </TextRun>
-                              </TextRuns>
-                              <ListStyle>Bulleted</ListStyle>
-                              <ListLevel>1</ListLevel>
-                              <Style />
-                            </Paragraph>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Parameters!pSLM3DK3.Value</Value>
-                                  <Style />
-                                </TextRun>
-                              </TextRuns>
-                              <ListStyle>Bulleted</ListStyle>
-                              <ListLevel>1</ListLevel>
                               <Style />
                             </Paragraph>
                           </Paragraphs>
@@ -485,53 +419,21 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox20">
+                        <Textbox Name="SoTienDK1">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Parameters!pSoTienDK1.Value</Value>
+                                  <Value>=Fields!SoTienDK1.Value</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
-                            </Paragraph>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Parameters!pSoTienDK2.Value</Value>
-                                  <Style />
-                                </TextRun>
-                              </TextRuns>
-                              <ListStyle>Bulleted</ListStyle>
-                              <ListLevel>1</ListLevel>
-                              <Style />
-                            </Paragraph>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Parameters!pSoTienDK3.Value</Value>
-                                  <Style />
-                                </TextRun>
-                              </TextRuns>
-                              <ListStyle>Bulleted</ListStyle>
-                              <ListLevel>1</ListLevel>
-                              <Style />
-                            </Paragraph>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value />
-                                  <Style />
-                                </TextRun>
-                              </TextRuns>
-                              <ListLevel>1</ListLevel>
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox20</rd:DefaultName>
+                          <rd:DefaultName>SoTienDK1</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>

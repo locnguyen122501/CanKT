@@ -238,6 +238,7 @@
     <Compile Include="Models\SaLan.cs" />
     <Compile Include="Models\SanPham.cs" />
     <Compile Include="Models\sysdiagram.cs" />
+    <Compile Include="Models\ThongKe.cs" />
     <Compile Include="Models\TramCan.cs" />
     <Compile Include="Models\Xe.cs" />
     <Compile Include="Models\XeXuc.cs" />
@@ -287,6 +288,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormChucNang\FrmDangNhap.resx">
       <DependentUpon>FrmDangNhap.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="FormDanhMuc\FrmMayXay.resx">
       <DependentUpon>FrmMayXay.cs</DependentUpon>
