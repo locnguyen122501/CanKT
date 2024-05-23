@@ -77,7 +77,6 @@ namespace CanKT.FormChucNang
         private void FrmDoanhSo_Load(object sender, EventArgs e)
         {
             var thongKeData = GetThongKeData(maKH, DK1, DK2, DK3);
-
             var reportDataSource = new ReportDataSource("CanDBDataset", thongKeData);
             this.reportViewer.LocalReport.DataSources.Clear();
             ReportParameter pNgayParameter = new ReportParameter("pNgay", DateTime.Today.ToString("dd-MM-yyyy"));
