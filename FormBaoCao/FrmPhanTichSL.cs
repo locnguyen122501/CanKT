@@ -222,8 +222,7 @@ namespace CanKT.FormBaoCao
                 sotien = 1; //rdbCoThue duoc check => tien thanh toan
             }
 
-            FrmDoanhSo frmDoanhSo = new FrmDoanhSo();
-            frmDoanhSo.loadData(ngaydau, ngaysau, makh, DK1, DK2, DK3, khongintien, sotien);
+            FrmDoanhSo frmDoanhSo = new FrmDoanhSo(ngaydau, ngaysau, makh, DK1, DK2, DK3, khongintien, sotien);
             frmDoanhSo.Show();
         }
     }
