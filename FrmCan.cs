@@ -23,6 +23,14 @@ using Microsoft.Reporting.WinForms;
 using CanKT.FormChucNang;
 using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Core.Metadata.Edm;
+using System.Threading;
+using System.Timers;
+using Timer = System.Timers.Timer;
+using TGMTplayer.Utilities;
+using TGMTplayer.Controls;
+using TGMTplayer;
+using System.Drawing.Imaging;
+
 
 namespace CanKT
 {
@@ -41,9 +49,34 @@ namespace CanKT
         string tlbanthan, tlchophep = "";
         DateTime handangkiem;
 
+        #region cac bien cua camera
+        public static float CpuUsage, CpuTotal;
+        public static bool HighCPU;
+
+
+        public static bool ShuttingDown = false;
+
+        private PerformanceCounter _cpuCounter, _cputotalCounter;
+
+        private PersistWindowState _mWindowState;
+        private PerformanceCounter _pcMem;
+        private Timer _houseKeepingTimer;
+
+
+        CameraFrame m_currentCameraFrame;
+
+        private static string _counters = "";
+
+        CameraFrame _cameraFrame;
+
+        Thread m_threadCPUusage;
+        #endregion
+
         public FrmCan(string tentaikhoan, string quyen)
         {
             InitializeComponent();
+
+            _mWindowState = new PersistWindowState { Parent = this, RegistryPath = @"Software\tgmtplayer\startup" };
 
             this.KeyPreview = true;
 
@@ -62,7 +95,18 @@ namespace CanKT
             lblDate.Text = DateTime.Today.ToString("dd/MM/yyyy");
 
             LoadDataIntoDataGridView();
-            SetupAutoCompleteForTextBoxes();            
+            SetupAutoCompleteForTextBoxes();
+
+            try
+            {
+                string url = "rtsp://admin:admin!@#$1234@172.16.10.14:554/cam/realmonitor?channel=1&subtype=1";
+                string resolution = "1280x720";
+                DisplayCamera(url, resolution, panel2, 0);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void FrmCan_Load(object sender, EventArgs e)
@@ -77,7 +121,7 @@ namespace CanKT
             {
                 // Thiết lập chỉ số hàng đầu tiên được hiển thị là hàng cuối cùng
                 dgvCan.FirstDisplayedScrollingRowIndex = dgvCan.Rows.Count - 1;
-            }
+            }           
         }
 
         private void LoadDataIntoDataGridView()
@@ -2490,6 +2534,33 @@ namespace CanKT
 
             // Nếu không có mã phiếu chính thức nào trong cơ sở dữ liệu, bạn có thể bắt đầu từ "1"
             return "1";
+        }
+
+
+        
+
+        private void CameraFrames_Click(object sender, EventArgs e)
+        {
+            m_currentCameraFrame = (CameraFrame)sender;
+            MouseEventArgs ee = (MouseEventArgs)e;
+
+            //if (ee.Button == MouseButtons.Right)
+            //{
+            //    ctxtMnu.Show(new Point(m_currentCameraFrame.parent.Location.X + ee.Location.X,
+            //        m_currentCameraFrame.parent.Location.Y + ee.Location.Y + 20));
+            //}
+        }
+
+        public void DisplayCamera(string url, string resolution, Panel panelDisplay, int camIndex)
+        {
+            _cameraFrame = new CameraFrame(url, resolution);
+            _cameraFrame.CamIndex = camIndex;
+
+            _cameraFrame.Start();
+            _cameraFrame.parent = panelDisplay;
+            _cameraFrame.Click += CameraFrames_Click;
+
+            panelDisplay.Controls.Add(_cameraFrame);
         }
     }
 }

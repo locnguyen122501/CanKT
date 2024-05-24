@@ -7,7 +7,7 @@
         <DataProvider>System.Data.DataSet</DataProvider>
         <ConnectString>/* Local Connection */</ConnectString>
       </ConnectionProperties>
-      <rd:DataSourceID>84f38a47-a5fa-447d-b269-f8f1c8516f40</rd:DataSourceID>
+      <rd:DataSourceID>2ab7b497-5b10-4e3a-882f-f0c94d660189</rd:DataSourceID>
     </DataSource>
   </DataSources>
   <DataSets>
@@ -710,6 +710,10 @@
                     <Value>=Parameters!pNgay.Value</Value>
                     <Style />
                   </TextRun>
+                  <TextRun>
+                    <Value>=Parameters!pNgay2.Value</Value>
+                    <Style />
+                  </TextRun>
                 </TextRuns>
                 <Style>
                   <TextAlign>Center</TextAlign>
@@ -836,6 +840,11 @@
       <DataType>String</DataType>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
+    <ReportParameter Name="pNgay2">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
   </ReportParameters>
   <ReportParametersLayout>
     <GridLayoutDefinition>
@@ -851,6 +860,11 @@
           <ColumnIndex>1</ColumnIndex>
           <RowIndex>4</RowIndex>
           <ParameterName>pSTT</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>2</ColumnIndex>
+          <RowIndex>4</RowIndex>
+          <ParameterName>pNgay2</ParameterName>
         </CellDefinition>
       </CellDefinitions>
     </GridLayoutDefinition>

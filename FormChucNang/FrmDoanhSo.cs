@@ -79,8 +79,26 @@ namespace CanKT.FormChucNang
             var thongKeData = GetThongKeData(maKH, DK1, DK2, DK3);
             var reportDataSource = new ReportDataSource("CanDBDataset", thongKeData);
             this.reportViewer.LocalReport.DataSources.Clear();
-            ReportParameter pNgayParameter = new ReportParameter("pNgay", DateTime.Today.ToString("dd-MM-yyyy"));
-            this.reportViewer.LocalReport.SetParameters(new ReportParameter[] { pNgayParameter });
+
+            if (ngayDau.Date == ngaySau.Date)
+            {
+                ReportParameter pNgayParameter = new ReportParameter("pNgay", ngayDau.Date.ToString("dd-MM-yyyy"));
+                this.reportViewer.LocalReport.SetParameters(new ReportParameter[] { pNgayParameter });
+
+                ReportParameter pNgaySauParameter = new ReportParameter("pNgay2", "");
+                this.reportViewer.LocalReport.SetParameters(new ReportParameter[] { pNgaySauParameter });
+            }
+            else
+            {
+                ReportParameter pNgayDauParameter = new ReportParameter("pNgay", ngayDau.Date.ToString("dd-MM-yyyy"));
+                this.reportViewer.LocalReport.SetParameters(new ReportParameter[] { pNgayDauParameter });
+
+                
+
+                ReportParameter pNgaySauParameter = new ReportParameter("pNgay2", ngaySau.Date.ToString("dd-MM-yyyy"));
+                this.reportViewer.LocalReport.SetParameters(new ReportParameter[] { pNgaySauParameter });
+            }
+            
             ReportParameter pSTTParameter = new ReportParameter("pSTT", "1");
             this.reportViewer.LocalReport.SetParameters(new ReportParameter[] { pSTTParameter });
             this.reportViewer.LocalReport.DataSources.Add(reportDataSource);
