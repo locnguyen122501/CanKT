@@ -31,7 +31,6 @@ using TGMTplayer.Controls;
 using TGMTplayer;
 using System.Drawing.Imaging;
 
-
 namespace CanKT
 {
     public partial class FrmCan : Form
@@ -70,6 +69,8 @@ namespace CanKT
         CameraFrame _cameraFrame;
 
         Thread m_threadCPUusage;
+
+        private readonly List<float> _cpuAverages = new List<float>();
         #endregion
 
         public FrmCan(string tentaikhoan, string quyen)
@@ -99,6 +100,14 @@ namespace CanKT
 
             try
             {
+                if (_cameraFrame != null)
+                {
+                    _cameraFrame.Stop();
+                    _cameraFrame.Dispose();
+                }
+                _shuttingDown = true;
+                _houseKeepingTimer?.Stop();
+
                 string url = "rtsp://admin:admin!@#$1234@172.16.10.14:554/cam/realmonitor?channel=1&subtype=1";
                 string resolution = "1280x720";
                 DisplayCamera(url, resolution, panel2, 0);
@@ -121,7 +130,19 @@ namespace CanKT
             {
                 // Thiết lập chỉ số hàng đầu tiên được hiển thị là hàng cuối cùng
                 dgvCan.FirstDisplayedScrollingRowIndex = dgvCan.Rows.Count - 1;
-            }           
+            }
+
+            _houseKeepingTimer = new System.Timers.Timer(1000);
+            _houseKeepingTimer.Elapsed += HouseKeepingTimerElapsed;
+            _houseKeepingTimer.AutoReset = true;
+            _houseKeepingTimer.SynchronizingObject = this;
+
+            _houseKeepingTimer.Start();
+
+
+
+            m_threadCPUusage = new Thread(new ThreadStart(ShowCPUusage));
+            m_threadCPUusage.Start();
         }
 
         private void LoadDataIntoDataGridView()
@@ -2536,9 +2557,6 @@ namespace CanKT
             return "1";
         }
 
-
-        
-
         private void CameraFrames_Click(object sender, EventArgs e)
         {
             m_currentCameraFrame = (CameraFrame)sender;
@@ -2561,6 +2579,72 @@ namespace CanKT
             _cameraFrame.Click += CameraFrames_Click;
 
             panelDisplay.Controls.Add(_cameraFrame);
+        }
+
+        void ShowCPUusage()
+        {
+            try
+            {
+                _cputotalCounter = new PerformanceCounter("Processor", "% Processor Time", "_total", true);
+                _cpuCounter = new PerformanceCounter("Process", "% Processor Time", Process.GetCurrentProcess().ProcessName, true);
+                try
+                {
+                    _pcMem = new PerformanceCounter("Process", "Working Set - Private", Process.GetCurrentProcess().ProcessName, true);
+                }
+                catch
+                {
+                    try
+                    {
+                        _pcMem = new PerformanceCounter("Memory", "Available MBytes");
+                    }
+                    catch (Exception ex2)
+                    {
+                        _pcMem = null;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _cputotalCounter = null;
+            }
+        }
+
+        private void HouseKeepingTimerElapsed(object sender, ElapsedEventArgs e)
+        {
+            _houseKeepingTimer.Stop();
+
+
+            if (_cputotalCounter != null)
+            {
+                try
+                {
+                    while (_cpuAverages.Count > 4)
+                        _cpuAverages.RemoveAt(0);
+                    _cpuAverages.Add(_cpuCounter.NextValue() / Environment.ProcessorCount);
+
+                    CpuUsage = _cpuAverages.Sum() / _cpuAverages.Count;
+                    CpuTotal = _cputotalCounter.NextValue();
+                    _counters = $"CPU: {CpuUsage:0.00}%";
+
+                    if (_pcMem != null)
+                    {
+                        _counters += " RAM Usage: " + Convert.ToInt32(_pcMem.RawValue / 1048576) + "MB  |";
+                    }
+                }
+                catch
+                {
+                }
+
+                HighCPU = CpuTotal > 90;
+            }
+            else
+            {
+                _counters = "Stats Unavailable - See Log File";
+            }
+
+
+            if (!_shuttingDown)
+                _houseKeepingTimer.Start();
         }
     }
 }
