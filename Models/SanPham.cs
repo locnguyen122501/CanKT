@@ -41,7 +41,7 @@ namespace CanKT.Models
         [StringLength(50)]
         public string maThue { get; set; }
 
-        [StringLength(50)]
+        [StringLength(255)]
         public string ghiChu { get; set; }
 
         public int? trangThai { get; set; }

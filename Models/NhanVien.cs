@@ -34,7 +34,7 @@ namespace CanKT.Models
         [StringLength(50)]
         public string maSoThue { get; set; }
 
-        [StringLength(50)]
+        [StringLength(255)]
         public string diaChi { get; set; }
 
         [StringLength(50)]
@@ -43,7 +43,7 @@ namespace CanKT.Models
         [StringLength(50)]
         public string email { get; set; }
 
-        [StringLength(50)]
+        [StringLength(255)]
         public string ghiChu { get; set; }
 
         public int? trangThai { get; set; }

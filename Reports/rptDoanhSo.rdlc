@@ -7,92 +7,100 @@
         <DataProvider>System.Data.DataSet</DataProvider>
         <ConnectString>/* Local Connection */</ConnectString>
       </ConnectionProperties>
-      <rd:DataSourceID>84f38a47-a5fa-447d-b269-f8f1c8516f40</rd:DataSourceID>
+      <rd:DataSourceID>225d35a6-d368-489d-8ebf-c9b98b99f563</rd:DataSourceID>
     </DataSource>
   </DataSources>
   <DataSets>
-    <DataSet Name="CanDBDataset">
+    <DataSet Name="DataSet1">
       <Query>
         <DataSourceName>CanDBDataSource</DataSourceName>
         <CommandText>/* Local Query */</CommandText>
       </Query>
       <Fields>
-        <Field Name="STT">
-          <DataField>STT</DataField>
+        <Field Name="maDon">
+          <DataField>maDon</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="bienSoXe">
+          <DataField>bienSoXe</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="maKH">
+          <DataField>maKH</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="trongLuongXeVao">
+          <DataField>trongLuongXeVao</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="trongLuongXeRa">
+          <DataField>trongLuongXeRa</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="lenhXuat">
+          <DataField>lenhXuat</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="maSP">
+          <DataField>maSP</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="soLuongTan">
+          <DataField>soLuongTan</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="soLuongM3">
+          <DataField>soLuongM3</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="donGia">
+          <DataField>donGia</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="thanhTien">
+          <DataField>thanhTien</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="tienThanhToan">
+          <DataField>tienThanhToan</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="maKho">
+          <DataField>maKho</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="maMayXay">
+          <DataField>maMayXay</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="maMayXuc">
+          <DataField>maMayXuc</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="thoiGianVao">
+          <DataField>thoiGianVao</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="thoiGianRa">
+          <DataField>thoiGianRa</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="trangThai">
+          <DataField>trangThai</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-        <Field Name="DK1">
-          <DataField>DK1</DataField>
+        <Field Name="ghiChu">
+          <DataField>ghiChu</DataField>
           <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="DK2">
-          <DataField>DK2</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="DK3">
-          <DataField>DK3</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="SLTanDK1">
-          <DataField>SLTanDK1</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="SLTanDK2">
-          <DataField>SLTanDK2</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="SLTanDK3">
-          <DataField>SLTanDK3</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="SLM3DK1">
-          <DataField>SLM3DK1</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="SLM3DK2">
-          <DataField>SLM3DK2</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="SLM3DK3">
-          <DataField>SLM3DK3</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="SoTienDK1">
-          <DataField>SoTienDK1</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="SoTienDK2">
-          <DataField>SoTienDK2</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="SoTienDK3">
-          <DataField>SoTienDK3</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="TongTan">
-          <DataField>TongTan</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="TongM3">
-          <DataField>TongM3</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="TongTien">
-          <DataField>TongTien</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="SoTrang">
-          <DataField>SoTrang</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>CanDBDataSource</rd:DataSetName>
         <rd:SchemaPath>C:\Users\User001\Desktop\Testing\CanKT\CanDBDataSource.xsd</rd:SchemaPath>
-        <rd:TableName>ThongKe</rd:TableName>
+        <rd:TableName>PhieuThu</rd:TableName>
         <rd:TableAdapterFillMethod>Fill</rd:TableAdapterFillMethod>
         <rd:TableAdapterGetDataMethod>GetData</rd:TableAdapterGetDataMethod>
-        <rd:TableAdapterName>ThongKeTableAdapter</rd:TableAdapterName>
+        <rd:TableAdapterName>PhieuThuTableAdapter</rd:TableAdapterName>
       </rd:DataSetInfo>
     </DataSet>
   </DataSets>
@@ -307,7 +315,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!STT.Value</Value>
+                                  <Value>=Parameters!pSTT.Value</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -330,43 +338,21 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="DK1">
+                        <Textbox Name="bienSoXe">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Parameters!pDK1.Value</Value>
+                                  <Value>=Fields!bienSoXe.Value</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
-                            </Paragraph>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Parameters!pDK2.Value</Value>
-                                  <Style />
-                                </TextRun>
-                              </TextRuns>
-                              <ListStyle>Bulleted</ListStyle>
-                              <ListLevel>1</ListLevel>
-                              <Style />
-                            </Paragraph>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Parameters!pDK3.Value</Value>
-                                  <Style />
-                                </TextRun>
-                              </TextRuns>
-                              <ListStyle>Bulleted</ListStyle>
-                              <ListLevel>1</ListLevel>
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>DK1</rd:DefaultName>
+                          <rd:DefaultName>bienSoXe</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -388,32 +374,10 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Parameters!pSLTanDK1.Value</Value>
+                                  <Value>=Fields!soLuongTan.Value</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
-                            </Paragraph>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Parameters!pSLTanDK2.Value</Value>
-                                  <Style />
-                                </TextRun>
-                              </TextRuns>
-                              <ListStyle>Bulleted</ListStyle>
-                              <ListLevel>1</ListLevel>
-                              <Style />
-                            </Paragraph>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Parameters!pSLTanDK3.Value</Value>
-                                  <Style />
-                                </TextRun>
-                              </TextRuns>
-                              <ListStyle>Bulleted</ListStyle>
-                              <ListLevel>1</ListLevel>
                               <Style />
                             </Paragraph>
                           </Paragraphs>
@@ -440,32 +404,10 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Parameters!pSLM3DK1.Value</Value>
+                                  <Value>=Fields!soLuongM3.Value</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
-                            </Paragraph>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Parameters!pSLM3DK2.Value</Value>
-                                  <Style />
-                                </TextRun>
-                              </TextRuns>
-                              <ListStyle>Bulleted</ListStyle>
-                              <ListLevel>1</ListLevel>
-                              <Style />
-                            </Paragraph>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Parameters!pSLM3DK3.Value</Value>
-                                  <Style />
-                                </TextRun>
-                              </TextRuns>
-                              <ListStyle>Bulleted</ListStyle>
-                              <ListLevel>1</ListLevel>
                               <Style />
                             </Paragraph>
                           </Paragraphs>
@@ -485,53 +427,21 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox20">
+                        <Textbox Name="thanhTien">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Parameters!pSoTienDK1.Value</Value>
+                                  <Value>=Fields!thanhTien.Value</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
-                            </Paragraph>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Parameters!pSoTienDK2.Value</Value>
-                                  <Style />
-                                </TextRun>
-                              </TextRuns>
-                              <ListStyle>Bulleted</ListStyle>
-                              <ListLevel>1</ListLevel>
-                              <Style />
-                            </Paragraph>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Parameters!pSoTienDK3.Value</Value>
-                                  <Style />
-                                </TextRun>
-                              </TextRuns>
-                              <ListStyle>Bulleted</ListStyle>
-                              <ListLevel>1</ListLevel>
-                              <Style />
-                            </Paragraph>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value />
-                                  <Style />
-                                </TextRun>
-                              </TextRuns>
-                              <ListLevel>1</ListLevel>
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox20</rd:DefaultName>
+                          <rd:DefaultName>thanhTien</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -595,7 +505,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!TongTan.Value</Value>
+                                  <Value>=Fields!bienSoXe.Value</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -625,7 +535,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!TongM3.Value</Value>
+                                  <Value>=Fields!bienSoXe.Value</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -648,21 +558,21 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="TongTien">
+                        <Textbox Name="bienSoXe1">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!TongTien.Value</Value>
+                                  <Value>=Fields!bienSoXe.Value</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>TongTien</rd:DefaultName>
+                          <rd:DefaultName>bienSoXe1</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -800,6 +710,10 @@
                     <Value>=Parameters!pNgay.Value</Value>
                     <Style />
                   </TextRun>
+                  <TextRun>
+                    <Value>=Parameters!pNgay2.Value</Value>
+                    <Style />
+                  </TextRun>
                 </TextRuns>
                 <Style>
                   <TextAlign>Center</TextAlign>
@@ -873,13 +787,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Trang </Value>
-                    <Style>
-                      <FontSize>8pt</FontSize>
-                    </Style>
-                  </TextRun>
-                  <TextRun>
-                    <Value>=Fields!SoTrang.Value</Value>
+                    <Value>Trang 1</Value>
                     <Style>
                       <FontSize>8pt</FontSize>
                     </Style>
@@ -924,27 +832,7 @@
     </ReportSection>
   </ReportSections>
   <ReportParameters>
-    <ReportParameter Name="pSLTanDK1">
-      <DataType>String</DataType>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="pSLM3DK1">
-      <DataType>String</DataType>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="pSoTienDK1">
-      <DataType>String</DataType>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="pTongTan">
-      <DataType>String</DataType>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="pTongM3">
-      <DataType>String</DataType>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="pTongTien">
+    <ReportParameter Name="pNgay">
       <DataType>String</DataType>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
@@ -952,56 +840,9 @@
       <DataType>String</DataType>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
-    <ReportParameter Name="pDK1">
-      <DataType>String</DataType>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="pDK2">
+    <ReportParameter Name="pNgay2">
       <DataType>String</DataType>
       <AllowBlank>true</AllowBlank>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="pDK3">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="pSLTanDK2">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="pSLM3DK2">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="pSoTienDK2">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="pSLTanDK3">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="pSLM3DK3">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="pSoTienDK3">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="pNgay">
-      <DataType>String</DataType>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="pSoTrang">
-      <DataType>String</DataType>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
   </ReportParameters>
@@ -1012,93 +853,18 @@
       <CellDefinitions>
         <CellDefinition>
           <ColumnIndex>0</ColumnIndex>
-          <RowIndex>0</RowIndex>
-          <ParameterName>pSLTanDK1</ParameterName>
-        </CellDefinition>
-        <CellDefinition>
-          <ColumnIndex>1</ColumnIndex>
-          <RowIndex>0</RowIndex>
-          <ParameterName>pSLM3DK1</ParameterName>
-        </CellDefinition>
-        <CellDefinition>
-          <ColumnIndex>2</ColumnIndex>
-          <RowIndex>0</RowIndex>
-          <ParameterName>pSoTienDK1</ParameterName>
-        </CellDefinition>
-        <CellDefinition>
-          <ColumnIndex>3</ColumnIndex>
-          <RowIndex>0</RowIndex>
-          <ParameterName>pTongTan</ParameterName>
-        </CellDefinition>
-        <CellDefinition>
-          <ColumnIndex>0</ColumnIndex>
-          <RowIndex>1</RowIndex>
-          <ParameterName>pTongM3</ParameterName>
-        </CellDefinition>
-        <CellDefinition>
-          <ColumnIndex>1</ColumnIndex>
-          <RowIndex>1</RowIndex>
-          <ParameterName>pTongTien</ParameterName>
-        </CellDefinition>
-        <CellDefinition>
-          <ColumnIndex>2</ColumnIndex>
-          <RowIndex>1</RowIndex>
-          <ParameterName>pSTT</ParameterName>
-        </CellDefinition>
-        <CellDefinition>
-          <ColumnIndex>3</ColumnIndex>
-          <RowIndex>1</RowIndex>
-          <ParameterName>pDK1</ParameterName>
-        </CellDefinition>
-        <CellDefinition>
-          <ColumnIndex>0</ColumnIndex>
-          <RowIndex>2</RowIndex>
-          <ParameterName>pDK2</ParameterName>
-        </CellDefinition>
-        <CellDefinition>
-          <ColumnIndex>1</ColumnIndex>
-          <RowIndex>2</RowIndex>
-          <ParameterName>pDK3</ParameterName>
-        </CellDefinition>
-        <CellDefinition>
-          <ColumnIndex>2</ColumnIndex>
-          <RowIndex>2</RowIndex>
-          <ParameterName>pSLTanDK2</ParameterName>
-        </CellDefinition>
-        <CellDefinition>
-          <ColumnIndex>3</ColumnIndex>
-          <RowIndex>2</RowIndex>
-          <ParameterName>pSLM3DK2</ParameterName>
-        </CellDefinition>
-        <CellDefinition>
-          <ColumnIndex>0</ColumnIndex>
-          <RowIndex>3</RowIndex>
-          <ParameterName>pSoTienDK2</ParameterName>
-        </CellDefinition>
-        <CellDefinition>
-          <ColumnIndex>1</ColumnIndex>
-          <RowIndex>3</RowIndex>
-          <ParameterName>pSLTanDK3</ParameterName>
-        </CellDefinition>
-        <CellDefinition>
-          <ColumnIndex>2</ColumnIndex>
-          <RowIndex>3</RowIndex>
-          <ParameterName>pSLM3DK3</ParameterName>
-        </CellDefinition>
-        <CellDefinition>
-          <ColumnIndex>3</ColumnIndex>
-          <RowIndex>3</RowIndex>
-          <ParameterName>pSoTienDK3</ParameterName>
-        </CellDefinition>
-        <CellDefinition>
-          <ColumnIndex>0</ColumnIndex>
           <RowIndex>4</RowIndex>
           <ParameterName>pNgay</ParameterName>
         </CellDefinition>
         <CellDefinition>
           <ColumnIndex>1</ColumnIndex>
           <RowIndex>4</RowIndex>
-          <ParameterName>pSoTrang</ParameterName>
+          <ParameterName>pSTT</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>2</ColumnIndex>
+          <RowIndex>4</RowIndex>
+          <ParameterName>pNgay2</ParameterName>
         </CellDefinition>
       </CellDefinitions>
     </GridLayoutDefinition>

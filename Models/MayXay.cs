@@ -16,7 +16,7 @@ namespace CanKT.Models
         }
 
         [StringLength(50)]
-        public string maDonVi { get; set; }
+        public string maBoPhan { get; set; }
 
         [Key]
         [StringLength(50)]
@@ -33,7 +33,7 @@ namespace CanKT.Models
 
         public int? trangThai { get; set; }
 
-        public virtual DonVi DonVi { get; set; }
+        public virtual BoPhan BoPhan { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PhieuThu> PhieuThus { get; set; }

@@ -10,7 +10,7 @@ namespace CanKT.Models
     public partial class Gia
     {
         [StringLength(50)]
-        public string maDonVi { get; set; }
+        public string maBoPhan { get; set; }
 
         [Key]
         [StringLength(50)]
@@ -31,12 +31,12 @@ namespace CanKT.Models
         [Column(TypeName = "date")]
         public DateTime? ngayHieuLuc { get; set; }
 
-        [StringLength(50)]
+        [StringLength(255)]
         public string ghiChu { get; set; }
 
         public int? trangThai { get; set; }
 
-        public virtual DonVi DonVi { get; set; }
+        public virtual BoPhan BoPhan { get; set; }
 
         public virtual Kho Kho { get; set; }
 
