@@ -6,40 +6,28 @@ namespace CanKT.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("KhachHang")]
-    public partial class KhachHang
+    [Table("BoPhan")]
+    public partial class BoPhan
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public KhachHang()
+        public BoPhan()
         {
-            HanMucCongNoes = new HashSet<HanMucCongNo>();
-            PhieuThus = new HashSet<PhieuThu>();
-            Xes = new HashSet<Xe>();
+            Gias = new HashSet<Gia>();
+            Khoes = new HashSet<Kho>();
+            MayXays = new HashSet<MayXay>();
+            TramCans = new HashSet<TramCan>();
+            XeXucs = new HashSet<XeXuc>();
         }
 
         [Key]
         [StringLength(50)]
-        public string maKH { get; set; }
+        public string maBoPhan { get; set; }
 
         [StringLength(100)]
-        public string tenKH { get; set; }
+        public string tenBoPhan { get; set; }
 
         [StringLength(255)]
         public string tenKhac { get; set; }
-
-        public int? loai { get; set; }
-
-        [StringLength(50)]
-        public string maSoThue { get; set; }
-
-        [StringLength(255)]
-        public string diaChi { get; set; }
-
-        [StringLength(50)]
-        public string sdt { get; set; }
-
-        [StringLength(50)]
-        public string email { get; set; }
 
         [StringLength(255)]
         public string ghiChu { get; set; }
@@ -47,12 +35,18 @@ namespace CanKT.Models
         public int? trangThai { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<HanMucCongNo> HanMucCongNoes { get; set; }
+        public virtual ICollection<Gia> Gias { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PhieuThu> PhieuThus { get; set; }
+        public virtual ICollection<Kho> Khoes { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Xe> Xes { get; set; }
+        public virtual ICollection<MayXay> MayXays { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<TramCan> TramCans { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<XeXuc> XeXucs { get; set; }
     }
 }

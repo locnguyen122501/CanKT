@@ -23,13 +23,8 @@ using Microsoft.Reporting.WinForms;
 using CanKT.FormChucNang;
 using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Core.Metadata.Edm;
-using System.Threading;
-using System.Timers;
-using Timer = System.Timers.Timer;
-using TGMTplayer.Utilities;
-using TGMTplayer.Controls;
-using TGMTplayer;
-using System.Drawing.Imaging;
+using LibVLCSharp.Shared;
+using LibVLCSharp.WinForms;
 
 namespace CanKT
 {
@@ -48,36 +43,13 @@ namespace CanKT
         string tlbanthan, tlchophep = "";
         DateTime handangkiem;
 
-        #region cac bien cua camera
-        public static float CpuUsage, CpuTotal;
-        public static bool HighCPU;
-
-
-        public static bool ShuttingDown = false;
-
-        private PerformanceCounter _cpuCounter, _cputotalCounter;
-
-        private PersistWindowState _mWindowState;
-        private PerformanceCounter _pcMem;
-        private Timer _houseKeepingTimer;
-
-
-        CameraFrame m_currentCameraFrame;
-
-        private static string _counters = "";
-
-        CameraFrame _cameraFrame;
-
-        Thread m_threadCPUusage;
-
-        private readonly List<float> _cpuAverages = new List<float>();
-        #endregion
+        private LibVLC _libVLC;
+        private MediaPlayer _mediaPlayer;
 
         public FrmCan(string tentaikhoan, string quyen)
         {
             InitializeComponent();
-
-            _mWindowState = new PersistWindowState { Parent = this, RegistryPath = @"Software\tgmtplayer\startup" };
+            InitializeVlcControl();
 
             this.KeyPreview = true;
 
@@ -97,25 +69,6 @@ namespace CanKT
 
             LoadDataIntoDataGridView();
             SetupAutoCompleteForTextBoxes();
-
-            try
-            {
-                if (_cameraFrame != null)
-                {
-                    _cameraFrame.Stop();
-                    _cameraFrame.Dispose();
-                }
-                _shuttingDown = true;
-                _houseKeepingTimer?.Stop();
-
-                string url = "rtsp://admin:admin!@#$1234@172.16.10.14:554/cam/realmonitor?channel=1&subtype=1";
-                string resolution = "1280x720";
-                DisplayCamera(url, resolution, panel2, 0);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
         }
 
         private void FrmCan_Load(object sender, EventArgs e)
@@ -132,17 +85,11 @@ namespace CanKT
                 dgvCan.FirstDisplayedScrollingRowIndex = dgvCan.Rows.Count - 1;
             }
 
-            _houseKeepingTimer = new System.Timers.Timer(1000);
-            _houseKeepingTimer.Elapsed += HouseKeepingTimerElapsed;
-            _houseKeepingTimer.AutoReset = true;
-            _houseKeepingTimer.SynchronizingObject = this;
+            string url = "rtsp://172.16.10.14:554/cam/realmonitor?channel=1&subtype=0";
+            string username = "admin";
+            string password = "admin!@#$1234";
 
-            _houseKeepingTimer.Start();
-
-
-
-            m_threadCPUusage = new Thread(new ThreadStart(ShowCPUusage));
-            m_threadCPUusage.Start();
+            PlayCameraStream(url, username, password);
         }
 
         private void LoadDataIntoDataGridView()
@@ -2557,94 +2504,41 @@ namespace CanKT
             return "1";
         }
 
-        private void CameraFrames_Click(object sender, EventArgs e)
+        #region Các hàm hiển thị camera
+        private void InitializeVlcControl()
         {
-            m_currentCameraFrame = (CameraFrame)sender;
-            MouseEventArgs ee = (MouseEventArgs)e;
+            Core.Initialize();
 
-            //if (ee.Button == MouseButtons.Right)
-            //{
-            //    ctxtMnu.Show(new Point(m_currentCameraFrame.parent.Location.X + ee.Location.X,
-            //        m_currentCameraFrame.parent.Location.Y + ee.Location.Y + 20));
-            //}
+            var libVlcDirectory = new DirectoryInfo(@"C:\Program Files\VideoLAN\VLC"); // Đường dẫn tới thư mục chứa libvlc.dll
+            _libVLC = new LibVLC("--no-osd", "--no-drop-late-frames", "--rtsp-tcp", "--network-caching=500", "--file-caching=500", "--live-caching=500", "--disc-caching=500", libVlcDirectory.FullName);
+            _mediaPlayer = new MediaPlayer(_libVLC);
+
+            var videoView = new VideoView { MediaPlayer = _mediaPlayer, Dock = DockStyle.Fill };
+            this.panel1.Controls.Add(videoView);
         }
 
-        public void DisplayCamera(string url, string resolution, Panel panelDisplay, int camIndex)
-        {
-            _cameraFrame = new CameraFrame(url, resolution);
-            _cameraFrame.CamIndex = camIndex;
-
-            _cameraFrame.Start();
-            _cameraFrame.parent = panelDisplay;
-            _cameraFrame.Click += CameraFrames_Click;
-
-            panelDisplay.Controls.Add(_cameraFrame);
-        }
-
-        void ShowCPUusage()
+        public void PlayCameraStream(string url, string username, string password)
         {
             try
             {
-                _cputotalCounter = new PerformanceCounter("Processor", "% Processor Time", "_total", true);
-                _cpuCounter = new PerformanceCounter("Process", "% Processor Time", Process.GetCurrentProcess().ProcessName, true);
-                try
-                {
-                    _pcMem = new PerformanceCounter("Process", "Working Set - Private", Process.GetCurrentProcess().ProcessName, true);
-                }
-                catch
-                {
-                    try
-                    {
-                        _pcMem = new PerformanceCounter("Memory", "Available MBytes");
-                    }
-                    catch (Exception ex2)
-                    {
-                        _pcMem = null;
-                    }
-                }
+                var media = new Media(_libVLC, url, FromType.FromLocation);
+                media.AddOption($":rtsp-user={username}");
+                media.AddOption($":rtsp-pwd={password}");
+
+                _mediaPlayer.Play(media);
             }
             catch (Exception ex)
             {
-                _cputotalCounter = null;
+                MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void HouseKeepingTimerElapsed(object sender, ElapsedEventArgs e)
+        private void FrmCan_FormClosing(object sender, FormClosingEventArgs e)
         {
-            _houseKeepingTimer.Stop();
-
-
-            if (_cputotalCounter != null)
-            {
-                try
-                {
-                    while (_cpuAverages.Count > 4)
-                        _cpuAverages.RemoveAt(0);
-                    _cpuAverages.Add(_cpuCounter.NextValue() / Environment.ProcessorCount);
-
-                    CpuUsage = _cpuAverages.Sum() / _cpuAverages.Count;
-                    CpuTotal = _cputotalCounter.NextValue();
-                    _counters = $"CPU: {CpuUsage:0.00}%";
-
-                    if (_pcMem != null)
-                    {
-                        _counters += " RAM Usage: " + Convert.ToInt32(_pcMem.RawValue / 1048576) + "MB  |";
-                    }
-                }
-                catch
-                {
-                }
-
-                HighCPU = CpuTotal > 90;
-            }
-            else
-            {
-                _counters = "Stats Unavailable - See Log File";
-            }
-
-
-            if (!_shuttingDown)
-                _houseKeepingTimer.Start();
+            _mediaPlayer?.Stop();
+            _mediaPlayer?.Dispose();
+            _libVLC?.Dispose();
         }
+        #endregion
     }
 }
