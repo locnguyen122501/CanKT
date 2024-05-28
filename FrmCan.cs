@@ -23,6 +23,8 @@ using Microsoft.Reporting.WinForms;
 using CanKT.FormChucNang;
 using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Core.Metadata.Edm;
+using LibVLCSharp.Shared;
+using LibVLCSharp.WinForms;
 
 namespace CanKT
 {
@@ -41,9 +43,13 @@ namespace CanKT
         string tlbanthan, tlchophep = "";
         DateTime handangkiem;
 
+        private LibVLC _libVLC;
+        private MediaPlayer _mediaPlayer;
+
         public FrmCan(string tentaikhoan, string quyen)
         {
             InitializeComponent();
+            InitializeVlcControl();
 
             this.KeyPreview = true;
 
@@ -62,7 +68,7 @@ namespace CanKT
             lblDate.Text = DateTime.Today.ToString("dd/MM/yyyy");
 
             LoadDataIntoDataGridView();
-            SetupAutoCompleteForTextBoxes();            
+            SetupAutoCompleteForTextBoxes();
         }
 
         private void FrmCan_Load(object sender, EventArgs e)
@@ -78,6 +84,12 @@ namespace CanKT
                 // Thiết lập chỉ số hàng đầu tiên được hiển thị là hàng cuối cùng
                 dgvCan.FirstDisplayedScrollingRowIndex = dgvCan.Rows.Count - 1;
             }
+
+            string url = "rtsp://172.16.10.14:554/cam/realmonitor?channel=1&subtype=0";
+            string username = "admin";
+            string password = "admin!@#$1234";
+
+            PlayCameraStream(url, username, password);
         }
 
         private void LoadDataIntoDataGridView()
@@ -2500,5 +2512,42 @@ namespace CanKT
             // Nếu không có mã phiếu chính thức nào trong cơ sở dữ liệu, bạn có thể bắt đầu từ "1"
             return "1";
         }
+
+        #region Các hàm hiển thị camera
+        private void InitializeVlcControl()
+        {
+            Core.Initialize();
+
+            var libVlcDirectory = new DirectoryInfo(@"C:\Program Files\VideoLAN\VLC"); // Đường dẫn tới thư mục chứa libvlc.dll
+            _libVLC = new LibVLC("--no-osd", "--no-drop-late-frames", "--rtsp-tcp", "--network-caching=500", "--file-caching=500", "--live-caching=500", "--disc-caching=500", libVlcDirectory.FullName);
+            _mediaPlayer = new MediaPlayer(_libVLC);
+
+            var videoView = new VideoView { MediaPlayer = _mediaPlayer, Dock = DockStyle.Fill };
+            this.panel1.Controls.Add(videoView);
+        }
+
+        public void PlayCameraStream(string url, string username, string password)
+        {
+            try
+            {
+                var media = new Media(_libVLC, url, FromType.FromLocation);
+                media.AddOption($":rtsp-user={username}");
+                media.AddOption($":rtsp-pwd={password}");
+
+                _mediaPlayer.Play(media);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void FrmCan_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            _mediaPlayer?.Stop();
+            _mediaPlayer?.Dispose();
+            _libVLC?.Dispose();
+        }
+        #endregion
     }
 }

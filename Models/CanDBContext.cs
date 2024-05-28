@@ -8,11 +8,11 @@ namespace CanKT.Models
     public partial class CanDBContext : DbContext
     {
         public CanDBContext()
-            : base("name=CanDBContext")
+            : base("name=CanDBContext1")
         {
         }
 
-        public virtual DbSet<DonVi> DonVis { get; set; }
+        public virtual DbSet<BoPhan> BoPhans { get; set; }
         public virtual DbSet<DonViTinh> DonViTinhs { get; set; }
         public virtual DbSet<Gia> Gias { get; set; }
         public virtual DbSet<HanMucCongNo> HanMucCongNoes { get; set; }
@@ -30,11 +30,13 @@ namespace CanKT.Models
         public virtual DbSet<TramCan> TramCans { get; set; }
         public virtual DbSet<Xe> Xes { get; set; }
         public virtual DbSet<XeXuc> XeXucs { get; set; }
+        public virtual DbSet<DonVi> DonVis { get; set; }
+        public virtual DbSet<ThongKe> ThongKes { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<DonVi>()
-                .Property(e => e.maDonVi)
+            modelBuilder.Entity<BoPhan>()
+                .Property(e => e.maBoPhan)
                 .IsUnicode(false);
 
             modelBuilder.Entity<DonViTinh>()
@@ -42,7 +44,7 @@ namespace CanKT.Models
                 .IsUnicode(false);
 
             modelBuilder.Entity<Gia>()
-                .Property(e => e.maDonVi)
+                .Property(e => e.maBoPhan)
                 .IsUnicode(false);
 
             modelBuilder.Entity<Gia>()
@@ -115,7 +117,7 @@ namespace CanKT.Models
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Kho>()
-                .Property(e => e.maDonVi)
+                .Property(e => e.maBoPhan)
                 .IsUnicode(false);
 
             modelBuilder.Entity<Kho>()
@@ -132,7 +134,7 @@ namespace CanKT.Models
                 .HasForeignKey(e => e.maNgoaiTe);
 
             modelBuilder.Entity<MayXay>()
-                .Property(e => e.maDonVi)
+                .Property(e => e.maBoPhan)
                 .IsUnicode(false);
 
             modelBuilder.Entity<MayXay>()
@@ -240,10 +242,6 @@ namespace CanKT.Models
                 .Property(e => e.maMayXuc)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<PhieuThu>()
-                .Property(e => e.ghiChu)
-                .IsUnicode(false);
-
             modelBuilder.Entity<SaLan>()
                 .Property(e => e.maDonVi)
                 .IsUnicode(false);
@@ -274,7 +272,7 @@ namespace CanKT.Models
                 .HasForeignKey(e => e.maSP);
 
             modelBuilder.Entity<TramCan>()
-                .Property(e => e.maDonVi)
+                .Property(e => e.maBoPhan)
                 .IsUnicode(false);
 
             modelBuilder.Entity<TramCan>()
@@ -298,7 +296,7 @@ namespace CanKT.Models
                 .HasPrecision(18, 3);
 
             modelBuilder.Entity<XeXuc>()
-                .Property(e => e.maDonVi)
+                .Property(e => e.maBoPhan)
                 .IsUnicode(false);
 
             modelBuilder.Entity<XeXuc>()
@@ -309,6 +307,70 @@ namespace CanKT.Models
                 .HasMany(e => e.PhieuThus)
                 .WithOptional(e => e.XeXuc)
                 .HasForeignKey(e => e.maMayXuc);
+
+            modelBuilder.Entity<DonVi>()
+                .Property(e => e.maDonVi)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<ThongKe>()
+                .Property(e => e.DK1)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<ThongKe>()
+                .Property(e => e.DK2)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<ThongKe>()
+                .Property(e => e.DK3)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<ThongKe>()
+                .Property(e => e.SLTanDK1)
+                .HasPrecision(18, 3);
+
+            modelBuilder.Entity<ThongKe>()
+                .Property(e => e.SLTanDK2)
+                .HasPrecision(18, 3);
+
+            modelBuilder.Entity<ThongKe>()
+                .Property(e => e.SLTanDK3)
+                .HasPrecision(18, 3);
+
+            modelBuilder.Entity<ThongKe>()
+                .Property(e => e.SLM3DK1)
+                .HasPrecision(18, 3);
+
+            modelBuilder.Entity<ThongKe>()
+                .Property(e => e.SLM3DK2)
+                .HasPrecision(18, 3);
+
+            modelBuilder.Entity<ThongKe>()
+                .Property(e => e.SLM3DK3)
+                .HasPrecision(18, 3);
+
+            modelBuilder.Entity<ThongKe>()
+                .Property(e => e.SoTienDK1)
+                .HasPrecision(19, 4);
+
+            modelBuilder.Entity<ThongKe>()
+                .Property(e => e.SoTienDK2)
+                .HasPrecision(19, 4);
+
+            modelBuilder.Entity<ThongKe>()
+                .Property(e => e.SoTienDK3)
+                .HasPrecision(19, 4);
+
+            modelBuilder.Entity<ThongKe>()
+                .Property(e => e.TongTan)
+                .HasPrecision(18, 3);
+
+            modelBuilder.Entity<ThongKe>()
+                .Property(e => e.TongM3)
+                .HasPrecision(18, 3);
+
+            modelBuilder.Entity<ThongKe>()
+                .Property(e => e.TongTien)
+                .HasPrecision(19, 4);
         }
 
         public string GetNextMaPhieu()
