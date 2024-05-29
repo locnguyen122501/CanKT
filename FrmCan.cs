@@ -5,6 +5,8 @@ using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Migrations.Infrastructure;
 using System.Drawing;
+using System.Drawing.Imaging;
+using Tesseract;
 using System.Globalization;
 using System.IO.Ports;
 using System.Linq;
@@ -51,6 +53,10 @@ namespace CanKT
             InitializeComponent();
             InitializeVlcControl();
 
+            // Đăng ký sự kiện MouseClick ở đây để đảm bảo nó luôn được gọi
+            var videoView = (VideoView)panel1.Controls[0];
+            videoView.MouseClick += VideoView_MouseClick;
+
             this.KeyPreview = true;
 
             quyenuser = quyen;
@@ -85,11 +91,7 @@ namespace CanKT
                 dgvCan.FirstDisplayedScrollingRowIndex = dgvCan.Rows.Count - 1;
             }
 
-            string url = "rtsp://172.16.10.14:554/cam/realmonitor?channel=1&subtype=0";
-            string username = "admin";
-            string password = "admin!@#$1234";
-
-            PlayCameraStream(url, username, password);
+            PlayCameraStream(); // ket noi cam
         }
 
         private void LoadDataIntoDataGridView()
@@ -2508,28 +2510,73 @@ namespace CanKT
         private void InitializeVlcControl()
         {
             Core.Initialize();
+            //txbSoXe.Enabled = true;
 
             var libVlcDirectory = new DirectoryInfo(@"C:\Program Files\VideoLAN\VLC"); // Đường dẫn tới thư mục chứa libvlc.dll
-            _libVLC = new LibVLC("--no-osd", "--no-drop-late-frames", "--rtsp-tcp", "--network-caching=500", "--file-caching=500", "--live-caching=500", "--disc-caching=500", libVlcDirectory.FullName);
+            _libVLC = new LibVLC("--no-osd", "--no-drop-late-frames", "--rtsp-tcp", "--network-caching=10", "--file-caching=500", "--live-caching=500", "--disc-caching=500", libVlcDirectory.FullName);
             _mediaPlayer = new MediaPlayer(_libVLC);
 
             var videoView = new VideoView { MediaPlayer = _mediaPlayer, Dock = DockStyle.Fill };
             this.panel1.Controls.Add(videoView);
+
+            // Gán sự kiện chuột phải để chụp ảnh và nhận diện ký tự
+            videoView.MouseClick += VideoView_MouseClick;
         }
 
-        public void PlayCameraStream(string url, string username, string password)
+        public void PlayCameraStream()
         {
+            string url = "rtsp://172.16.10.14:554/cam/realmonitor?channel=1&subtype=0";
             try
             {
                 var media = new Media(_libVLC, url, FromType.FromLocation);
-                media.AddOption($":rtsp-user={username}");
-                media.AddOption($":rtsp-pwd={password}");
+                media.AddOption($":rtsp-user={"admin"}");
+                media.AddOption($":rtsp-pwd={"admin!@#$1234"}");
 
                 _mediaPlayer.Play(media);
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void VideoView_MouseClick(object sender, MouseEventArgs e)
+        {
+            MessageBox.Show("Lỗi: ", "Hmm", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            if (e.Button == MouseButtons.Right)
+            {
+                // Chụp ảnh từ VideoView
+                var bitmap = CaptureImageFromPanel(panel1);
+
+                // Nhận diện ký tự từ ảnh
+                string recognizedText = RecognizeTextFromImage(bitmap);
+
+                // Điền vào textbox
+                txbSoXe.Text = recognizedText;
+            }
+        }
+
+        private Bitmap CaptureImageFromPanel(Panel panel)
+        {
+            Bitmap bitmap = new Bitmap(panel.Width, panel.Height);
+            panel.DrawToBitmap(bitmap, new Rectangle(0, 0, panel.Width, panel.Height));
+            return bitmap;
+        }
+
+        private string RecognizeTextFromImage(Bitmap image)
+        {
+            string tessDataPath = @"C:\Users\User001\Desktop\Testing\CanKT\Resources\tessdata"; // Đường dẫn tới thư mục chứa tessdata
+            string lang = "eng"; // Ngôn ngữ nhận diện
+
+            using (var engine = new TesseractEngine(tessDataPath, lang, EngineMode.Default))
+            {
+                using (var pix = PixConverter.ToPix(image))
+                {
+                    using (var page = engine.Process(pix))
+                    {
+                        return page.GetText();
+                    }
+                }
             }
         }
 
