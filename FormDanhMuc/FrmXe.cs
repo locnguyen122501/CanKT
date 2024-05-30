@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -13,6 +14,7 @@ namespace CanKT
     public partial class FrmXe : Form
     {
         CanDBContext db = new CanDBContext();
+        CultureInfo cultureInfo = new CultureInfo("vi-VN");
         public FrmXe()
         {
             InitializeComponent();
@@ -80,10 +82,10 @@ namespace CanKT
                 row.Cells["Column5"].Value = item.tenTaiXe;
 
                 decimal tlbanthan = Convert.ToDecimal(item.trongLuongBanThan);
-                row.Cells["Column6"].Value = tlbanthan.ToString("N0");
+                row.Cells["Column6"].Value = tlbanthan.ToString(cultureInfo);
 
                 decimal tlchophep = Convert.ToDecimal(item.trongLuongChoPhep);
-                row.Cells["Column7"].Value = tlchophep.ToString("N0");
+                row.Cells["Column7"].Value = tlchophep.ToString(cultureInfo);
 
                 DateTime ngayketdangkiem = Convert.ToDateTime(item.ngayKetDangKiem);
                 row.Cells["Column8"].Value = ngayketdangkiem.ToString("dd/MM/yyyy");
