@@ -47,6 +47,7 @@ namespace CanKT
 
         private LibVLC _libVLC;
         private MediaPlayer _mediaPlayer;
+        private TransparentPanel overlayPanel;
 
         public FrmCan(string tentaikhoan, string quyen)
         {
@@ -1096,6 +1097,8 @@ namespace CanKT
                 {
                     if (quyenuser == "Admin")
                     {
+                        int cn = 0; //cn = 0 => khong trigger cn (sua phieu)
+                                    //cn = 1 => trigger cn (them phieu)
                         flag = 1;                      
 
                         // Cập nhật các thuộc tính của đối tượng dữ liệu
@@ -1308,7 +1311,15 @@ namespace CanKT
                         newPhieuThu.ghiChu = phieuthu.ghiChu;
 
                         // Thêm các thuộc tính mới cho đối tượng mới
-                        newPhieuThu.maDon = backUpMaDon;   
+                        if (phieuthu.maDon.StartsWith("H"))
+                        {
+                            newPhieuThu.maDon = newMaDon;
+                            cn = 1;
+                        }
+                        else
+                        {
+                            newPhieuThu.maDon = backUpMaDon;
+                        }
 
                         // Thêm đối tượng mới vào cơ sở dữ liệu
                         db.PhieuThus.Add(newPhieuThu);
@@ -1318,6 +1329,12 @@ namespace CanKT
 
                         // Lưu thay đổi vào cơ sở dữ liệu
                         db.SaveChanges();
+
+                        if (cn == 1)
+                        {
+                            XuLyCongNo(txbMaKH.Text, (decimal)newPhieuThu.soLuongTan, (decimal)newPhieuThu.soLuongM3, (decimal)newPhieuThu.tienThanhToan);
+                            txbMaPhieu.Text = newMaDon;
+                        }
 
                         // Thông báo thành công
                         MessageBox.Show("Cập nhật phiếu thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -2517,10 +2534,15 @@ namespace CanKT
             _mediaPlayer = new MediaPlayer(_libVLC);
 
             var videoView = new VideoView { MediaPlayer = _mediaPlayer, Dock = DockStyle.Fill };
-            this.panel1.Controls.Add(videoView);
+            //this.panel1.Controls.Add(videoView);
 
             // Gán sự kiện chuột phải để chụp ảnh và nhận diện ký tự
-            videoView.MouseClick += VideoView_MouseClick;
+            //videoView.MouseClick += VideoView_MouseClick;
+
+            // Thêm lớp phủ trong suốt
+            overlayPanel = new TransparentPanel { Dock = DockStyle.Fill };
+            overlayPanel.MouseClick += OverlayPanel_MouseClick;
+            this.panel1.Controls.Add(overlayPanel);
         }
 
         public void PlayCameraStream()
@@ -2540,6 +2562,22 @@ namespace CanKT
             }
         }
 
+        private void OverlayPanel_MouseClick(object sender, MouseEventArgs e)
+        {
+            MessageBox.Show("OverlayPanel MouseClick triggered", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            if (e.Button == MouseButtons.Right)
+            {
+                // Chụp ảnh từ VideoView
+                var bitmap = CaptureImageFromPanel(panel1);
+
+                // Nhận diện ký tự từ ảnh
+                string recognizedText = RecognizeTextFromImage(bitmap);
+
+                // Điền vào textbox
+                txbSoXe.Text = recognizedText;
+            }
+        }
+
         private void VideoView_MouseClick(object sender, MouseEventArgs e)
         {
             MessageBox.Show("Lỗi: ", "Hmm", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -2553,7 +2591,7 @@ namespace CanKT
 
                 // Điền vào textbox
                 txbSoXe.Text = recognizedText;
-            }
+            }   
         }
 
         private Bitmap CaptureImageFromPanel(Panel panel)
@@ -2585,6 +2623,14 @@ namespace CanKT
             _mediaPlayer?.Stop();
             _mediaPlayer?.Dispose();
             _libVLC?.Dispose();
+        }
+
+        public class TransparentPanel : Panel
+        {
+            protected override void OnPaintBackground(PaintEventArgs e)
+            {
+                // Don't paint background to keep it transparent
+            }
         }
         #endregion
     }
