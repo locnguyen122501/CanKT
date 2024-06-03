@@ -27,6 +27,8 @@ using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Core.Metadata.Edm;
 using LibVLCSharp.Shared;
 using LibVLCSharp.WinForms;
+using OpenCvSharp;
+using Microsoft.ReportingServices.Interfaces;
 
 namespace CanKT
 {
@@ -47,16 +49,12 @@ namespace CanKT
 
         private LibVLC _libVLC;
         private MediaPlayer _mediaPlayer;
-        private TransparentPanel overlayPanel;
+        private VideoView videoView;
 
         public FrmCan(string tentaikhoan, string quyen)
         {
             InitializeComponent();
             InitializeVlcControl();
-
-            // Đăng ký sự kiện MouseClick ở đây để đảm bảo nó luôn được gọi
-            var videoView = (VideoView)panel1.Controls[0];
-            videoView.MouseClick += VideoView_MouseClick;
 
             this.KeyPreview = true;
 
@@ -2527,22 +2525,18 @@ namespace CanKT
         private void InitializeVlcControl()
         {
             Core.Initialize();
-            //txbSoXe.Enabled = true;
+            txbSoXe.Enabled = true;
 
             var libVlcDirectory = new DirectoryInfo(@"C:\Program Files\VideoLAN\VLC"); // Đường dẫn tới thư mục chứa libvlc.dll
             _libVLC = new LibVLC("--no-osd", "--no-drop-late-frames", "--rtsp-tcp", "--network-caching=10", "--file-caching=500", "--live-caching=500", "--disc-caching=500", libVlcDirectory.FullName);
             _mediaPlayer = new MediaPlayer(_libVLC);
 
-            var videoView = new VideoView { MediaPlayer = _mediaPlayer, Dock = DockStyle.Fill };
-            //this.panel1.Controls.Add(videoView);
+            //var videoView = new VideoView { MediaPlayer = _mediaPlayer, Dock = DockStyle.Fill };
+            videoView = new VideoView { MediaPlayer = _mediaPlayer, Dock = DockStyle.Fill };
+            this.panel1.Controls.Add(videoView);
 
             // Gán sự kiện chuột phải để chụp ảnh và nhận diện ký tự
-            //videoView.MouseClick += VideoView_MouseClick;
-
-            // Thêm lớp phủ trong suốt
-            overlayPanel = new TransparentPanel { Dock = DockStyle.Fill };
-            overlayPanel.MouseClick += OverlayPanel_MouseClick;
-            this.panel1.Controls.Add(overlayPanel);
+            videoView.MouseClick += VideoView_MouseClick;
         }
 
         public void PlayCameraStream()
@@ -2562,53 +2556,118 @@ namespace CanKT
             }
         }
 
-        private void OverlayPanel_MouseClick(object sender, MouseEventArgs e)
-        {
-            MessageBox.Show("OverlayPanel MouseClick triggered", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            if (e.Button == MouseButtons.Right)
-            {
-                // Chụp ảnh từ VideoView
-                var bitmap = CaptureImageFromPanel(panel1);
-
-                // Nhận diện ký tự từ ảnh
-                string recognizedText = RecognizeTextFromImage(bitmap);
-
-                // Điền vào textbox
-                txbSoXe.Text = recognizedText;
-            }
-        }
-
         private void VideoView_MouseClick(object sender, MouseEventArgs e)
         {
             MessageBox.Show("Lỗi: ", "Hmm", MessageBoxButtons.OK, MessageBoxIcon.Error);
             if (e.Button == MouseButtons.Right)
             {
                 // Chụp ảnh từ VideoView
-                var bitmap = CaptureImageFromPanel(panel1);
+                //var bitmap = CaptureImageFromPanel(panel1);
 
                 // Nhận diện ký tự từ ảnh
-                string recognizedText = RecognizeTextFromImage(bitmap);
+                //string recognizedText = RecognizeTextFromImage(bitmap);
 
                 // Điền vào textbox
-                txbSoXe.Text = recognizedText;
+                //txbSoXe.Text = recognizedText;
             }   
         }
 
-        private Bitmap CaptureImageFromPanel(Panel panel)
+        private void btnTrigger_Click(object sender, EventArgs e)
         {
-            Bitmap bitmap = new Bitmap(panel.Width, panel.Height);
-            panel.DrawToBitmap(bitmap, new Rectangle(0, 0, panel.Width, panel.Height));
+            MessageBox.Show("Lỗi: ", "Hmm", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            // Chụp ảnh từ VideoView
+            var bitmap = CaptureImageFromPanel();
+            //bitmap.Save("captured_frame.png", System.Drawing.Imaging.ImageFormat.Png);
+
+            // Hiển thị bitmap trong PictureBox
+            pictureBox1.Image = bitmap;
+
+            // Tìm và cắt vùng chứa biển số xe
+            var licensePlateBitmap = DetectAndCropLicensePlate(bitmap);
+            licensePlateBitmap.Save("license_plate.png", System.Drawing.Imaging.ImageFormat.Png); // Save to file for testing
+
+            // Nhận diện ký tự từ ảnh
+            string recognizedText = RecognizeTextFromImage(licensePlateBitmap);
+
+            // Điền vào textbox
+            txbSoXe.Text = recognizedText;
+        }
+
+        //private Bitmap CaptureImageFromPanel(Panel panel)
+        private Bitmap CaptureImageFromPanel()
+        {
+            string tempFilePath = Path.Combine(Path.GetTempPath(), "snapshot.png");
+
+            //string testFilePath = "C:\\Users\\User001\\Desktop\\Testing\\license.png";
+
+            // Take a snapshot and save it to the temporary file path
+            _mediaPlayer.TakeSnapshot(0, tempFilePath, 0, 0);
+
+            // Load the snapshot into a Bitmap object
+            Bitmap bitmap = new Bitmap(tempFilePath);
+
+            // Optionally, delete the temporary file
+            //File.Delete(tempFilePath);
+
             return bitmap;
         }
 
-        private string RecognizeTextFromImage(Bitmap image)
+        private Bitmap DetectAndCropLicensePlate(Bitmap bitmap)
         {
-            string tessDataPath = @"C:\Users\User001\Desktop\Testing\CanKT\Resources\tessdata"; // Đường dẫn tới thư mục chứa tessdata
-            string lang = "eng"; // Ngôn ngữ nhận diện
+            // Chuyển Bitmap sang Mat của OpenCV
+            Mat src = OpenCvSharp.Extensions.BitmapConverter.ToMat(bitmap);
+            Mat gray = new Mat();
+            Cv2.CvtColor(src, gray, ColorConversionCodes.BGR2GRAY);
+
+            // Áp dụng xử lý ảnh để tìm các khối chữ nhật có khả năng là biển số xe
+            Mat blurred = new Mat();
+            Cv2.GaussianBlur(gray, blurred, new OpenCvSharp.Size(5, 5), 0);
+            Mat edged = new Mat();
+            Cv2.Canny(blurred, edged, 75, 200);
+
+            // Tìm các đường viền trong ảnh
+            OpenCvSharp.Point[][] contours;
+            HierarchyIndex[] hierarchy;
+            Cv2.FindContours(edged, out contours, out hierarchy, RetrievalModes.List, ContourApproximationModes.ApproxSimple);
+
+            // Lọc các đường viền để tìm khối chữ nhật có kích thước phù hợp
+            OpenCvSharp.Rect licensePlateRect = new OpenCvSharp.Rect();
+            foreach (var contour in contours)
+            {
+                var approx = Cv2.ApproxPolyDP(contour, 0.02 * Cv2.ArcLength(contour, true), true);
+                if (approx.Length == 4)
+                {
+                    var rect = Cv2.BoundingRect(approx);
+                    if (IsPossibleLicensePlate(rect))
+                    {
+                        licensePlateRect = rect;
+                        break;
+                    }
+                }
+            }
+
+            // Cắt vùng chứa biển số xe
+            var licensePlateMat = new Mat(src, licensePlateRect);
+            var licensePlateBitmap = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(licensePlateMat);
+
+            return licensePlateBitmap;
+        }
+
+        private bool IsPossibleLicensePlate(OpenCvSharp.Rect rect)
+        {
+            // Xác định điều kiện để vùng được cho là biển số xe (tùy chỉnh điều kiện theo yêu cầu của bạn)
+            float aspectRatio = (float)rect.Width / rect.Height;
+            return aspectRatio > 2 && aspectRatio < 5 && rect.Height > 20;
+        }
+
+        private string RecognizeTextFromImage(Bitmap bitmap)
+        {
+            string tessDataPath = @"C:\Users\User001\AppData\Local\Programs\Tesseract-OCR\tessdata"; // Đường dẫn tới thư mục chứa tessdata
+            string lang = "vie"; // Ngôn ngữ nhận diện
 
             using (var engine = new TesseractEngine(tessDataPath, lang, EngineMode.Default))
             {
-                using (var pix = PixConverter.ToPix(image))
+                using (var pix = PixConverter.ToPix(bitmap))
                 {
                     using (var page = engine.Process(pix))
                     {
@@ -2623,15 +2682,7 @@ namespace CanKT
             _mediaPlayer?.Stop();
             _mediaPlayer?.Dispose();
             _libVLC?.Dispose();
-        }
-
-        public class TransparentPanel : Panel
-        {
-            protected override void OnPaintBackground(PaintEventArgs e)
-            {
-                // Don't paint background to keep it transparent
-            }
-        }
+        }       
         #endregion
     }
 }
