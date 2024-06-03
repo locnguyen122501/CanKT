@@ -5,6 +5,8 @@ using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Migrations.Infrastructure;
 using System.Drawing;
+using System.Drawing.Imaging;
+using Tesseract;
 using System.Globalization;
 using System.IO.Ports;
 using System.Linq;
@@ -45,11 +47,16 @@ namespace CanKT
 
         private LibVLC _libVLC;
         private MediaPlayer _mediaPlayer;
+        private TransparentPanel overlayPanel;
 
         public FrmCan(string tentaikhoan, string quyen)
         {
             InitializeComponent();
             InitializeVlcControl();
+
+            // Đăng ký sự kiện MouseClick ở đây để đảm bảo nó luôn được gọi
+            var videoView = (VideoView)panel1.Controls[0];
+            videoView.MouseClick += VideoView_MouseClick;
 
             this.KeyPreview = true;
 
@@ -85,11 +92,7 @@ namespace CanKT
                 dgvCan.FirstDisplayedScrollingRowIndex = dgvCan.Rows.Count - 1;
             }
 
-            string url = "rtsp://172.16.10.14:554/cam/realmonitor?channel=1&subtype=0";
-            string username = "admin";
-            string password = "admin!@#$1234";
-
-            PlayCameraStream(url, username, password);
+            PlayCameraStream(); // ket noi cam
         }
 
         private void LoadDataIntoDataGridView()
@@ -1095,6 +1098,8 @@ namespace CanKT
                 {
                     if (quyenuser == "Admin")
                     {
+                        int cn = 0; //cn = 0 => khong trigger cn (sua phieu)
+                                    //cn = 1 => trigger cn (them phieu)
                         flag = 1;                      
 
                         // Cập nhật các thuộc tính của đối tượng dữ liệu
@@ -1307,7 +1312,15 @@ namespace CanKT
                         newPhieuThu.ghiChu = phieuthu.ghiChu;
 
                         // Thêm các thuộc tính mới cho đối tượng mới
-                        newPhieuThu.maDon = backUpMaDon;   
+                        if (phieuthu.maDon.StartsWith("H"))
+                        {
+                            newPhieuThu.maDon = newMaDon;
+                            cn = 1;
+                        }
+                        else
+                        {
+                            newPhieuThu.maDon = backUpMaDon;
+                        }
 
                         // Thêm đối tượng mới vào cơ sở dữ liệu
                         db.PhieuThus.Add(newPhieuThu);
@@ -1317,6 +1330,12 @@ namespace CanKT
 
                         // Lưu thay đổi vào cơ sở dữ liệu
                         db.SaveChanges();
+
+                        if (cn == 1)
+                        {
+                            XuLyCongNo(txbMaKH.Text, (decimal)newPhieuThu.soLuongTan, (decimal)newPhieuThu.soLuongM3, (decimal)newPhieuThu.tienThanhToan);
+                            txbMaPhieu.Text = newMaDon;
+                        }
 
                         // Thông báo thành công
                         MessageBox.Show("Cập nhật phiếu thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -2517,22 +2536,32 @@ namespace CanKT
         private void InitializeVlcControl()
         {
             Core.Initialize();
+            //txbSoXe.Enabled = true;
 
             var libVlcDirectory = new DirectoryInfo(@"C:\Program Files\VideoLAN\VLC"); // Đường dẫn tới thư mục chứa libvlc.dll
-            _libVLC = new LibVLC("--no-osd", "--no-drop-late-frames", "--rtsp-tcp", "--network-caching=500", "--file-caching=500", "--live-caching=500", "--disc-caching=500", libVlcDirectory.FullName);
+            _libVLC = new LibVLC("--no-osd", "--no-drop-late-frames", "--rtsp-tcp", "--network-caching=10", "--file-caching=500", "--live-caching=500", "--disc-caching=500", libVlcDirectory.FullName);
             _mediaPlayer = new MediaPlayer(_libVLC);
 
             var videoView = new VideoView { MediaPlayer = _mediaPlayer, Dock = DockStyle.Fill };
-            this.panel1.Controls.Add(videoView);
+            //this.panel1.Controls.Add(videoView);
+
+            // Gán sự kiện chuột phải để chụp ảnh và nhận diện ký tự
+            //videoView.MouseClick += VideoView_MouseClick;
+
+            // Thêm lớp phủ trong suốt
+            overlayPanel = new TransparentPanel { Dock = DockStyle.Fill };
+            overlayPanel.MouseClick += OverlayPanel_MouseClick;
+            this.panel1.Controls.Add(overlayPanel);
         }
 
-        public void PlayCameraStream(string url, string username, string password)
+        public void PlayCameraStream()
         {
+            string url = "rtsp://172.16.10.14:554/cam/realmonitor?channel=1&subtype=0";
             try
             {
                 var media = new Media(_libVLC, url, FromType.FromLocation);
-                media.AddOption($":rtsp-user={username}");
-                media.AddOption($":rtsp-pwd={password}");
+                media.AddOption($":rtsp-user={"admin"}");
+                media.AddOption($":rtsp-pwd={"admin!@#$1234"}");
 
                 _mediaPlayer.Play(media);
             }
@@ -2542,11 +2571,75 @@ namespace CanKT
             }
         }
 
+        private void OverlayPanel_MouseClick(object sender, MouseEventArgs e)
+        {
+            MessageBox.Show("OverlayPanel MouseClick triggered", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            if (e.Button == MouseButtons.Right)
+            {
+                // Chụp ảnh từ VideoView
+                var bitmap = CaptureImageFromPanel(panel1);
+
+                // Nhận diện ký tự từ ảnh
+                string recognizedText = RecognizeTextFromImage(bitmap);
+
+                // Điền vào textbox
+                txbSoXe.Text = recognizedText;
+            }
+        }
+
+        private void VideoView_MouseClick(object sender, MouseEventArgs e)
+        {
+            MessageBox.Show("Lỗi: ", "Hmm", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            if (e.Button == MouseButtons.Right)
+            {
+                // Chụp ảnh từ VideoView
+                var bitmap = CaptureImageFromPanel(panel1);
+
+                // Nhận diện ký tự từ ảnh
+                string recognizedText = RecognizeTextFromImage(bitmap);
+
+                // Điền vào textbox
+                txbSoXe.Text = recognizedText;
+            }   
+        }
+
+        private Bitmap CaptureImageFromPanel(Panel panel)
+        {
+            Bitmap bitmap = new Bitmap(panel.Width, panel.Height);
+            panel.DrawToBitmap(bitmap, new Rectangle(0, 0, panel.Width, panel.Height));
+            return bitmap;
+        }
+
+        private string RecognizeTextFromImage(Bitmap image)
+        {
+            string tessDataPath = @"C:\Users\User001\Desktop\Testing\CanKT\Resources\tessdata"; // Đường dẫn tới thư mục chứa tessdata
+            string lang = "eng"; // Ngôn ngữ nhận diện
+
+            using (var engine = new TesseractEngine(tessDataPath, lang, EngineMode.Default))
+            {
+                using (var pix = PixConverter.ToPix(image))
+                {
+                    using (var page = engine.Process(pix))
+                    {
+                        return page.GetText();
+                    }
+                }
+            }
+        }
+
         private void FrmCan_FormClosing(object sender, FormClosingEventArgs e)
         {
             _mediaPlayer?.Stop();
             _mediaPlayer?.Dispose();
             _libVLC?.Dispose();
+        }
+
+        public class TransparentPanel : Panel
+        {
+            protected override void OnPaintBackground(PaintEventArgs e)
+            {
+                // Don't paint background to keep it transparent
+            }
         }
         #endregion
     }
