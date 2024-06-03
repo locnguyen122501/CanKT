@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using ClosedXML.Excel;
 using DocumentFormat.OpenXml.Wordprocessing;
 using System.Runtime.InteropServices.ComTypes;
+using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace CanKT.FormChucNang
 {
@@ -163,7 +164,31 @@ namespace CanKT.FormChucNang
                 {
                     for (int col = 0; col < dgv.Columns.Count; col++)
                     {
-                        worksheet.Cell(row + 2, col + 1).Value = dgv.Rows[row].Cells[col].Value;
+                        //worksheet.Cell(row + 2, col + 1).Value = dgv.Rows[row].Cells[col].Value;
+
+                        var cellValue = dgv.Rows[row].Cells[col].Value;
+
+                        // Kiểm tra kiểu dữ liệu của cellValue và chuyển đổi tương ứng
+                        if (cellValue is double)
+                        {
+                            worksheet.Cell(row + 2, col + 1).Value = (double)cellValue;
+                        }
+                        else if (cellValue is string)
+                        {
+                            worksheet.Cell(row + 2, col + 1).Value = (string)cellValue;
+                        }
+                        else if (cellValue is DateTime)
+                        {
+                            worksheet.Cell(row + 2, col + 1).Value = (DateTime)cellValue;
+                        }
+                        else if (cellValue is bool)
+                        {
+                            worksheet.Cell(row + 2, col + 1).Value = (bool)cellValue;
+                        }
+                        else
+                        {
+                            worksheet.Cell(row + 2, col + 1).Value = cellValue?.ToString();
+                        }
                     }
                 }
 
