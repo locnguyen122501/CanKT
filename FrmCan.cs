@@ -2663,7 +2663,7 @@ namespace CanKT
         private string RecognizeTextFromImage(Bitmap bitmap)
         {
             string tessDataPath = @"C:\Users\User001\AppData\Local\Programs\Tesseract-OCR\tessdata"; // Đường dẫn tới thư mục chứa tessdata
-            string lang = "vie"; // Ngôn ngữ nhận diện
+            string lang = "eng"; // Ngôn ngữ nhận diện
 
             using (var engine = new TesseractEngine(tessDataPath, lang, EngineMode.Default))
             {
