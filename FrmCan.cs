@@ -2601,7 +2601,7 @@ namespace CanKT
             //string testFilePath = "C:\\Users\\User001\\Desktop\\Testing\\license.png";
 
             // Take a snapshot and save it to the temporary file path
-            _mediaPlayer.TakeSnapshot(0, tempFilePath, 0, 0);
+            _mediaPlayer.TakeSnapshot(0, tempFilePath, 521, 322);
 
             // Load the snapshot into a Bitmap object
             Bitmap bitmap = new Bitmap(tempFilePath);
@@ -2623,7 +2623,7 @@ namespace CanKT
             Mat blurred = new Mat();
             Cv2.GaussianBlur(gray, blurred, new OpenCvSharp.Size(5, 5), 0);
             Mat edged = new Mat();
-            Cv2.Canny(blurred, edged, 75, 200);
+            Cv2.Canny(blurred, edged, 50, 150);
 
             // Tìm các đường viền trong ảnh
             OpenCvSharp.Point[][] contours;
