@@ -2593,7 +2593,6 @@ namespace CanKT
             txbSoXe.Text = recognizedText;
         }
 
-        //private Bitmap CaptureImageFromPanel(Panel panel)
         private Bitmap CaptureImageFromPanel()
         {
             string tempFilePath = Path.Combine(Path.GetTempPath(), "snapshot.png");
