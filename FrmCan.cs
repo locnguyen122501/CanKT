@@ -2573,8 +2573,7 @@ namespace CanKT
         }
 
         private void btnTrigger_Click(object sender, EventArgs e)
-        {
-            //MessageBox.Show("Lỗi: ", "Hmm", MessageBoxButtons.OK, MessageBoxIcon.Error);           
+        {       
             // Chụp ảnh từ VideoView
             var bitmap = CaptureImageFromPanel();
             //bitmap.Save("captured_frame.png", System.Drawing.Imaging.ImageFormat.Png);
