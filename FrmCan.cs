@@ -2531,7 +2531,6 @@ namespace CanKT
             _libVLC = new LibVLC("--no-osd", "--no-drop-late-frames", "--rtsp-tcp", "--network-caching=10", "--file-caching=500", "--live-caching=500", "--disc-caching=500", libVlcDirectory.FullName);
             _mediaPlayer = new MediaPlayer(_libVLC);
 
-            //var videoView = new VideoView { MediaPlayer = _mediaPlayer, Dock = DockStyle.Fill };
             videoView = new VideoView { MediaPlayer = _mediaPlayer, Dock = DockStyle.Fill };
             this.panel1.Controls.Add(videoView);
 
