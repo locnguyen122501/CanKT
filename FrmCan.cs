@@ -41,7 +41,6 @@ namespace CanKT
         int prevMP = 0;
 
         string quyenuser = "";
-
         string tentk = "";
 
         string tlbanthan, tlchophep = "";
