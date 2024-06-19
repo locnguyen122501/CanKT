@@ -2641,7 +2641,6 @@ namespace CanKT
                         // Vẽ viền quanh vùng được nhận diện
                         Cv2.Rectangle(src, rect, new Scalar(0, 255, 0), 2);
 
-
                         break;
                     }
                 }
