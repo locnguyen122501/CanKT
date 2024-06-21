@@ -2579,6 +2579,7 @@ namespace CanKT
             // Hiển thị bitmap trong PictureBox
             pictureBox1.Image = bitmap;
 
+
             // Tìm và cắt vùng chứa biển số xe
             var licensePlateBitmap = DetectAndCropLicensePlate(bitmap);
             licensePlateBitmap.Save("license_plate.png", System.Drawing.Imaging.ImageFormat.Png); // Save to file for testing
