@@ -2620,7 +2620,7 @@ namespace CanKT
             Mat blurred = new Mat();
             Cv2.GaussianBlur(gray, blurred, new OpenCvSharp.Size(5, 5), 0);
             Mat edged = new Mat();
-            Cv2.Canny(blurred, edged, 50, 150);
+            Cv2.Canny(blurred, edged, 75, 150);
 
             // Tìm các đường viền trong ảnh
             OpenCvSharp.Point[][] contours;
@@ -2647,18 +2647,34 @@ namespace CanKT
                 }
             }
 
-            // Cắt vùng chứa biển số xe
-            var licensePlateMat = new Mat(src, licensePlateRect);
-            var licensePlateBitmap = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(licensePlateMat);
+            // Cắt vùng chứa biển số xe nếu tìm thấy
+            Bitmap licensePlateBitmap;
+            if (licensePlateRect.Width > 0 && licensePlateRect.Height > 0)
+            {
+                var licensePlateMat = new Mat(src, licensePlateRect);
+                licensePlateBitmap = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(licensePlateMat);
+            }
+            else
+            {
+                licensePlateBitmap = bitmap;
+            }
 
-            return licensePlateBitmap;
+            // Chuyển đổi lại ảnh gốc sang Bitmap để hiển thị
+            var resultBitmap = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(src);
+            return resultBitmap;
+
+            // Cắt vùng chứa biển số xe
+            //var licensePlateMat = new Mat(src, licensePlateRect);
+            //var licensePlateBitmap = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(licensePlateMat);
+
+            //return licensePlateBitmap;
         }
 
         private bool IsPossibleLicensePlate(OpenCvSharp.Rect rect)
         {
             // Xác định điều kiện để vùng được cho là biển số xe (tùy chỉnh điều kiện theo yêu cầu của bạn)
-            float aspectRatio = (float)rect.Width / rect.Height;
-            return aspectRatio > 2 && aspectRatio < 5 && rect.Height > 20;
+            double aspectRatio = (double)rect.Width / rect.Height;
+            return aspectRatio > 2 && aspectRatio < 5 && rect.Width > 30 && rect.Height > 15;
         }
 
         private string RecognizeTextFromImage(Bitmap bitmap)
