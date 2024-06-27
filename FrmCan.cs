@@ -2622,6 +2622,7 @@ namespace CanKT
             Mat edged = new Mat();
             Cv2.Canny(blurred, edged, 75, 150);
 
+
             // Tìm các đường viền trong ảnh
             OpenCvSharp.Point[][] contours;
             HierarchyIndex[] hierarchy;
