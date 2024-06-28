@@ -2554,22 +2554,6 @@ namespace CanKT
             }
         }
 
-        private void VideoView_MouseClick(object sender, MouseEventArgs e)
-        {
-            MessageBox.Show("Lỗi: ", "Hmm", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            if (e.Button == MouseButtons.Right)
-            {
-                // Chụp ảnh từ VideoView
-                //var bitmap = CaptureImageFromPanel(panel1);
-
-                // Nhận diện ký tự từ ảnh
-                //string recognizedText = RecognizeTextFromImage(bitmap);
-
-                // Điền vào textbox
-                //txbSoXe.Text = recognizedText;
-            }   
-        }
-
         private void btnTrigger_Click(object sender, EventArgs e)
         {       
             // Chụp ảnh từ VideoView
@@ -2621,7 +2605,6 @@ namespace CanKT
             Cv2.GaussianBlur(gray, blurred, new OpenCvSharp.Size(5, 5), 0);
             Mat edged = new Mat();
             Cv2.Canny(blurred, edged, 75, 150);
-
 
             // Tìm các đường viền trong ảnh
             OpenCvSharp.Point[][] contours;
