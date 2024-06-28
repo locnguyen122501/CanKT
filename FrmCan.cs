@@ -41,7 +41,6 @@ namespace CanKT
         int prevMP = 0;
 
         string quyenuser = "";
-
         string tentk = "";
 
         string tlbanthan, tlchophep = "";
@@ -2540,7 +2539,6 @@ namespace CanKT
             _libVLC = new LibVLC("--no-osd", "--no-drop-late-frames", "--rtsp-tcp", "--network-caching=10", "--file-caching=500", "--live-caching=500", "--disc-caching=500", libVlcDirectory.FullName);
             _mediaPlayer = new MediaPlayer(_libVLC);
 
-            //var videoView = new VideoView { MediaPlayer = _mediaPlayer, Dock = DockStyle.Fill };
             videoView = new VideoView { MediaPlayer = _mediaPlayer, Dock = DockStyle.Fill };
             this.panel1.Controls.Add(videoView);
 
@@ -2565,32 +2563,15 @@ namespace CanKT
             }
         }
 
-        private void VideoView_MouseClick(object sender, MouseEventArgs e)
-        {
-            MessageBox.Show("Lỗi: ", "Hmm", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            if (e.Button == MouseButtons.Right)
-            {
-                // Chụp ảnh từ VideoView
-                //var bitmap = CaptureImageFromPanel(panel1);
-
-                // Nhận diện ký tự từ ảnh
-                //string recognizedText = RecognizeTextFromImage(bitmap);
-
-                // Điền vào textbox
-                //txbSoXe.Text = recognizedText;
-            }   
-        }
-
         private void btnTrigger_Click(object sender, EventArgs e)
-        {
-            //MessageBox.Show("Lỗi: ", "Hmm", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            
+        {       
             // Chụp ảnh từ VideoView
             var bitmap = CaptureImageFromPanel();
             //bitmap.Save("captured_frame.png", System.Drawing.Imaging.ImageFormat.Png);
 
             // Hiển thị bitmap trong PictureBox
             pictureBox1.Image = bitmap;
+
 
             // Tìm và cắt vùng chứa biển số xe
             var licensePlateBitmap = DetectAndCropLicensePlate(bitmap);
@@ -2632,7 +2613,7 @@ namespace CanKT
             Mat blurred = new Mat();
             Cv2.GaussianBlur(gray, blurred, new OpenCvSharp.Size(5, 5), 0);
             Mat edged = new Mat();
-            Cv2.Canny(blurred, edged, 50, 150);
+            Cv2.Canny(blurred, edged, 75, 150);
 
             // Tìm các đường viền trong ảnh
             OpenCvSharp.Point[][] contours;
@@ -2650,29 +2631,49 @@ namespace CanKT
                     if (IsPossibleLicensePlate(rect))
                     {
                         licensePlateRect = rect;
+
+                        // Vẽ viền quanh vùng được nhận diện
+                        Cv2.Rectangle(src, rect, new Scalar(0, 255, 0), 2);
+
                         break;
                     }
                 }
             }
 
-            // Cắt vùng chứa biển số xe
-            var licensePlateMat = new Mat(src, licensePlateRect);
-            var licensePlateBitmap = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(licensePlateMat);
+            // Cắt vùng chứa biển số xe nếu tìm thấy
+            Bitmap licensePlateBitmap;
+            if (licensePlateRect.Width > 0 && licensePlateRect.Height > 0)
+            {
+                var licensePlateMat = new Mat(src, licensePlateRect);
+                licensePlateBitmap = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(licensePlateMat);
+            }
+            else
+            {
+                licensePlateBitmap = bitmap;
+            }
 
-            return licensePlateBitmap;
+            // Chuyển đổi lại ảnh gốc sang Bitmap để hiển thị
+            var resultBitmap = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(src);
+            return resultBitmap;
+
+            // Cắt vùng chứa biển số xe
+            //var licensePlateMat = new Mat(src, licensePlateRect);
+            //var licensePlateBitmap = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(licensePlateMat);
+
+            //return licensePlateBitmap;
         }
 
         private bool IsPossibleLicensePlate(OpenCvSharp.Rect rect)
         {
             // Xác định điều kiện để vùng được cho là biển số xe (tùy chỉnh điều kiện theo yêu cầu của bạn)
-            float aspectRatio = (float)rect.Width / rect.Height;
-            return aspectRatio > 2 && aspectRatio < 5 && rect.Height > 20;
+            double aspectRatio = (double)rect.Width / rect.Height;
+            return aspectRatio > 2 && aspectRatio < 5 && rect.Width > 30 && rect.Height > 15;
         }
 
         private string RecognizeTextFromImage(Bitmap bitmap)
         {
-            string tessDataPath = @"C:\Users\User001\AppData\Local\Programs\Tesseract-OCR\tessdata"; // Đường dẫn tới thư mục chứa tessdata
-            string lang = "eng"; // Ngôn ngữ nhận diện
+            string tessDataPath = @"E:\Tesseract-OCR"; // Đường dẫn tới thư mục chứa tessdata
+            string lang = "vie"; // Ngôn ngữ nhận diện
 
             using (var engine = new TesseractEngine(tessDataPath, lang, EngineMode.Default))
             {
