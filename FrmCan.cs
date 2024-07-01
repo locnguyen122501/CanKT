@@ -2534,7 +2534,7 @@ namespace CanKT
             this.panel1.Controls.Add(videoView);
 
             // Gán sự kiện chuột phải để chụp ảnh và nhận diện ký tự
-            videoView.MouseClick += VideoView_MouseClick;
+            //videoView.MouseClick += VideoView_MouseClick;
         }
 
         public void PlayCameraStream()
@@ -2605,6 +2605,7 @@ namespace CanKT
             Cv2.GaussianBlur(gray, blurred, new OpenCvSharp.Size(5, 5), 0);
             Mat edged = new Mat();
             Cv2.Canny(blurred, edged, 75, 150);
+
 
             // Tìm các đường viền trong ảnh
             OpenCvSharp.Point[][] contours;
