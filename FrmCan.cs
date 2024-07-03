@@ -2548,6 +2548,7 @@ namespace CanKT
 
                 _mediaPlayer.Play(media);
             }
+
             catch (Exception ex)
             {
                 MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
