@@ -50,7 +50,6 @@ namespace CanKT
             this.Column9 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column10 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.lblDate = new System.Windows.Forms.Label();
             this.txbGhiChu = new System.Windows.Forms.TextBox();
             this.lblWelcome = new System.Windows.Forms.Label();
@@ -108,12 +107,9 @@ namespace CanKT
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.panel1 = new System.Windows.Forms.Panel();
-            this.btnTrigger = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCan)).BeginInit();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox2.SuspendLayout();
-            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // dgvCan
@@ -238,7 +234,6 @@ namespace CanKT
             // groupBox1
             // 
             this.groupBox1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.groupBox1.Controls.Add(this.pictureBox1);
             this.groupBox1.Controls.Add(this.lblDate);
             this.groupBox1.Controls.Add(this.txbGhiChu);
             this.groupBox1.Controls.Add(this.lblWelcome);
@@ -286,15 +281,6 @@ namespace CanKT
             this.groupBox1.Size = new System.Drawing.Size(907, 339);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Location = new System.Drawing.Point(381, 11);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(521, 322);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 46;
-            this.pictureBox1.TabStop = false;
             // 
             // lblDate
             // 
@@ -899,23 +885,10 @@ namespace CanKT
             this.panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panel1.BackgroundImage = global::CanKT.Properties.Resources.camera_pic;
             this.panel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.panel1.Controls.Add(this.btnTrigger);
             this.panel1.Location = new System.Drawing.Point(925, 12);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(295, 386);
             this.panel1.TabIndex = 5;
-            // 
-            // btnTrigger
-            // 
-            this.btnTrigger.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnTrigger.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnTrigger.Location = new System.Drawing.Point(220, 0);
-            this.btnTrigger.Name = "btnTrigger";
-            this.btnTrigger.Size = new System.Drawing.Size(75, 23);
-            this.btnTrigger.TabIndex = 0;
-            this.btnTrigger.Text = "Click";
-            this.btnTrigger.UseVisualStyleBackColor = true;
-            this.btnTrigger.Click += new System.EventHandler(this.btnTrigger_Click);
             // 
             // FrmCan
             // 
@@ -941,9 +914,7 @@ namespace CanKT
             ((System.ComponentModel.ISupportInitialize)(this.dgvCan)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.groupBox2.ResumeLayout(false);
-            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1018,7 +989,5 @@ namespace CanKT
         private System.Windows.Forms.DataGridViewTextBoxColumn Column9;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column10;
         private System.Windows.Forms.Panel panel1;
-        private Button btnTrigger;
-        private PictureBox pictureBox1;
     }
 }

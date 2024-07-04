@@ -29,6 +29,7 @@ using LibVLCSharp.Shared;
 using LibVLCSharp.WinForms;
 using OpenCvSharp;
 using Microsoft.ReportingServices.Interfaces;
+using OpenCvSharp.Extensions;
 
 namespace CanKT
 {
@@ -2548,72 +2549,54 @@ namespace CanKT
 
                 _mediaPlayer.Play(media);
             }
-
             catch (Exception ex)
             {
                 MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void btnTrigger_Click(object sender, EventArgs e)
-        {       
-            // Chụp ảnh từ VideoView
-            var bitmap = CaptureImageFromPanel();
-            //bitmap.Save("captured_frame.png", System.Drawing.Imaging.ImageFormat.Png);
-
-            // Hiển thị bitmap trong PictureBox
-            pictureBox1.Image = bitmap;
-
-            // Tìm và cắt vùng chứa biển số xe
-            var licensePlateBitmap = DetectAndCropLicensePlate(bitmap);
-            licensePlateBitmap.Save("license_plate.png", System.Drawing.Imaging.ImageFormat.Png); // Save to file for testing
-
-            // Nhận diện ký tự từ ảnh
-            string recognizedText = RecognizeTextFromImage(licensePlateBitmap);
-
-            // Điền vào textbox
-            txbSoXe.Text = recognizedText;
+        private void InitializeRecognitionTimer()
+        {
+            recognitionTimer = new System.Windows.Forms.Timer();
+            recognitionTimer.Interval = 1000; // Chạy mỗi giây
+            recognitionTimer.Tick += RecognitionTimer_Tick;
+            recognitionTimer.Start();
         }
 
-        private Bitmap CaptureImageFromPanel()
+        private void RecognitionTimer_Tick(object sender, EventArgs e)
         {
-            string tempFilePath = Path.Combine(Path.GetTempPath(), "snapshot.png");
+            var bitmap = CaptureImageFromVideoView(videoView);
+            if (bitmap != null)
+            {
+                var detectedBitmap = DetectAndHighlightLicensePlate(bitmap);
+                videoView.Image = detectedBitmap; // Hiển thị ảnh với khung chữ nhật trên videoView
+            }
+        }
 
-            //string testFilePath = "C:\\Users\\User001\\Desktop\\Testing\\license.png";
-
-            // Take a snapshot and save it to the temporary file path
-            _mediaPlayer.TakeSnapshot(0, tempFilePath, 521, 322);
-
-            // Load the snapshot into a Bitmap object
-            Bitmap bitmap = new Bitmap(tempFilePath);
-
-            // Optionally, delete the temporary file
-            //File.Delete(tempFilePath);
-
+        private Bitmap CaptureImageFromVideoView(VideoView videoView)
+        {
+            var bitmap = new Bitmap(videoView.Width, videoView.Height);
+            var graphics = Graphics.FromImage(bitmap);
+            var rect = videoView.ClientRectangle;
+            videoView.DrawToBitmap(bitmap, rect);
             return bitmap;
         }
 
-        private Bitmap DetectAndCropLicensePlate(Bitmap bitmap)
+        private Bitmap DetectAndHighlightLicensePlate(Bitmap bitmap)
         {
-            // Chuyển Bitmap sang Mat của OpenCV
-            Mat src = OpenCvSharp.Extensions.BitmapConverter.ToMat(bitmap);
+            Mat src = BitmapConverter.ToMat(bitmap);
             Mat gray = new Mat();
             Cv2.CvtColor(src, gray, ColorConversionCodes.BGR2GRAY);
 
-            // Áp dụng xử lý ảnh để tìm các khối chữ nhật có khả năng là biển số xe
             Mat blurred = new Mat();
             Cv2.GaussianBlur(gray, blurred, new OpenCvSharp.Size(5, 5), 0);
             Mat edged = new Mat();
             Cv2.Canny(blurred, edged, 75, 150);
 
-
-            // Tìm các đường viền trong ảnh
-            OpenCvSharp.Point[][] contours;
+            Point[][] contours;
             HierarchyIndex[] hierarchy;
             Cv2.FindContours(edged, out contours, out hierarchy, RetrievalModes.List, ContourApproximationModes.ApproxSimple);
 
-            // Lọc các đường viền để tìm khối chữ nhật có kích thước phù hợp
-            OpenCvSharp.Rect licensePlateRect = new OpenCvSharp.Rect();
             foreach (var contour in contours)
             {
                 var approx = Cv2.ApproxPolyDP(contour, 0.02 * Cv2.ArcLength(contour, true), true);
@@ -2622,42 +2605,17 @@ namespace CanKT
                     var rect = Cv2.BoundingRect(approx);
                     if (IsPossibleLicensePlate(rect))
                     {
-                        licensePlateRect = rect;
-
-                        // Vẽ viền quanh vùng được nhận diện
-                        Cv2.Rectangle(src, rect, new Scalar(0, 255, 0), 2);
-
+                        Cv2.Rectangle(src, rect, new Scalar(0, 255, 0), 2); // Vẽ hình chữ nhật quanh biển số xe
                         break;
                     }
                 }
             }
 
-            // Cắt vùng chứa biển số xe nếu tìm thấy
-            Bitmap licensePlateBitmap;
-            if (licensePlateRect.Width > 0 && licensePlateRect.Height > 0)
-            {
-                var licensePlateMat = new Mat(src, licensePlateRect);
-                licensePlateBitmap = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(licensePlateMat);
-            }
-            else
-            {
-                licensePlateBitmap = bitmap;
-            }
-
-            // Chuyển đổi lại ảnh gốc sang Bitmap để hiển thị
-            var resultBitmap = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(src);
-            return resultBitmap;
-
-            // Cắt vùng chứa biển số xe
-            //var licensePlateMat = new Mat(src, licensePlateRect);
-            //var licensePlateBitmap = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(licensePlateMat);
-
-            //return licensePlateBitmap;
+            return BitmapConverter.ToBitmap(src);
         }
 
-        private bool IsPossibleLicensePlate(OpenCvSharp.Rect rect)
+        private bool IsPossibleLicensePlate(Rect rect)
         {
-            // Xác định điều kiện để vùng được cho là biển số xe (tùy chỉnh điều kiện theo yêu cầu của bạn)
             double aspectRatio = (double)rect.Width / rect.Height;
             return aspectRatio > 2 && aspectRatio < 5 && rect.Width > 30 && rect.Height > 15;
         }
