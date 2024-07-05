@@ -50,6 +50,8 @@ namespace CanKT
         private LibVLC _libVLC;
         private MediaPlayer _mediaPlayer;
         private VideoView videoView;
+        private System.Windows.Forms.Timer recognitionTimer;
+        private PictureBox pictureBox;
 
         public FrmCan(string tentaikhoan, string quyen)
         {
@@ -2569,7 +2571,7 @@ namespace CanKT
             if (bitmap != null)
             {
                 var detectedBitmap = DetectAndHighlightLicensePlate(bitmap);
-                videoView.Image = detectedBitmap; // Hiển thị ảnh với khung chữ nhật trên videoView
+                pictureBox.Image = detectedBitmap; // Hiển thị ảnh với khung chữ nhật trên videoView
             }
         }
 
@@ -2593,7 +2595,7 @@ namespace CanKT
             Mat edged = new Mat();
             Cv2.Canny(blurred, edged, 75, 150);
 
-            Point[][] contours;
+            OpenCvSharp.Point[][] contours;
             HierarchyIndex[] hierarchy;
             Cv2.FindContours(edged, out contours, out hierarchy, RetrievalModes.List, ContourApproximationModes.ApproxSimple);
 
@@ -2614,7 +2616,7 @@ namespace CanKT
             return BitmapConverter.ToBitmap(src);
         }
 
-        private bool IsPossibleLicensePlate(Rect rect)
+        private bool IsPossibleLicensePlate(OpenCvSharp.Rect rect)
         {
             double aspectRatio = (double)rect.Width / rect.Height;
             return aspectRatio > 2 && aspectRatio < 5 && rect.Width > 30 && rect.Height > 15;
