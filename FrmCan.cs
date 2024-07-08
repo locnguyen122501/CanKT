@@ -2550,6 +2550,8 @@ namespace CanKT
                 media.AddOption($":rtsp-pwd={"admin!@#$1234"}");
 
                 _mediaPlayer.Play(media);
+
+                InitializeRecognitionTimer();
             }
             catch (Exception ex)
             {
