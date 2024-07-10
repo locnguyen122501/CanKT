@@ -2575,6 +2575,7 @@ namespace CanKT
                 var detectedBitmap = DetectAndHighlightLicensePlate(bitmap);
                 pictureBox.Image = detectedBitmap; // Hiển thị ảnh với khung chữ nhật trên videoView
             }
+
         }
 
         private Bitmap CaptureImageFromVideoView(VideoView videoView)
