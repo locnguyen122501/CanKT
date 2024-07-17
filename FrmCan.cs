@@ -2536,6 +2536,7 @@ namespace CanKT
             videoView = new VideoView { MediaPlayer = _mediaPlayer, Dock = DockStyle.Fill };
             this.panel1.Controls.Add(videoView);
 
+
             // Gán sự kiện chuột phải để chụp ảnh và nhận diện ký tự
             //videoView.MouseClick += VideoView_MouseClick;
         }
