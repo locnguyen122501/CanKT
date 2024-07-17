@@ -2557,7 +2557,6 @@ namespace CanKT
             {
                 MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
 
         private void InitializeRecognitionTimer()
