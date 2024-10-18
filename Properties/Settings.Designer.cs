@@ -26,8 +26,8 @@ namespace CanKT.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=PHONGDO-PC\\SQLEXPRESS;Initial Catalog=CanDB;Integrated Security=True;" +
-            "TrustServerCertificate=True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=LOC-PC\\SQLEXPRESS;Initial Catalog=CanDB;Integrated Security=True;Trus" +
+            "tServerCertificate=True")]
         public string CanDBConnectionString {
             get {
                 return ((string)(this["CanDBConnectionString"]));
