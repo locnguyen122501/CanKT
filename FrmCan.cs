@@ -2536,7 +2536,6 @@ namespace CanKT
             videoView = new VideoView { MediaPlayer = _mediaPlayer, Dock = DockStyle.Fill };
             this.panel1.Controls.Add(videoView);
 
-
             // Gán sự kiện chuột phải để chụp ảnh và nhận diện ký tự
             //videoView.MouseClick += VideoView_MouseClick;
         }
@@ -2575,7 +2574,7 @@ namespace CanKT
             if (bitmap != null)
             {
                 var detectedBitmap = DetectAndHighlightLicensePlate(bitmap);
-                pictureBox.Image = detectedBitmap; // Hiển thị ảnh với khung chữ nhật trên videoView
+                //pictureBox.Image = detectedBitmap; // Hiển thị ảnh với khung chữ nhật trên videoView
             }
         }
 
